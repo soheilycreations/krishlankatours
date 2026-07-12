@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Menu, X } from "lucide-react";
@@ -22,9 +23,19 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-ink/95 backdrop-blur border-b border-gold/20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8 flex items-center justify-between h-20">
-        <Link href="/" className="font-display text-paper text-xl sm:text-2xl tracking-tight">
-          Krish Lanka
-          <span className="text-gold italic"> Tours</span>
+        <Link href="/" className="flex items-center gap-3 shrink-0">
+          <span className="relative w-11 h-11 rounded-full bg-paper flex items-center justify-center overflow-hidden shrink-0">
+            <Image
+              src="/images/logo-icon.png"
+              alt="Krish Lanka Tours & Travels"
+              width={40}
+              height={40}
+              className="object-contain w-9 h-9"
+            />
+          </span>
+          <span className="font-display text-paper text-base sm:text-xl tracking-tight leading-tight whitespace-nowrap">
+            Krish Lanka<span className="text-gold italic"> Tours</span>
+          </span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">

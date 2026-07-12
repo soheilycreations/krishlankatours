@@ -53,7 +53,38 @@
     ],
     "ctaTitle": "Erzähl mir, was dir vorschwebt.",
     "ctaBody": "Schreib mir ein paar Zeilen zu deinen Reisedaten und Interessen, und ich antworte mit einer passenden Route.",
-    "ctaButton": "Planung starten"
+    "ctaButton": "Planung starten",
+    "trustEyebrow": "Warum direkt buchen",
+    "trust": [
+      { "title": "Ein Fahrer, von Anfang bis Ende", "body": "Die Person, die deine Reise plant, sitzt auch am Steuer." },
+      { "title": "Antwort innerhalb eines Tages", "body": "Jede Anfrage bekommt eine persönliche Antwort, meist deutlich schneller." },
+      { "title": "Englisch & Deutsch gesprochen", "body": "Keine Verständigungslücken unterwegs oder über WhatsApp." },
+      { "title": "Nichts ist in Stein gemeißelt", "body": "Jede Reiseroute auf dieser Seite ist ein Ausgangspunkt, den du anpassen kannst." }
+    ],
+    "faqEyebrow": "Fragen",
+    "faqTitle": "Bevor du schreibst",
+    "faq": [
+      {
+        "q": "Holt ihr vom Flughafen ab?",
+        "a": "Ja — Flughafenabholung und -transfer lassen sich für jede Reise arrangieren und sind in den mehrtägigen Paketen bereits enthalten."
+      },
+      {
+        "q": "Kann die Route nach der Buchung noch geändert werden?",
+        "a": "Ja, im vernünftigen Rahmen. Die meisten Gäste passen das Tempo an oder tauschen einen Stopp, sobald sie tatsächlich hier sind — genau das ist der Sinn eines privaten Fahrers."
+      },
+      {
+        "q": "Was ist im Preis inbegriffen?",
+        "a": "Fahrzeug, Treibstoff, Fahrer-Guide sowie Park- oder Eintrittsgebühren, wo bei der jeweiligen Tour angegeben. Unterkunft und Mahlzeiten werden separat nach Wunsch angeboten."
+      },
+      {
+        "q": "Wie viele Personen können an einer Reise teilnehmen?",
+        "a": "Die meisten Fahrzeuge bieten je nach Tour bequem Platz für bis zu 6–8 Personen. Größere Gruppen sind möglich — frag einfach bei der Anfrage nach."
+      },
+      {
+        "q": "Wie weit im Voraus sollte ich buchen?",
+        "a": "Ein paar Wochen im Voraus sind angenehm, besonders in der Hochsaison Dezember–März und Juli–August. Auch kurzfristiger geht oft — frag einfach nach."
+      }
+    ]
   },
   "tours": {
     "pageEyebrow": "Touren",

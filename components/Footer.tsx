@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { MapPin, Mail, Phone } from "lucide-react";
@@ -11,8 +12,19 @@ export default function Footer() {
     <footer className="bg-ink text-paper/80 border-t border-gold/20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8 py-14 grid grid-cols-1 sm:grid-cols-3 gap-10">
         <div>
-          <div className="font-display text-2xl text-paper mb-3">
-            Krish Lanka<span className="text-gold italic"> Tours</span>
+          <div className="flex items-center gap-3 mb-3">
+            <span className="relative w-12 h-12 rounded-full bg-paper flex items-center justify-center overflow-hidden shrink-0">
+              <Image
+                src="/images/logo-icon.png"
+                alt="Krish Lanka Tours & Travels"
+                width={44}
+                height={44}
+                className="object-contain w-10 h-10"
+              />
+            </span>
+            <div className="font-display text-2xl text-paper">
+              Krish Lanka<span className="text-gold italic"> Tours</span>
+            </div>
           </div>
           <p className="font-body text-sm text-paper/60 max-w-xs">
             {t("tagline")}

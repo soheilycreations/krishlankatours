@@ -53,7 +53,38 @@
     ],
     "ctaTitle": "Tell me what you have in mind.",
     "ctaBody": "Send a few lines about your dates and interests, and I'll reply with a route built around them.",
-    "ctaButton": "Start planning"
+    "ctaButton": "Start planning",
+    "trustEyebrow": "Why book directly",
+    "trust": [
+      { "title": "One driver, start to finish", "body": "The person who plans your trip is the one behind the wheel." },
+      { "title": "Reply within a day", "body": "Every enquiry gets a personal reply, usually much sooner." },
+      { "title": "English & German spoken", "body": "No translation gaps on the road or over WhatsApp." },
+      { "title": "Nothing fixed in stone", "body": "Every itinerary on this site is a starting point you can reshape." }
+    ],
+    "faqEyebrow": "Questions",
+    "faqTitle": "Before you write in",
+    "faq": [
+      {
+        "q": "Do you pick up from the airport?",
+        "a": "Yes — airport pickup and drop-off can be arranged for any trip, and is included in the multi-day packages."
+      },
+      {
+        "q": "Can the itinerary be changed after booking?",
+        "a": "Yes, within reason. Most guests adjust the pace or swap a stop once they're actually here — that flexibility is the point of a private driver."
+      },
+      {
+        "q": "What's included in the price?",
+        "a": "Vehicle, fuel, driver-guide, and park or site entry fees where noted on the tour. Accommodation and meals are quoted separately based on what you'd like."
+      },
+      {
+        "q": "How many people can join one trip?",
+        "a": "Most vehicles comfortably seat up to 6–8 depending on the tour. Larger groups are possible — ask when you write in."
+      },
+      {
+        "q": "How far ahead should I book?",
+        "a": "A few weeks ahead is comfortable, especially in the December–March and July–August high seasons. Shorter notice often works too — just ask."
+      }
+    ]
   },
   "tours": {
     "pageEyebrow": "Tour packages",

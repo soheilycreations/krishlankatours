@@ -35,6 +35,10 @@ export const metadata: Metadata = {
   title: "Krish Lanka Tours & Travels | Private Sri Lanka Tours",
   description:
     "Private, driver-guided tours across Sri Lanka — wildlife safaris, ancient cities, tea country and the coast, planned around you.",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export function generateStaticParams() {

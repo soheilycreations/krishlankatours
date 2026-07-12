@@ -5,6 +5,9 @@ import { ArrowRight, Quote } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import TourCard from "@/components/TourCard";
 import RoutePath from "@/components/RoutePath";
+import HeroCollage from "@/components/HeroCollage";
+import TrustBadges from "@/components/TrustBadges";
+import FaqAccordion from "@/components/FaqAccordion";
 import { tours } from "@/lib/tours";
 
 export default async function HomePage() {
@@ -15,6 +18,8 @@ export default async function HomePage() {
     name: string;
     origin: string;
   }[];
+  const trustItems = t.raw("trust") as { title: string; body: string }[];
+  const faqItems = t.raw("faq") as { q: string; a: string }[];
 
   const galleryPreview = [
     "/images/monk-meditation-cliff.jpg",
@@ -39,38 +44,49 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/20" />
         <div className="absolute inset-0 bg-ink/10" />
 
-        <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 pb-20 sm:pb-28 w-full">
-          <Reveal>
-            <p className="font-stamp text-xs sm:text-sm uppercase tracking-[0.2em] text-gold mb-5">
-              {t("heroEyebrow")}
-            </p>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl text-paper leading-[1.05] max-w-3xl text-balance">
-              {t("heroTitle")}
-            </h1>
-          </Reveal>
-          <Reveal delay={0.18}>
-            <p className="font-body text-base sm:text-lg text-paper/75 max-w-xl mt-6 leading-relaxed">
-              {t("heroSubtitle")}
-            </p>
-          </Reveal>
-          <Reveal delay={0.28}>
-            <div className="flex flex-wrap gap-4 mt-9">
-              <Link
-                href="/tours"
-                className="inline-flex items-center gap-2 bg-gold text-ink px-6 py-3.5 rounded-full font-body font-medium hover:bg-gold-light transition-colors"
-              >
-                {t("heroCtaPrimary")} <ArrowRight size={17} />
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 border border-paper/40 text-paper px-6 py-3.5 rounded-full font-body font-medium hover:border-gold hover:text-gold transition-colors"
-              >
-                {t("heroCtaSecondary")}
-              </Link>
-            </div>
-          </Reveal>
+        <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 pb-20 sm:pb-28 w-full grid lg:grid-cols-[1.35fr_1fr] gap-10 items-center">
+          <div>
+            <Reveal>
+              <p className="font-stamp text-xs sm:text-sm uppercase tracking-[0.2em] text-gold mb-5">
+                {t("heroEyebrow")}
+              </p>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <h1 className="font-display text-4xl sm:text-6xl lg:text-6xl text-paper leading-[1.05] max-w-2xl text-balance">
+                {t("heroTitle")}
+              </h1>
+            </Reveal>
+            <Reveal delay={0.18}>
+              <p className="font-body text-base sm:text-lg text-paper/75 max-w-xl mt-6 leading-relaxed">
+                {t("heroSubtitle")}
+              </p>
+            </Reveal>
+            <Reveal delay={0.28}>
+              <div className="flex flex-wrap gap-4 mt-9">
+                <Link
+                  href="/tours"
+                  className="inline-flex items-center gap-2 bg-gold text-ink px-6 py-3.5 rounded-full font-body font-medium hover:bg-gold-light transition-colors"
+                >
+                  {t("heroCtaPrimary")} <ArrowRight size={17} />
+                </Link>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2 border border-paper/40 text-paper px-6 py-3.5 rounded-full font-body font-medium hover:border-gold hover:text-gold transition-colors"
+                >
+                  {t("heroCtaSecondary")}
+                </Link>
+              </div>
+            </Reveal>
+          </div>
+
+          <HeroCollage />
+        </div>
+      </section>
+
+      {/* TRUST BADGES */}
+      <section className="bg-ink pb-20 sm:pb-24 pt-2">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8">
+          <TrustBadges items={trustItems} />
         </div>
       </section>
 
@@ -228,6 +244,23 @@ export default async function HomePage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="bg-paper py-20 sm:py-28">
+        <div className="mx-auto max-w-3xl px-5 sm:px-8">
+          <Reveal className="text-center mb-12">
+            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-clay mb-4">
+              {t("faqEyebrow")}
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl text-ink-text">
+              {t("faqTitle")}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <FaqAccordion items={faqItems} />
+          </Reveal>
         </div>
       </section>
 
