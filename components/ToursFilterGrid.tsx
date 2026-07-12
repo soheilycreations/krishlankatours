@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import TourCard from "@/components/TourCard";
 import Reveal from "@/components/Reveal";
@@ -16,7 +17,11 @@ const categories: TourCategory[] = [
 ];
 
 export default function ToursFilterGrid() {
-  const [active, setActive] = useState<TourCategory | "all">("all");
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get("category") as TourCategory | null;
+  const [active, setActive] = useState<TourCategory | "all">(
+    initialCategory && categories.includes(initialCategory) ? initialCategory : "all"
+  );
   const locale = useLocale() as Locale;
   const t = useTranslations("tours");
 
@@ -30,8 +35,8 @@ export default function ToursFilterGrid() {
           onClick={() => setActive("all")}
           className={`font-stamp text-xs uppercase tracking-wide px-4 py-2 rounded-full border transition-colors ${
             active === "all"
-              ? "bg-gold text-ink border-gold"
-              : "border-paper/25 text-paper/65 hover:border-gold/50 hover:text-paper"
+              ? "bg-blue text-white border-blue"
+              : "border-navy/15 text-ink-text/65 hover:border-blue/50 hover:text-navy"
           }`}
         >
           {t("filterAll")}
@@ -42,8 +47,8 @@ export default function ToursFilterGrid() {
             onClick={() => setActive(c)}
             className={`font-stamp text-xs uppercase tracking-wide px-4 py-2 rounded-full border transition-colors ${
               active === c
-                ? "bg-gold text-ink border-gold"
-                : "border-paper/25 text-paper/65 hover:border-gold/50 hover:text-paper"
+                ? "bg-blue text-white border-blue"
+                : "border-navy/15 text-ink-text/65 hover:border-blue/50 hover:text-navy"
             }`}
           >
             {categoryLabels[c][locale]}

@@ -23,11 +23,11 @@ export default function RoutePath({ stops }: { stops: Stop[] }) {
             transition={{ duration: 0.5, delay: i * 0.12 }}
             className="flex flex-col items-center text-center px-2"
           >
-            <div className="relative z-10 w-12 h-12 rounded-full bg-gold flex items-center justify-center text-ink font-stamp font-bold text-sm mb-4">
+            <div className="relative z-10 w-12 h-12 rounded-full bg-blue flex items-center justify-center text-white font-stamp font-bold text-sm mb-4">
               {i + 1}
             </div>
-            <p className="font-display text-base text-paper mb-1.5">{s.label}</p>
-            <p className="font-body text-xs text-paper/55 leading-relaxed">{s.note}</p>
+            <p className="font-display text-base text-navy mb-1.5">{s.label}</p>
+            <p className="font-body text-xs text-ink-text/55 leading-relaxed">{s.note}</p>
           </motion.div>
         ))}
       </div>
@@ -44,11 +44,11 @@ export default function RoutePath({ stops }: { stops: Stop[] }) {
             transition={{ duration: 0.5, delay: i * 0.1 }}
             className="relative pb-9 last:pb-0"
           >
-            <div className="absolute -left-14 w-12 h-12 rounded-full bg-gold flex items-center justify-center text-ink font-stamp font-bold text-sm">
+            <div className="absolute -left-14 w-12 h-12 rounded-full bg-blue flex items-center justify-center text-white font-stamp font-bold text-sm">
               {i + 1}
             </div>
-            <p className="font-display text-base text-paper mb-1">{s.label}</p>
-            <p className="font-body text-xs text-paper/55 leading-relaxed">{s.note}</p>
+            <p className="font-display text-base text-navy mb-1">{s.label}</p>
+            <p className="font-body text-xs text-ink-text/55 leading-relaxed">{s.note}</p>
           </motion.div>
         ))}
       </div>

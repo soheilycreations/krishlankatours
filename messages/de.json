@@ -13,9 +13,17 @@
     "heroSubtitle": "Private, fahrergeführte Touren durch die ganze Insel — Tierwelt, alte Königsstädte, Teeland und Küste, geplant um dich herum statt nach starrem Busfahrplan.",
     "heroCtaPrimary": "Touren ansehen",
     "heroCtaSecondary": "Individuelle Reise planen",
+    "searchWhere": "Wohin in Sri Lanka?",
+    "searchWhereAny": "Noch unsicher",
+    "searchWhen": "Wann?",
+    "searchWhenPlaceholder": "Deine Reisedaten",
+    "searchTravelers": "Reisende",
+    "searchButton": "Suchen",
     "introEyebrow": "Warum ein privater Guide",
     "introTitle": "Ein Fahrer, ein Guide, eine Reise, gebaut um dich herum.",
     "introBody": "Keine geteilten Busse, keine festen Abfahrtszeiten. Du sagst mir, was du sehen möchtest und wie schnell du reisen willst, und ich baue die Route danach. Die meisten meiner Gäste kommen über eine Empfehlung früherer Gäste zu mir — so läuft dieses Geschäft bis heute.",
+    "categoriesEyebrow": "Kategorien",
+    "categoriesTitle": "Finde Inspiration nach der Art der Reise, die du möchtest",
     "routeEyebrow": "Wie eine Reise meist abläuft",
     "routeTitle": "Vom Flughafen bis dorthin, wo du hin willst",
     "routeStops": [
@@ -158,6 +166,10 @@
     "tagline": "Private, fahrergeführte Touren durch ganz Sri Lanka.",
     "quickLinks": "Schnelllinks",
     "contactTitle": "Kontakt",
+    "newsletterTitle": "Bleib inspiriert",
+    "newsletterBody": "Reiseideen und saisonale Tipps, ein paar Mal im Jahr — kein Spam.",
+    "newsletterPlaceholder": "Deine E-Mail",
+    "newsletterButton": "Abonnieren",
     "rights": "Krish Lanka Tours & Travels. Alle Rechte vorbehalten."
   }
 }

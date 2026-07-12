@@ -14,9 +14,9 @@ export default function TourCard({ tour }: { tour: Tour }) {
   return (
     <Link
       href={`/tours/${tour.slug}`}
-      className="group block bg-ink-2 rounded-2xl overflow-hidden border border-gold/15 hover:border-gold/40 transition-colors"
+      className="group block bg-white rounded-2xl overflow-hidden border border-navy/8 shadow-sm hover:shadow-lg hover:border-blue/30 transition-all"
     >
-      <div className="relative h-56 stamp-corner overflow-hidden">
+      <div className="relative h-52 stamp-corner overflow-hidden">
         <Image
           src={tour.heroImage}
           alt={tour.title[locale]}
@@ -24,33 +24,33 @@ export default function TourCard({ tour }: { tour: Tour }) {
           sizes="(max-width: 768px) 100vw, 400px"
           className="object-cover group-hover:scale-105 transition-transform duration-700"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/5 to-transparent" />
-        <div className="absolute top-4 right-4 w-14 h-14 rounded-full border-2 border-dashed border-paper/70 flex flex-col items-center justify-center text-paper font-stamp leading-none">
+        <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-navy/5 to-transparent" />
+        <div className="absolute top-4 right-4 w-14 h-14 rounded-full border-2 border-dashed border-white/70 flex flex-col items-center justify-center text-white font-stamp leading-none">
           <span className="text-base font-bold">{tour.durationDays}</span>
           <span className="text-[9px] uppercase tracking-wide">
             {tour.durationDays === 1 ? t("day") : t("days")}
           </span>
         </div>
-        <span className="absolute bottom-4 left-4 font-stamp text-[10px] uppercase tracking-widest bg-gold text-ink px-2.5 py-1 rounded-full">
+        <span className="absolute bottom-4 left-4 font-stamp text-[10px] uppercase tracking-widest bg-blue text-white px-2.5 py-1 rounded-full">
           {categoryLabels[tour.category][locale]}
         </span>
       </div>
 
       <div className="p-6">
-        <h3 className="font-display text-xl text-paper mb-2 group-hover:text-gold transition-colors">
+        <h3 className="font-display text-xl text-navy mb-2 group-hover:text-blue transition-colors">
           {tour.title[locale]}
         </h3>
-        <p className="font-body text-sm text-paper/65 leading-relaxed mb-5 line-clamp-2">
+        <p className="font-body text-sm text-ink-text/60 leading-relaxed mb-5 line-clamp-2">
           {tour.tagline[locale]}
         </p>
         <div className="dotted-rule pb-4 mb-1" />
         <div className="flex items-center justify-between">
-          <span className="font-stamp text-xs text-paper/50 uppercase tracking-wide">
+          <span className="font-stamp text-xs text-ink-text/45 uppercase tracking-wide">
             {t("from")}
           </span>
-          <span className="font-display text-lg text-gold">
+          <span className="font-display text-lg text-blue">
             ${tour.priceFromUsd}
-            <span className="font-body text-xs text-paper/50"> /{t("perPerson")}</span>
+            <span className="font-body text-xs text-ink-text/45"> /{t("perPerson")}</span>
           </span>
         </div>
       </div>

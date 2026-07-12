@@ -82,3 +82,30 @@ create policy "Only authenticated users can manage tours"
   to authenticated
   using (true)
   with check (true);
+
+-- =========================================================
+-- 3. NEWSLETTER SUBSCRIBERS (footer "Stay inspired" signup)
+-- =========================================================
+create table if not exists newsletter_subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text unique not null,
+  created_at timestamptz not null default now()
+);
+
+alter table newsletter_subscribers enable row level security;
+
+create policy "Public can subscribe"
+  on newsletter_subscribers for insert
+  to anon
+  with check (true);
+
+create policy "Public can update their own subscription (upsert)"
+  on newsletter_subscribers for update
+  to anon
+  using (true)
+  with check (true);
+
+create policy "Only authenticated users can read subscribers"
+  on newsletter_subscribers for select
+  to authenticated
+  using (true);

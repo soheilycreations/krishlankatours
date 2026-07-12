@@ -16,18 +16,18 @@ export default async function AboutPage() {
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/50 to-navy/10" />
         <div className="relative z-10 mx-auto max-w-5xl w-full px-5 sm:px-8 pb-12">
-          <p className="font-stamp text-xs uppercase tracking-[0.2em] text-gold mb-4">
+          <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue-light mb-4">
             {t("pageEyebrow")}
           </p>
-          <h1 className="font-display text-4xl sm:text-5xl text-paper text-balance">
+          <h1 className="font-display text-4xl sm:text-5xl text-white text-balance">
             {t("pageTitle")}
           </h1>
         </div>
       </section>
 
-      <section className="bg-paper py-16 sm:py-20">
+      <section className="bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-3xl px-5 sm:px-8">
           <Reveal>
             <p className="font-body text-lg text-ink-text/80 leading-relaxed mb-6">
@@ -40,10 +40,10 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-ink py-16 sm:py-20">
+      <section className="bg-navy py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-5 sm:px-8">
           <Reveal className="mb-12">
-            <h2 className="font-display text-3xl text-paper text-balance">
+            <h2 className="font-display text-3xl text-white text-balance">
               {t("valuesTitle")}
             </h2>
           </Reveal>
@@ -52,20 +52,20 @@ export default async function AboutPage() {
               <Reveal
                 key={v.title}
                 delay={i * 0.08}
-                className="bg-ink-2 border border-gold/15 rounded-2xl p-7"
+                className="bg-navy-2 border border-blue/20 rounded-2xl p-7"
               >
-                <div className="font-stamp text-xs text-gold mb-3">
+                <div className="font-stamp text-xs text-blue-light mb-3">
                   {String(i + 1).padStart(2, "0")}
                 </div>
-                <h3 className="font-display text-lg text-paper mb-2.5">{v.title}</h3>
-                <p className="font-body text-sm text-paper/60 leading-relaxed">{v.body}</p>
+                <h3 className="font-display text-lg text-white mb-2.5">{v.title}</h3>
+                <p className="font-body text-sm text-white/60 leading-relaxed">{v.body}</p>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-paper py-16 sm:py-20">
+      <section className="bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-5 sm:px-8 grid md:grid-cols-2 gap-12 items-center">
           <Reveal className="relative h-72 sm:h-96 rounded-2xl overflow-hidden postcard-edge order-2 md:order-1">
             <Image
@@ -77,7 +77,7 @@ export default async function AboutPage() {
             />
           </Reveal>
           <Reveal delay={0.1} className="order-1 md:order-2">
-            <h2 className="font-display text-3xl text-ink-text mb-5 text-balance">
+            <h2 className="font-display text-3xl text-navy mb-5 text-balance">
               {t("experienceTitle")}
             </h2>
             <p className="font-body text-ink-text/70 leading-relaxed">

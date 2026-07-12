@@ -93,6 +93,9 @@ The easiest path for a Next.js site like this is **Vercel** (made by the Next.js
 
 ## Notes on the design
 
-- Colors, type, and the "postcard/passport-stamp" motif on tour cards and day-by-day itineraries are original choices for this brief — not a template. See `tailwind.config.ts` for the color tokens (`ink`, `gold`, `clay`, `paper`, `moss`) if you want to adjust the palette.
+- Palette: navy (`navy`, `navy-2`) for the header, footer, and one bold CTA band; blue (`blue`, `blue-light`) as the primary accent for buttons, links, and icons; white/light-blue (`paper`, `paper-2`) for section backgrounds. See `tailwind.config.ts` to adjust.
+- The "postcard/passport-stamp" motif carries over into the new palette — tour cards and day-by-day itineraries still use the stamp-style circular markers, now in blue instead of gold.
+- The homepage hero includes a small search-style widget (destination category, dates, travelers) that links into the filterable tour listing — and a scattered-photo collage echoing the postcard motif.
 - All 14 uploaded photos are used across the homepage, tour packages, and gallery — mapped by subject (wildlife → safari tours, ruins/carvings → heritage tour, temple/tea → hill country tour, boats → wetland tour, pool/dance → coastal tour).
-- Testimonials on the homepage (`messages/en.json` → `home.testimonials`) are placeholder sample content — swap in real guest reviews when you have them.
+- Testimonials on the homepage (`messages/en.json` → `home.testimonials`) are placeholder sample content — swap in real guest reviews when you have them. The star ratings are decorative/uniform (5 stars) until real review scores are wired in.
+- The footer newsletter signup posts to `/api/newsletter`, which writes to the `newsletter_subscribers` table in `supabase/schema.sql` (same graceful "not configured yet" behavior as the booking form until Supabase is connected).

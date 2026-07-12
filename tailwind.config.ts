@@ -9,16 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0E2B27",
-        "ink-2": "#123832",
-        "ink-3": "#1A4740",
-        gold: "#C99A44",
-        "gold-light": "#E4C374",
-        clay: "#B8452F",
-        paper: "#F6F1E1",
-        "paper-2": "#ECE3C9",
-        moss: "#4B6350",
-        "ink-text": "#1B211F",
+        navy: "#0E1C3A",
+        "navy-2": "#16294F",
+        blue: "#2F6FED",
+        "blue-light": "#5B90F5",
+        clay: "#F5A623",
+        paper: "#FFFFFF",
+        "paper-2": "#EEF3FC",
+        "ink-text": "#16233F",
       },
       fontFamily: {
         display: ["var(--font-fraunces)", "serif"],

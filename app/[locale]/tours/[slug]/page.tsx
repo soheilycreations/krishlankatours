@@ -36,25 +36,25 @@ export default async function TourDetailPage({
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/50 to-navy/10" />
         <div className="relative z-10 mx-auto max-w-5xl w-full px-5 sm:px-8 pb-12">
           <Link
             href="/tours"
-            className="inline-flex items-center gap-2 font-body text-sm text-paper/70 hover:text-gold mb-6"
+            className="inline-flex items-center gap-2 font-body text-sm text-white/70 hover:text-blue-light mb-6"
           >
             <ArrowLeft size={15} /> {t("back")}
           </Link>
-          <span className="font-stamp text-[10px] uppercase tracking-widest bg-gold text-ink px-2.5 py-1 rounded-full">
+          <span className="font-stamp text-[10px] uppercase tracking-widest bg-blue text-white px-2.5 py-1 rounded-full">
             {categoryLabels[tour.category][loc]}
           </span>
-          <h1 className="font-display text-3xl sm:text-5xl text-paper mt-4 max-w-2xl text-balance">
+          <h1 className="font-display text-3xl sm:text-5xl text-white mt-4 max-w-2xl text-balance">
             {tour.title[loc]}
           </h1>
-          <p className="font-body text-paper/70 mt-3 max-w-xl">{tour.tagline[loc]}</p>
+          <p className="font-body text-white/70 mt-3 max-w-xl">{tour.tagline[loc]}</p>
         </div>
       </section>
 
-      <section className="bg-paper py-16 sm:py-20">
+      <section className="bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-5 sm:px-8 grid lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2">
             <Reveal>
@@ -64,13 +64,13 @@ export default async function TourDetailPage({
             </Reveal>
 
             <Reveal delay={0.05}>
-              <h2 className="font-display text-2xl text-ink-text mb-5">
+              <h2 className="font-display text-2xl text-navy mb-5">
                 {t("highlightsTitle")}
               </h2>
               <ul className="grid sm:grid-cols-2 gap-4 mb-12">
                 {tour.highlights.map((h) => (
                   <li key={h[loc]} className="flex gap-3 items-start">
-                    <Check size={17} className="text-clay mt-0.5 shrink-0" />
+                    <Check size={17} className="text-blue mt-0.5 shrink-0" />
                     <span className="font-body text-sm text-ink-text/75">{h[loc]}</span>
                   </li>
                 ))}
@@ -78,25 +78,25 @@ export default async function TourDetailPage({
             </Reveal>
 
             <Reveal delay={0.1}>
-              <h2 className="font-display text-2xl text-ink-text mb-6">
+              <h2 className="font-display text-2xl text-navy mb-6">
                 {t("itineraryTitle")}
               </h2>
               <div className="flex flex-col">
                 {tour.itinerary.map((day) => (
                   <div
                     key={day.day}
-                    className="flex gap-5 pb-8 mb-8 border-b border-ink-text/10 last:border-0 last:mb-0 last:pb-0"
+                    className="flex gap-5 pb-8 mb-8 border-b border-navy/8 last:border-0 last:mb-0 last:pb-0"
                   >
-                    <div className="shrink-0 w-14 h-14 rounded-full border-2 border-dashed border-clay/50 flex flex-col items-center justify-center font-stamp">
-                      <span className="text-[9px] uppercase text-clay/70 leading-none">
+                    <div className="shrink-0 w-14 h-14 rounded-full border-2 border-dashed border-blue/50 flex flex-col items-center justify-center font-stamp">
+                      <span className="text-[9px] uppercase text-blue/70 leading-none">
                         {t("day")}
                       </span>
-                      <span className="text-base font-bold text-clay leading-none mt-1">
+                      <span className="text-base font-bold text-blue leading-none mt-1">
                         {day.day}
                       </span>
                     </div>
                     <div>
-                      <h3 className="font-display text-lg text-ink-text mb-1.5">
+                      <h3 className="font-display text-lg text-navy mb-1.5">
                         {day.title[loc]}
                       </h3>
                       <p className="font-body text-sm text-ink-text/65 leading-relaxed">
@@ -120,29 +120,29 @@ export default async function TourDetailPage({
           </div>
 
           <div className="lg:col-span-1">
-            <Reveal delay={0.1} className="sticky top-28 bg-ink-2 rounded-2xl p-7 border border-gold/15">
-              <div className="flex items-center justify-between mb-5 pb-5 border-b border-paper/10">
-                <span className="font-stamp text-xs text-paper/50 uppercase">
+            <Reveal delay={0.1} className="sticky top-28 bg-white rounded-2xl p-7 border border-navy/10 shadow-lg">
+              <div className="flex items-center justify-between mb-5 pb-5 border-b border-navy/8">
+                <span className="font-stamp text-xs text-ink-text/50 uppercase">
                   {tListing("from")}
                 </span>
-                <span className="font-display text-3xl text-gold">
+                <span className="font-display text-3xl text-blue">
                   ${tour.priceFromUsd}
                 </span>
               </div>
-              <div className="flex items-center gap-3 mb-3 font-body text-sm text-paper/70">
-                <Calendar size={16} className="text-gold shrink-0" />
+              <div className="flex items-center gap-3 mb-3 font-body text-sm text-ink-text/70">
+                <Calendar size={16} className="text-blue shrink-0" />
                 {tour.durationDays} {tour.durationDays === 1 ? tListing("day") : tListing("days")}
               </div>
-              <div className="flex items-center gap-3 mb-6 font-body text-sm text-paper/70">
-                <Users size={16} className="text-gold shrink-0" />
+              <div className="flex items-center gap-3 mb-6 font-body text-sm text-ink-text/70">
+                <Users size={16} className="text-blue shrink-0" />
                 {tour.groupSize}
               </div>
-              <p className="font-body text-xs text-paper/45 leading-relaxed mb-6">
+              <p className="font-body text-xs text-ink-text/45 leading-relaxed mb-6">
                 {t("priceNote")}
               </p>
               <Link
                 href={`/contact?tour=${tour.slug}`}
-                className="w-full inline-flex items-center justify-center gap-2 bg-gold text-ink px-5 py-3.5 rounded-full font-body font-medium hover:bg-gold-light transition-colors"
+                className="w-full inline-flex items-center justify-center gap-2 bg-blue text-white px-5 py-3.5 rounded-full font-body font-medium hover:bg-blue-light transition-colors"
               >
                 {t("enquire")} <ArrowRight size={16} />
               </Link>
@@ -151,9 +151,9 @@ export default async function TourDetailPage({
         </div>
       </section>
 
-      <section className="bg-ink py-16 sm:py-20">
+      <section className="bg-paper-2/50 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
-          <h2 className="font-display text-2xl sm:text-3xl text-paper mb-8">
+          <h2 className="font-display text-2xl sm:text-3xl text-navy mb-8">
             {t("otherTours")}
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -1,13 +1,16 @@
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { ArrowRight, Quote } from "lucide-react";
+import { ArrowRight, Quote, Star } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import TourCard from "@/components/TourCard";
 import RoutePath from "@/components/RoutePath";
 import HeroCollage from "@/components/HeroCollage";
+import HeroSearchBar from "@/components/HeroSearchBar";
 import TrustBadges from "@/components/TrustBadges";
 import FaqAccordion from "@/components/FaqAccordion";
+import CategoryIcons from "@/components/CategoryIcons";
+import HorizontalScroller from "@/components/HorizontalScroller";
 import { tours } from "@/lib/tours";
 
 export default async function HomePage() {
@@ -33,31 +36,21 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative min-h-[92vh] flex items-end overflow-hidden">
-        <Image
-          src="/images/golden-temple-hills.jpg"
-          alt=""
-          fill
-          priority
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/20" />
-        <div className="absolute inset-0 bg-ink/10" />
-
-        <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 pb-20 sm:pb-28 w-full grid lg:grid-cols-[1.35fr_1fr] gap-10 items-center">
+      <section className="relative overflow-hidden bg-gradient-to-b from-paper-2/70 via-white to-white pt-14 pb-16 sm:pt-20 sm:pb-20">
+        <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 grid lg:grid-cols-[1.35fr_1fr] gap-10 items-center">
           <div>
             <Reveal>
-              <p className="font-stamp text-xs sm:text-sm uppercase tracking-[0.2em] text-gold mb-5">
+              <p className="font-stamp text-xs sm:text-sm uppercase tracking-[0.2em] text-blue mb-5">
                 {t("heroEyebrow")}
               </p>
             </Reveal>
             <Reveal delay={0.08}>
-              <h1 className="font-display text-4xl sm:text-6xl lg:text-6xl text-paper leading-[1.05] max-w-2xl text-balance">
+              <h1 className="font-display text-4xl sm:text-6xl lg:text-6xl text-navy leading-[1.05] max-w-2xl text-balance">
                 {t("heroTitle")}
               </h1>
             </Reveal>
             <Reveal delay={0.18}>
-              <p className="font-body text-base sm:text-lg text-paper/75 max-w-xl mt-6 leading-relaxed">
+              <p className="font-body text-base sm:text-lg text-ink-text/65 max-w-xl mt-6 leading-relaxed">
                 {t("heroSubtitle")}
               </p>
             </Reveal>
@@ -65,13 +58,13 @@ export default async function HomePage() {
               <div className="flex flex-wrap gap-4 mt-9">
                 <Link
                   href="/tours"
-                  className="inline-flex items-center gap-2 bg-gold text-ink px-6 py-3.5 rounded-full font-body font-medium hover:bg-gold-light transition-colors"
+                  className="inline-flex items-center gap-2 bg-blue text-white px-6 py-3.5 rounded-full font-body font-medium hover:bg-blue-light transition-colors"
                 >
                   {t("heroCtaPrimary")} <ArrowRight size={17} />
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 border border-paper/40 text-paper px-6 py-3.5 rounded-full font-body font-medium hover:border-gold hover:text-gold transition-colors"
+                  className="inline-flex items-center gap-2 border border-navy/20 text-navy px-6 py-3.5 rounded-full font-body font-medium hover:border-blue hover:text-blue transition-colors"
                 >
                   {t("heroCtaSecondary")}
                 </Link>
@@ -81,23 +74,42 @@ export default async function HomePage() {
 
           <HeroCollage />
         </div>
+
+        <Reveal delay={0.35} className="relative z-10 mx-auto max-w-5xl px-5 sm:px-8 mt-10 sm:mt-14">
+          <HeroSearchBar />
+        </Reveal>
+      </section>
+
+      {/* CATEGORIES */}
+      <section className="bg-white py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8">
+          <Reveal className="text-center mb-12">
+            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
+              {t("categoriesEyebrow")}
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl text-navy text-balance">
+              {t("categoriesTitle")}
+            </h2>
+          </Reveal>
+          <CategoryIcons />
+        </div>
       </section>
 
       {/* TRUST BADGES */}
-      <section className="bg-ink pb-20 sm:pb-24 pt-2">
+      <section className="bg-paper-2/50 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <TrustBadges items={trustItems} />
         </div>
       </section>
 
       {/* INTRO */}
-      <section className="bg-paper py-20 sm:py-28">
+      <section className="bg-white py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8 grid md:grid-cols-2 gap-12 items-center">
           <Reveal>
-            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-clay mb-4">
+            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
               {t("introEyebrow")}
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl text-ink-text leading-tight mb-6 text-balance">
+            <h2 className="font-display text-3xl sm:text-4xl text-navy leading-tight mb-6 text-balance">
               {t("introTitle")}
             </h2>
             <p className="font-body text-ink-text/70 leading-relaxed">
@@ -119,13 +131,13 @@ export default async function HomePage() {
       </section>
 
       {/* ROUTE PATH */}
-      <section className="bg-ink py-20 sm:py-28">
+      <section className="bg-paper-2/50 py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal className="text-center mb-16">
-            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-gold mb-4">
+            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
               {t("routeEyebrow")}
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl text-paper text-balance">
+            <h2 className="font-display text-3xl sm:text-4xl text-navy text-balance">
               {t("routeTitle")}
             </h2>
           </Reveal>
@@ -133,39 +145,43 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* TOURS GRID */}
-      <section className="bg-ink pb-20 sm:pb-28">
+      {/* TOURS SCROLLER */}
+      <section className="bg-white py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
-              <p className="font-stamp text-xs uppercase tracking-[0.2em] text-gold mb-4">
+              <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
                 {t("toursEyebrow")}
               </p>
-              <h2 className="font-display text-3xl sm:text-4xl text-paper mb-3">
+              <h2 className="font-display text-3xl sm:text-4xl text-navy mb-3">
                 {t("toursTitle")}
               </h2>
-              <p className="font-body text-paper/60 max-w-lg">{t("toursSubtitle")}</p>
+              <p className="font-body text-ink-text/60 max-w-lg">{t("toursSubtitle")}</p>
             </div>
             <Link
               href="/tours"
-              className="hidden sm:inline-flex items-center gap-2 font-body text-sm text-gold hover:text-gold-light shrink-0"
+              className="hidden sm:inline-flex items-center gap-2 font-body text-sm text-blue hover:text-blue-light shrink-0"
             >
               {t("viewAllTours")} <ArrowRight size={15} />
             </Link>
           </Reveal>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tours.map((tour, i) => (
-              <Reveal key={tour.slug} delay={i * 0.08}>
+          <HorizontalScroller>
+            {tours.map((tour) => (
+              <div
+                key={tour.slug}
+                data-card
+                className="snap-start shrink-0 w-[280px] sm:w-[320px]"
+              >
                 <TourCard tour={tour} />
-              </Reveal>
+              </div>
             ))}
-          </div>
+          </HorizontalScroller>
 
           <div className="sm:hidden mt-8 text-center">
             <Link
               href="/tours"
-              className="inline-flex items-center gap-2 font-body text-sm text-gold"
+              className="inline-flex items-center gap-2 font-body text-sm text-blue"
             >
               {t("viewAllTours")} <ArrowRight size={15} />
             </Link>
@@ -174,13 +190,13 @@ export default async function HomePage() {
       </section>
 
       {/* GALLERY TEASER */}
-      <section className="bg-paper py-20 sm:py-28">
+      <section className="bg-paper-2/50 py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal className="text-center mb-12">
-            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-clay mb-4">
+            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
               {t("galleryEyebrow")}
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl text-ink-text">
+            <h2 className="font-display text-3xl sm:text-4xl text-navy">
               {t("galleryTitle")}
             </h2>
           </Reveal>
@@ -206,7 +222,7 @@ export default async function HomePage() {
           <Reveal className="text-center mt-10">
             <Link
               href="/gallery"
-              className="inline-flex items-center gap-2 font-body text-sm text-clay hover:text-ink-text border-b border-clay/40 pb-0.5"
+              className="inline-flex items-center gap-2 font-body text-sm text-blue hover:text-navy border-b border-blue/40 pb-0.5"
             >
               {t("galleryCta")} <ArrowRight size={15} />
             </Link>
@@ -215,13 +231,13 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="bg-ink py-20 sm:py-28">
+      <section className="bg-white py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal className="text-center mb-14">
-            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-gold mb-4">
+            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
               {t("testimonialsEyebrow")}
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl text-paper">
+            <h2 className="font-display text-3xl sm:text-4xl text-navy">
               {t("testimonialsTitle")}
             </h2>
           </Reveal>
@@ -230,14 +246,19 @@ export default async function HomePage() {
               <Reveal
                 key={item.name}
                 delay={i * 0.1}
-                className="bg-ink-2 border border-gold/15 rounded-2xl p-7 flex flex-col"
+                className="bg-white border border-navy/8 shadow-sm rounded-2xl p-7 flex flex-col"
               >
-                <Quote className="text-gold/50 mb-4" size={26} />
-                <p className="font-body text-paper/75 text-sm leading-relaxed flex-1">
+                <Quote className="text-blue/40 mb-3" size={26} />
+                <div className="flex gap-0.5 mb-3">
+                  {[...Array(5)].map((_, s) => (
+                    <Star key={s} size={13} className="fill-clay text-clay" />
+                  ))}
+                </div>
+                <p className="font-body text-ink-text/75 text-sm leading-relaxed flex-1">
                   &ldquo;{item.quote}&rdquo;
                 </p>
                 <div className="dotted-rule pt-5 mt-5">
-                  <p className="font-stamp text-xs text-paper/50 uppercase tracking-wide pt-4">
+                  <p className="font-stamp text-xs text-ink-text/50 uppercase tracking-wide pt-4">
                     {item.name} — {item.origin}
                   </p>
                 </div>
@@ -248,13 +269,13 @@ export default async function HomePage() {
       </section>
 
       {/* FAQ */}
-      <section className="bg-paper py-20 sm:py-28">
+      <section className="bg-paper-2/50 py-20 sm:py-28">
         <div className="mx-auto max-w-3xl px-5 sm:px-8">
           <Reveal className="text-center mb-12">
-            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-clay mb-4">
+            <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
               {t("faqEyebrow")}
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl text-ink-text">
+            <h2 className="font-display text-3xl sm:text-4xl text-navy">
               {t("faqTitle")}
             </h2>
           </Reveal>
@@ -265,16 +286,16 @@ export default async function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gold py-20 sm:py-24">
+      <section className="bg-navy py-20 sm:py-24">
         <div className="mx-auto max-w-3xl px-5 sm:px-8 text-center">
           <Reveal>
-            <h2 className="font-display text-3xl sm:text-4xl text-ink mb-4 text-balance">
+            <h2 className="font-display text-3xl sm:text-4xl text-white mb-4 text-balance">
               {t("ctaTitle")}
             </h2>
-            <p className="font-body text-ink/70 mb-8 max-w-lg mx-auto">{t("ctaBody")}</p>
+            <p className="font-body text-white/65 mb-8 max-w-lg mx-auto">{t("ctaBody")}</p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-ink text-paper px-7 py-3.5 rounded-full font-body font-medium hover:bg-ink-2 transition-colors"
+              className="inline-flex items-center gap-2 bg-blue text-white px-7 py-3.5 rounded-full font-body font-medium hover:bg-blue-light transition-colors"
             >
               {t("ctaButton")} <ArrowRight size={17} />
             </Link>

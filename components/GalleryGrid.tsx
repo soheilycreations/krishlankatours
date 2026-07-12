@@ -44,7 +44,7 @@ export default function GalleryGrid() {
                 sizes="(max-width: 640px) 50vw, 33vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-ink/0 group-hover:bg-ink/20 transition-colors" />
+              <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/20 transition-colors" />
             </button>
           </Reveal>
         ))}
@@ -56,13 +56,13 @@ export default function GalleryGrid() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-ink/95 flex items-center justify-center px-4"
+            className="fixed inset-0 z-[100] bg-navy/95 flex items-center justify-center px-4"
             onClick={close}
           >
             <button
               onClick={close}
               aria-label="Close"
-              className="absolute top-6 right-6 text-paper/70 hover:text-gold"
+              className="absolute top-6 right-6 text-paper/70 hover:text-blue-light"
             >
               <X size={28} />
             </button>
@@ -72,7 +72,7 @@ export default function GalleryGrid() {
                 prev();
               }}
               aria-label="Previous"
-              className="absolute left-3 sm:left-8 text-paper/70 hover:text-gold"
+              className="absolute left-3 sm:left-8 text-paper/70 hover:text-blue-light"
             >
               <ChevronLeft size={32} />
             </button>
@@ -82,7 +82,7 @@ export default function GalleryGrid() {
                 next();
               }}
               aria-label="Next"
-              className="absolute right-3 sm:right-8 text-paper/70 hover:text-gold"
+              className="absolute right-3 sm:right-8 text-paper/70 hover:text-blue-light"
             >
               <ChevronRight size={32} />
             </button>

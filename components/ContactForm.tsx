@@ -57,29 +57,29 @@ export default function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="bg-ink-2 border border-gold/20 rounded-2xl p-10 text-center">
-        <CheckCircle2 className="text-gold mx-auto mb-4" size={40} />
-        <h3 className="font-display text-2xl text-paper mb-2">{t("successTitle")}</h3>
-        <p className="font-body text-paper/65 max-w-sm mx-auto">{t("successBody")}</p>
+      <div className="bg-white border border-navy/8 shadow-sm rounded-2xl p-10 text-center">
+        <CheckCircle2 className="text-blue mx-auto mb-4" size={40} />
+        <h3 className="font-display text-2xl text-navy mb-2">{t("successTitle")}</h3>
+        <p className="font-body text-ink-text/65 max-w-sm mx-auto">{t("successBody")}</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-ink-2 border border-gold/20 rounded-2xl p-6 sm:p-8">
+    <form onSubmit={handleSubmit} className="bg-white border border-navy/8 shadow-sm rounded-2xl p-6 sm:p-8">
       <div className="grid sm:grid-cols-2 gap-5">
         <Field label={t("formName")} name="name" value={form.name} onChange={handleChange} required />
         <Field label={t("formEmail")} name="email" type="email" value={form.email} onChange={handleChange} required />
         <Field label={t("formPhone")} name="phone" value={form.phone} onChange={handleChange} />
         <div>
-          <label className="block font-stamp text-xs uppercase tracking-wide text-paper/50 mb-2">
+          <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-2">
             {t("formTour")}
           </label>
           <select
             name="tourSlug"
             value={form.tourSlug}
             onChange={handleChange}
-            className="w-full bg-ink border border-paper/15 rounded-lg px-4 py-3 font-body text-sm text-paper focus:border-gold outline-none"
+            className="w-full bg-paper-2/40 border border-navy/12 rounded-lg px-4 py-3 font-body text-sm text-navy focus:border-blue outline-none"
           >
             <option value="">{t("formTourPlaceholder")}</option>
             {tours.map((tour) => (
@@ -94,7 +94,7 @@ export default function ContactForm() {
       </div>
 
       <div className="mt-5">
-        <label className="block font-stamp text-xs uppercase tracking-wide text-paper/50 mb-2">
+        <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-2">
           {t("formMessage")}
         </label>
         <textarea
@@ -103,7 +103,7 @@ export default function ContactForm() {
           placeholder={t("formMessagePlaceholder")}
           value={form.message}
           onChange={handleChange}
-          className="w-full bg-ink border border-paper/15 rounded-lg px-4 py-3 font-body text-sm text-paper placeholder:text-paper/30 focus:border-gold outline-none resize-none"
+          className="w-full bg-paper-2/40 border border-navy/12 rounded-lg px-4 py-3 font-body text-sm text-navy placeholder:text-ink-text/35 focus:border-blue outline-none resize-none"
         />
       </div>
 
@@ -113,7 +113,7 @@ export default function ContactForm() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="flex items-start gap-2 mt-5 text-clay"
+            className="flex items-start gap-2 mt-5 text-red-500"
           >
             <AlertCircle size={16} className="mt-0.5 shrink-0" />
             <p className="font-body text-sm">{t("errorBody")}</p>
@@ -124,7 +124,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-7 w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gold text-ink px-7 py-3.5 rounded-full font-body font-medium hover:bg-gold-light transition-colors disabled:opacity-60"
+        className="mt-7 w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-blue text-white px-7 py-3.5 rounded-full font-body font-medium hover:bg-blue-light transition-colors disabled:opacity-60"
       >
         {status === "submitting" ? t("submitting") : t("submit")}
         {status !== "submitting" && <Send size={16} />}
@@ -150,7 +150,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block font-stamp text-xs uppercase tracking-wide text-paper/50 mb-2">
+      <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-2">
         {label}
       </label>
       <input
@@ -159,7 +159,7 @@ function Field({
         value={value}
         onChange={onChange}
         required={required}
-        className="w-full bg-ink border border-paper/15 rounded-lg px-4 py-3 font-body text-sm text-paper focus:border-gold outline-none"
+        className="w-full bg-paper-2/40 border border-navy/12 rounded-lg px-4 py-3 font-body text-sm text-navy focus:border-blue outline-none"
       />
     </div>
   );

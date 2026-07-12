@@ -13,9 +13,17 @@
     "heroSubtitle": "Private, driver-guided tours across the island — wildlife, ancient cities, tea country and the coast, planned around you instead of a fixed bus schedule.",
     "heroCtaPrimary": "See tour packages",
     "heroCtaSecondary": "Plan a custom trip",
+    "searchWhere": "Where in Sri Lanka?",
+    "searchWhereAny": "Not sure yet",
+    "searchWhen": "When?",
+    "searchWhenPlaceholder": "Your travel dates",
+    "searchTravelers": "Travelers",
+    "searchButton": "Search",
     "introEyebrow": "Why a private guide",
     "introTitle": "One driver, one guide, one trip built around you.",
     "introBody": "No shared coaches, no fixed departure times. You tell me what you want to see and how fast you want to move, and I build the route around that. Most of my guests find me through a recommendation from a past guest — that's still how this business runs.",
+    "categoriesEyebrow": "Categories",
+    "categoriesTitle": "Find inspiration by the kind of trip you want",
     "routeEyebrow": "How a trip usually goes",
     "routeTitle": "From the airport to wherever you want to end up",
     "routeStops": [
@@ -158,6 +166,10 @@
     "tagline": "Private, driver-guided tours across Sri Lanka.",
     "quickLinks": "Quick links",
     "contactTitle": "Contact",
+    "newsletterTitle": "Stay inspired",
+    "newsletterBody": "Trip ideas and seasonal tips, a few times a year — no spam.",
+    "newsletterPlaceholder": "Your email",
+    "newsletterButton": "Subscribe",
     "rights": "Krish Lanka Tours & Travels. All rights reserved."
   }
 }

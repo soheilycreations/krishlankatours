@@ -27,7 +27,7 @@ export default function FaqAccordion({ items }: { items: FaqItem[] }) {
               <motion.span
                 animate={{ rotate: isOpen ? 45 : 0 }}
                 transition={{ duration: 0.25 }}
-                className="shrink-0 text-clay"
+                className="shrink-0 text-blue"
               >
                 <Plus size={20} />
               </motion.span>

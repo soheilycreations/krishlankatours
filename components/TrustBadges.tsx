@@ -16,11 +16,13 @@ export default function TrustBadges({
           <Reveal
             key={item.title}
             delay={i * 0.07}
-            className="bg-ink-2 border border-gold/15 rounded-2xl p-6"
+            className="bg-white border border-navy/8 shadow-sm rounded-2xl p-6"
           >
-            <Icon className="text-gold mb-3.5" size={24} />
-            <h3 className="font-display text-base text-paper mb-1.5">{item.title}</h3>
-            <p className="font-body text-xs text-paper/55 leading-relaxed">{item.body}</p>
+            <div className="w-11 h-11 rounded-full bg-paper-2 flex items-center justify-center mb-3.5">
+              <Icon className="text-blue" size={20} />
+            </div>
+            <h3 className="font-display text-base text-navy mb-1.5">{item.title}</h3>
+            <p className="font-body text-xs text-ink-text/55 leading-relaxed">{item.body}</p>
           </Reveal>
         );
       })}
