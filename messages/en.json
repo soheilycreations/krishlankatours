@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "home": "Home",
+    "tours": "Tour Packages",
+    "gallery": "Gallery",
+    "about": "About",
+    "contact": "Contact",
+    "bookNow": "Enquire Now"
+  },
+  "home": {
+    "heroEyebrow": "Krish Lanka Tours & Travels",
+    "heroTitle": "See Sri Lanka the way I'd show my own family.",
+    "heroSubtitle": "Private, driver-guided tours across the island — wildlife, ancient cities, tea country and the coast, planned around you instead of a fixed bus schedule.",
+    "heroCtaPrimary": "See tour packages",
+    "heroCtaSecondary": "Plan a custom trip",
+    "introEyebrow": "Why a private guide",
+    "introTitle": "One driver, one guide, one trip built around you.",
+    "introBody": "No shared coaches, no fixed departure times. You tell me what you want to see and how fast you want to move, and I build the route around that. Most of my guests find me through a recommendation from a past guest — that's still how this business runs.",
+    "routeEyebrow": "How a trip usually goes",
+    "routeTitle": "From the airport to wherever you want to end up",
+    "routeStops": [
+      { "label": "Airport pickup", "note": "We talk through your trip on the drive in" },
+      { "label": "Wild places", "note": "Elephants, birds, and early starts for good light" },
+      { "label": "Old stone cities", "note": "Ruins and carvings a thousand years old" },
+      { "label": "The hills", "note": "Tea country, temples above the clouds" },
+      { "label": "The coast", "note": "Slow days, or none at all" }
+    ],
+    "toursEyebrow": "Tour packages",
+    "toursTitle": "Five ways to see the island",
+    "toursSubtitle": "Each one can be shortened, extended, or combined — these are starting points, not fixed packages.",
+    "viewAllTours": "View all tour packages",
+    "galleryEyebrow": "From the road",
+    "galleryTitle": "A few frames from recent trips",
+    "galleryCta": "See the full gallery",
+    "testimonialsEyebrow": "Past guests",
+    "testimonialsTitle": "What people say after the trip",
+    "testimonials": [
+      {
+        "quote": "Krish planned around our kids' nap schedule without us even asking twice. It felt like traveling with family, not a tour company.",
+        "name": "Visiting family",
+        "origin": "Germany"
+      },
+      {
+        "quote": "We changed the plan twice mid-trip and it was never a problem. That flexibility is worth more than any five-star itinerary.",
+        "name": "Two travelers",
+        "origin": "United Kingdom"
+      },
+      {
+        "quote": "Best light for the elephants, quietest hour at the temple — small details like that made the whole week better.",
+        "name": "Solo traveler",
+        "origin": "Netherlands"
+      }
+    ],
+    "ctaTitle": "Tell me what you have in mind.",
+    "ctaBody": "Send a few lines about your dates and interests, and I'll reply with a route built around them.",
+    "ctaButton": "Start planning"
+  },
+  "tours": {
+    "pageEyebrow": "Tour packages",
+    "pageTitle": "Five starting points for your trip",
+    "pageSubtitle": "Every route below can be adjusted in length, pace, and stops. Tell me what matters to you and we'll shape it from there.",
+    "filterAll": "All",
+    "days": "days",
+    "day": "day",
+    "from": "from",
+    "perPerson": "per person",
+    "viewDetails": "View itinerary"
+  },
+  "tourDetail": {
+    "back": "All tour packages",
+    "highlightsTitle": "What's included",
+    "itineraryTitle": "Day by day",
+    "day": "Day",
+    "groupSize": "Group size",
+    "priceNote": "Final price depends on group size, season, and vehicle. I'll send an exact quote once I know your dates.",
+    "enquire": "Enquire about this trip",
+    "otherTours": "Other tour packages"
+  },
+  "gallery": {
+    "pageEyebrow": "Gallery",
+    "pageTitle": "The island, as I see it",
+    "pageSubtitle": "A mix of wildlife, old stone, tea country and coast — from trips over the years."
+  },
+  "about": {
+    "pageEyebrow": "About",
+    "pageTitle": "The person behind the wheel",
+    "introBody1": "Krish Lanka Tours & Travels is one driver-guide, not a call centre. When you book a trip, you're booking me — I plan the route, I drive, and I'm the one who shows up at your hotel at 5:30am when the light over the park is worth losing sleep for.",
+    "introBody2": "I grew up around these roads and I still learn something new on most trips. Sri Lanka rewards slowness more than it rewards a packed checklist, and that's the trip I try to build for every guest.",
+    "valuesTitle": "How I try to run things",
+    "values": [
+      { "title": "Small groups only", "body": "One vehicle, one group. Your trip is never merged with strangers to fill seats." },
+      { "title": "Local, not scripted", "body": "I take you to the places I'd take my own visiting family, not just the stops every bus makes." },
+      { "title": "Honest about pace", "body": "If a route is too rushed for what you want, I'll say so before you book it, not after." },
+      { "title": "Responsible travel", "body": "The small guesthouses, family spice gardens, and local paddlers I work with are part of how the money stays in the community." }
+    ],
+    "experienceTitle": "Years on these roads",
+    "experienceBody": "I've driven and guided across the island long enough to have a shortlist of quiet mountain temples the tour buses miss, and to know which park roads are empty at sunrise. That's the experience I bring to every itinerary."
+  },
+  "contact": {
+    "pageEyebrow": "Contact",
+    "pageTitle": "Let's plan your trip",
+    "pageSubtitle": "Fill in what you know so far — dates, rough interests, how many people. I reply personally, usually within a day.",
+    "formName": "Full name",
+    "formEmail": "Email",
+    "formPhone": "Phone / WhatsApp",
+    "formTour": "Which trip interests you?",
+    "formTourPlaceholder": "Not sure yet / custom trip",
+    "formDates": "Travel dates (rough is fine)",
+    "formGroupSize": "Number of travelers",
+    "formMessage": "Anything else I should know?",
+    "formMessagePlaceholder": "Interests, pace, special occasions, accessibility needs...",
+    "submit": "Send enquiry",
+    "submitting": "Sending...",
+    "successTitle": "Got it, thank you.",
+    "successBody": "Your enquiry is in. I reply personally, usually within a day — check your email (and spam folder, just in case).",
+    "errorBody": "Something went wrong sending that. Please try again, or reach out directly on WhatsApp below.",
+    "whatsappTitle": "Prefer WhatsApp?",
+    "whatsappBody": "Message me directly for a faster reply.",
+    "whatsappCta": "Chat on WhatsApp",
+    "directTitle": "Direct contact",
+    "directEmail": "Email",
+    "directPhone": "Phone",
+    "directLocation": "Based in",
+    "locationValue": "Kalutara, Sri Lanka"
+  },
+  "footer": {
+    "tagline": "Private, driver-guided tours across Sri Lanka.",
+    "quickLinks": "Quick links",
+    "contactTitle": "Contact",
+    "rights": "Krish Lanka Tours & Travels. All rights reserved."
+  }
+}

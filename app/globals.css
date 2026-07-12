@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #F6F1E1;
+  --foreground: #1B211F;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Postcard / stamp signature element */
+  .stamp-corner {
+    position: relative;
+  }
+  .stamp-corner::after {
+    content: "";
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 56px;
+    height: 56px;
+    border-radius: 9999px;
+    border: 1.5px dashed rgba(246, 241, 225, 0.85);
+    pointer-events: none;
+  }
+
+  .postcard-edge {
+    clip-path: polygon(
+      0% 2%, 2% 0%, 98% 0%, 100% 2%,
+      100% 98%, 98% 100%, 2% 100%, 0% 98%
+    );
+  }
+
+  .dotted-rule {
+    background-image: radial-gradient(circle, rgba(201, 154, 68, 0.55) 1.5px, transparent 1.5px);
+    background-size: 10px 10px;
+    background-repeat: repeat-x;
+    background-position: bottom;
+  }
+
+  .dotted-rule-vertical {
+    background-image: radial-gradient(circle, rgba(201, 154, 68, 0.55) 1.5px, transparent 1.5px);
+    background-size: 10px 10px;
+    background-repeat: repeat-y;
+    background-position: left;
+  }
+}
+
+/* Visible keyboard focus */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #C99A44;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
