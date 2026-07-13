@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import type { Tour } from "@/lib/tours";
 import { categoryLabels } from "@/lib/tours";
 import type { Locale } from "@/i18n/routing";
+import TourImagePlaceholder from "@/components/TourImagePlaceholder";
 
 export default function TourCard({ tour }: { tour: Tour }) {
   const locale = useLocale() as Locale;
@@ -17,13 +18,21 @@ export default function TourCard({ tour }: { tour: Tour }) {
       className="group block bg-white rounded-2xl overflow-hidden border border-navy/8 shadow-sm hover:shadow-lg hover:border-blue/30 transition-all"
     >
       <div className="relative h-52 stamp-corner overflow-hidden">
-        <Image
-          src={tour.heroImage}
-          alt={tour.title[locale]}
-          fill
-          sizes="(max-width: 768px) 100vw, 400px"
-          className="object-cover group-hover:scale-105 transition-transform duration-700"
-        />
+        {tour.heroImage ? (
+          <Image
+            src={tour.heroImage}
+            alt={tour.title[locale]}
+            fill
+            sizes="(max-width: 768px) 100vw, 400px"
+            className="object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+        ) : (
+          <TourImagePlaceholder
+            category={tour.category}
+            label={t("photoComingSoon")}
+            className="absolute inset-0"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-navy/5 to-transparent" />
         <div className="absolute top-4 right-4 w-14 h-14 rounded-full border-2 border-dashed border-white/70 flex flex-col items-center justify-center text-white font-stamp leading-none">
           <span className="text-base font-bold">{tour.durationDays}</span>

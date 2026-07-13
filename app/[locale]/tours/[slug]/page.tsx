@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { ArrowLeft, ArrowRight, Users, Calendar, Check } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import TourCard from "@/components/TourCard";
+import TourImagePlaceholder from "@/components/TourImagePlaceholder";
 import { tours, getTourBySlug, categoryLabels } from "@/lib/tours";
 import type { Locale } from "@/i18n/routing";
 
@@ -28,14 +29,26 @@ export default async function TourDetailPage({
 
   return (
     <>
-      <section className="relative h-[60vh] min-h-[420px] flex items-end overflow-hidden">
-        <Image
-          src={tour.heroImage}
-          alt={tour.title[loc]}
-          fill
-          priority
-          className="object-cover"
-        />
+      <section
+        className={`relative flex items-end overflow-hidden ${
+          tour.heroImage ? "h-[60vh] min-h-[420px]" : "h-[34vh] min-h-[260px]"
+        }`}
+      >
+        {tour.heroImage ? (
+          <Image
+            src={tour.heroImage}
+            alt={tour.title[loc]}
+            fill
+            priority
+            className="object-cover"
+          />
+        ) : (
+          <TourImagePlaceholder
+            category={tour.category}
+            label={tListing("photoComingSoon")}
+            className="absolute inset-0"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/50 to-navy/10" />
         <div className="relative z-10 mx-auto max-w-5xl w-full px-5 sm:px-8 pb-12">
           <Link

@@ -14,6 +14,7 @@ const categories: TourCategory[] = [
   "hillcountry",
   "wetland",
   "coastal",
+  "city",
 ];
 
 export default function ToursFilterGrid() {

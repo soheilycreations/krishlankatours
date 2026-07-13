@@ -108,7 +108,8 @@
     "day": "Tag",
     "from": "ab",
     "perPerson": "pro Person",
-    "viewDetails": "Reiseplan ansehen"
+    "viewDetails": "Reiseplan ansehen",
+    "photoComingSoon": "Foto folgt in Kürze"
   },
   "tourDetail": {
     "back": "Alle Touren",
@@ -186,10 +187,13 @@
     "pickupTitle": "Abholung ist möglich ab",
     "pickupAreas": [
       "Ahungalla",
-      "Middaramulla",
       "Balapitiya",
       "Kosgoda",
       "Bentota",
+      "Aluthgama",
+      "Beruwala",
+      "Kalutara",
+      "Wadduwa",
       "Induruwa",
       "Ambalangoda",
       "Hikkaduwa",

@@ -3,25 +3,25 @@
 import Image from "next/image";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { categoryLabels, type TourCategory } from "@/lib/tours";
+import { categoryLabels } from "@/lib/tours";
 import type { Locale } from "@/i18n/routing";
 import Reveal from "@/components/Reveal";
 
-const categoryImages: Record<TourCategory, string> = {
+const order = [
+  "wildlife",
+  "heritage",
+  "hillcountry",
+  "wetland",
+  "coastal",
+] as const;
+
+const categoryImages: Record<(typeof order)[number], string> = {
   wildlife: "/images/elephants-trio.jpg",
   heritage: "/images/buddha-carving.jpg",
   hillcountry: "/images/golden-temple-hills.jpg",
   wetland: "/images/river-boat-safari.jpg",
   coastal: "/images/couple-pool-sunset.jpg",
 };
-
-const order: TourCategory[] = [
-  "wildlife",
-  "heritage",
-  "hillcountry",
-  "wetland",
-  "coastal",
-];
 
 export default function CategoryIcons() {
   const locale = useLocale() as Locale;

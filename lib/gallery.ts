@@ -30,9 +30,13 @@ export const galleryImages: GalleryImage[] = [
     caption: { en: "The old royal palace at Polonnaruwa", de: "Der alte Königspalast von Polonnaruwa" },
   },
   {
-    src: "/images/river-boat-safari.jpg",
+    src: "/images/real/river-safari-mangrove-silhouette.jpg",
     caption: { en: "Canoeing the wetland channels", de: "Kanufahrt durch die Feuchtgebietskanäle" },
     tall: true,
+  },
+  {
+    src: "/images/real/turtle-release-beach.jpg",
+    caption: { en: "A turtle release at Ahungalla", de: "Eine Schildkröten-Freilassung in Ahungalla" },
   },
   {
     src: "/images/ancient-statue-polonnaruwa.jpg",
@@ -62,6 +66,10 @@ export const galleryImages: GalleryImage[] = [
   {
     src: "/images/macaque-monkey.jpg",
     caption: { en: "A macaque keeping watch", de: "Ein Makake auf der Hut" },
+  },
+  {
+    src: "/images/real/river-safari-boat-guests.jpg",
+    caption: { en: "Out on the river", de: "Unterwegs auf dem Fluss" },
   },
   {
     src: "/images/bee-eater-bird.jpg",

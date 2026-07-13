@@ -108,7 +108,8 @@
     "day": "day",
     "from": "from",
     "perPerson": "per person",
-    "viewDetails": "View itinerary"
+    "viewDetails": "View itinerary",
+    "photoComingSoon": "Photo coming soon"
   },
   "tourDetail": {
     "back": "All tour packages",
@@ -186,10 +187,13 @@
     "pickupTitle": "Pickup can be arranged from",
     "pickupAreas": [
       "Ahungalla",
-      "Middaramulla",
       "Balapitiya",
       "Kosgoda",
       "Bentota",
+      "Aluthgama",
+      "Beruwala",
+      "Kalutara",
+      "Wadduwa",
       "Induruwa",
       "Ambalangoda",
       "Hikkaduwa",

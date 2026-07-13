@@ -32,7 +32,7 @@ export default async function HomePage() {
     "/images/kandyan-dance.jpg",
     "/images/elephants-trio.jpg",
     "/images/polonnaruwa-ruins.jpg",
-    "/images/river-boat-safari.jpg",
+    "/images/real/river-safari-mangrove-silhouette.jpg",
     "/images/villa-pool-sunset.jpg",
   ];
 
