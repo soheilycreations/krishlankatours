@@ -12,6 +12,7 @@ import FaqAccordion from "@/components/FaqAccordion";
 import CategoryIcons from "@/components/CategoryIcons";
 import HorizontalScroller from "@/components/HorizontalScroller";
 import DestinationCard from "@/components/DestinationCard";
+import CornerMotif from "@/components/motifs/CornerMotif";
 import { tours } from "@/lib/tours";
 import { destinations } from "@/lib/destinations";
 
@@ -39,10 +40,13 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-paper-textured pt-14 pb-16 sm:pt-20 sm:pb-20">
+      <section className="relative overflow-hidden bg-paper-textured pt-14 pb-16 sm:pt-20 sm:pb-24">
         {/* soft decorative gradient blobs for depth */}
         <div className="absolute -top-24 -right-24 w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-blue/10 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-32 -left-20 w-72 h-72 rounded-full bg-clay/10 blur-3xl pointer-events-none" />
+
+        {/* single decorative motif, not tiled — sits quietly in one corner */}
+        <CornerMotif className="hidden md:block absolute top-0 right-0 w-[420px] h-[420px] text-blue/25 pointer-events-none" />
 
         <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 grid lg:grid-cols-[1.35fr_1fr] gap-10 items-center">
           <div>
@@ -77,20 +81,12 @@ export default async function HomePage() {
                 </Link>
               </div>
             </Reveal>
-            <Reveal delay={0.36}>
-              <div className="flex flex-wrap gap-x-8 gap-y-3 mt-10 pt-8 border-t border-navy/8">
-                <HeroStat value="5" label={t("statTours")} />
-                <HeroStat value="6" label={t("statDestinations")} />
-                <HeroStat value="EN·DE" label={t("statLanguages")} />
-                <HeroStat value="1:1" label={t("statPrivate")} />
-              </div>
-            </Reveal>
           </div>
 
           <HeroCollage />
         </div>
 
-        <Reveal delay={0.44} className="relative z-10 mx-auto max-w-5xl px-5 sm:px-8 mt-10 sm:mt-14">
+        <Reveal delay={0.36} className="relative z-10 mx-auto max-w-5xl px-5 sm:px-8 mt-12 sm:mt-16">
           <HeroSearchBar />
         </Reveal>
       </section>
@@ -334,8 +330,9 @@ export default async function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-navy py-20 sm:py-24">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8 text-center">
+      <section className="relative overflow-hidden bg-navy py-20 sm:py-24">
+        <CornerMotif className="hidden sm:block absolute -bottom-16 -left-16 w-80 h-80 text-blue-light/20 pointer-events-none rotate-180" />
+        <div className="relative z-10 mx-auto max-w-3xl px-5 sm:px-8 text-center">
           <Reveal>
             <h2 className="font-display text-3xl sm:text-4xl text-white mb-4 text-balance">
               {t("ctaTitle")}
@@ -351,14 +348,5 @@ export default async function HomePage() {
         </div>
       </section>
     </>
-  );
-}
-
-function HeroStat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="flex flex-col">
-      <span className="font-display text-xl text-navy leading-none">{value}</span>
-      <span className="font-body text-xs text-ink-text/50 mt-1">{label}</span>
-    </div>
   );
 }

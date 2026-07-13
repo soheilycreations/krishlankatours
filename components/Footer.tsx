@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { MapPin, Mail, Phone } from "lucide-react";
 import NewsletterForm from "@/components/NewsletterForm";
+import CornerMotif from "@/components/motifs/CornerMotif";
 
 export default function Footer() {
   const t = useTranslations("footer");
@@ -10,8 +11,9 @@ export default function Footer() {
   const contact = useTranslations("contact");
 
   return (
-    <footer className="bg-navy text-white/75 border-t border-white/10">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <footer className="relative overflow-hidden bg-navy text-white/75 border-t border-white/10">
+      <CornerMotif className="hidden lg:block absolute -top-20 -right-20 w-96 h-96 text-blue-light/15 pointer-events-none" />
+      <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         <div>
           <div className="flex items-center gap-3 mb-3">
             <span className="relative w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0">
