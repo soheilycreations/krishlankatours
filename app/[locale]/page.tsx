@@ -11,10 +11,13 @@ import TrustBadges from "@/components/TrustBadges";
 import FaqAccordion from "@/components/FaqAccordion";
 import CategoryIcons from "@/components/CategoryIcons";
 import HorizontalScroller from "@/components/HorizontalScroller";
+import DestinationCard from "@/components/DestinationCard";
 import { tours } from "@/lib/tours";
+import { destinations } from "@/lib/destinations";
 
 export default async function HomePage() {
   const t = await getTranslations("home");
+  const td = await getTranslations("destinations");
   const routeStops = t.raw("routeStops") as { label: string; note: string }[];
   const testimonials = t.raw("testimonials") as {
     quote: string;
@@ -185,6 +188,39 @@ export default async function HomePage() {
             >
               {t("viewAllTours")} <ArrowRight size={15} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* POPULAR DESTINATIONS */}
+      <section className="bg-paper-2/50 py-20 sm:py-28">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8">
+          <Reveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
+            <div>
+              <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
+                {td("homeEyebrow")}
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl text-navy mb-3">
+                {td("homeTitle")}
+              </h2>
+              <p className="font-body text-ink-text/60 max-w-lg">
+                {td("homeSubtitle")}
+              </p>
+            </div>
+            <Link
+              href="/destinations"
+              className="hidden sm:inline-flex items-center gap-2 font-body text-sm text-blue hover:text-blue-light shrink-0"
+            >
+              {td("viewAll")} <ArrowRight size={15} />
+            </Link>
+          </Reveal>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {destinations.map((dest, i) => (
+              <Reveal key={dest.slug} delay={i * 0.06}>
+                <DestinationCard destination={dest} />
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>

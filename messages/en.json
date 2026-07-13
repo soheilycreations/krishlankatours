@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "tours": "Tour Packages",
+    "destinations": "Destinations",
     "gallery": "Gallery",
     "about": "About",
     "contact": "Contact",
@@ -115,6 +116,21 @@
     "enquire": "Enquire about this trip",
     "otherTours": "Other tour packages"
   },
+  "destinations": {
+    "pageEyebrow": "Destinations",
+    "pageTitle": "The places most trips are built around",
+    "pageSubtitle": "Six places that come up in almost every itinerary — some detail on what each is actually like, so you know what you're choosing between.",
+    "regionLabel": "Region",
+    "highlightsTitle": "Worth knowing",
+    "bestTimeTitle": "Best time to visit",
+    "relatedTourCta": "See a tour that includes this",
+    "homeEyebrow": "Popular destinations",
+    "homeTitle": "Places worth building a trip around",
+    "homeSubtitle": "Six spots that come up in almost every conversation about Sri Lanka.",
+    "viewAll": "See all destinations",
+    "ctaTitle": "Not sure which of these fits your trip?",
+    "ctaButton": "Tell me what you're after"
+  },
   "gallery": {
     "pageEyebrow": "Gallery",
     "pageTitle": "The island, as I see it",
@@ -160,7 +176,23 @@
     "directEmail": "Email",
     "directPhone": "Phone",
     "directLocation": "Based in",
-    "locationValue": "Kalutara, Sri Lanka"
+    "locationValue": "Ahungalla, Sri Lanka",
+    "findUsTitle": "Find us in Ahungalla",
+    "findUsBody": "Krish Lanka Tours & Travels is based in Ahungalla, a peaceful coastal area on the south-west coast of Sri Lanka — convenient for travelers staying in Ahungalla and the nearby beach hotels.",
+    "pickupTitle": "Pickup can be arranged from",
+    "pickupAreas": [
+      "Ahungalla",
+      "Middaramulla",
+      "Balapitiya",
+      "Kosgoda",
+      "Bentota",
+      "Induruwa",
+      "Ambalangoda",
+      "Hikkaduwa",
+      "Galle",
+      "Nearby villas and beach hotels"
+    ],
+    "pickupAirportNote": "Colombo Airport pickup can also be arranged for selected tours and transfers."
   },
   "footer": {
     "tagline": "Private, driver-guided tours across Sri Lanka.",

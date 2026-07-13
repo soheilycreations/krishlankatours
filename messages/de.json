@@ -2,6 +2,7 @@
   "nav": {
     "home": "Startseite",
     "tours": "Touren",
+    "destinations": "Reiseziele",
     "gallery": "Galerie",
     "about": "Über uns",
     "contact": "Kontakt",
@@ -115,6 +116,21 @@
     "enquire": "Zu dieser Reise anfragen",
     "otherTours": "Weitere Touren"
   },
+  "destinations": {
+    "pageEyebrow": "Reiseziele",
+    "pageTitle": "Die Orte, um die sich die meisten Reisen drehen",
+    "pageSubtitle": "Sechs Orte, die in fast jeder Reiseroute vorkommen — mit Details dazu, wie sie wirklich sind, damit du weißt, wofür du dich entscheidest.",
+    "regionLabel": "Region",
+    "highlightsTitle": "Gut zu wissen",
+    "bestTimeTitle": "Beste Reisezeit",
+    "relatedTourCta": "Zu einer Tour, die das einschließt",
+    "homeEyebrow": "Beliebte Reiseziele",
+    "homeTitle": "Orte, um die sich eine Reise lohnt",
+    "homeSubtitle": "Sechs Orte, die in fast jedem Gespräch über Sri Lanka vorkommen.",
+    "viewAll": "Alle Reiseziele ansehen",
+    "ctaTitle": "Nicht sicher, welches davon zu deiner Reise passt?",
+    "ctaButton": "Sag mir, was du suchst"
+  },
   "gallery": {
     "pageEyebrow": "Galerie",
     "pageTitle": "Die Insel, wie ich sie sehe",
@@ -160,7 +176,23 @@
     "directEmail": "E-Mail",
     "directPhone": "Telefon",
     "directLocation": "Sitz in",
-    "locationValue": "Kalutara, Sri Lanka"
+    "locationValue": "Ahungalla, Sri Lanka",
+    "findUsTitle": "Uns in Ahungalla finden",
+    "findUsBody": "Krish Lanka Tours & Travels hat seinen Sitz in Ahungalla, einer ruhigen Küstenregion an der Südwestküste Sri Lankas — praktisch für Reisende, die in Ahungalla und den nahegelegenen Strandhotels wohnen.",
+    "pickupTitle": "Abholung ist möglich ab",
+    "pickupAreas": [
+      "Ahungalla",
+      "Middaramulla",
+      "Balapitiya",
+      "Kosgoda",
+      "Bentota",
+      "Induruwa",
+      "Ambalangoda",
+      "Hikkaduwa",
+      "Galle",
+      "Nahegelegene Villen und Strandhotels"
+    ],
+    "pickupAirportNote": "Die Abholung vom Flughafen Colombo ist für ausgewählte Touren und Transfers ebenfalls möglich."
   },
   "footer": {
     "tagline": "Private, fahrergeführte Touren durch ganz Sri Lanka.",

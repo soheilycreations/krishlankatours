@@ -29,26 +29,30 @@ app/
     page.tsx                # Home
     tours/page.tsx          # Tour package listing (with category filter)
     tours/[slug]/page.tsx   # Single tour detail + itinerary
+    destinations/page.tsx   # Yala, Kandy, Nuwara Eliya, Ella, Anuradhapura, Polonnaruwa
     gallery/page.tsx        # Photo gallery with lightbox
     about/page.tsx          # About / founder story
     contact/page.tsx        # Booking enquiry form
   api/inquiries/route.ts    # POST endpoint that writes form submissions to Supabase
+  api/newsletter/route.ts   # POST endpoint for the footer newsletter signup
 lib/
   tours.ts                 # All 5 tour packages — content lives here, in code
+  destinations.ts           # The 6 destination write-ups (bilingual, per place)
   gallery.ts                # Gallery captions
   supabase.ts                # Supabase client (uses the public anon key only)
 messages/
   en.json / de.json         # All UI copy (nav, buttons, page text)
 supabase/
   schema.sql                # Run this once in your Supabase project
-public/images/               # Your 14 photos, already optimized (~6.5MB total)
+public/images/               # Your 14 photos, already optimized (~4MB total)
 ```
 
 ## Editing content
 
 - **Tour packages** (titles, itineraries, prices, images): edit `lib/tours.ts`. Each tour has an `en` and `de` version of every text field side by side, so it's hard to accidentally leave one language behind.
+- **Destinations** (Yala, Kandy, Nuwara Eliya, Ella, Anuradhapura, Polonnaruwa): edit `lib/destinations.ts`. Each entry has a description, highlights, best-time-to-visit note, and a link to the related tour package. Add a new destination by adding another object to the `destinations` array — the page picks it up automatically, alternating left/right layout.
 - **Site copy** (headings, button labels, footer, etc.): edit `messages/en.json` and `messages/de.json`. Keep the same keys in both files.
-- **Photos**: drop new files into `public/images/` and reference them as `/images/your-file.jpg`. Next.js resizes/optimizes images automatically at request time — but for git repo size, keep source files under ~1MB each (the included photos were compressed with `convert -resize 1920x1920> -strip -quality 82`).
+- **Photos**: drop new files into `public/images/` and reference them as `/images/your-file.jpg`. Next.js resizes/optimizes images automatically at request time (serving AVIF/WebP to browsers that support them) — but for git repo size, keep source files under ~500KB each (the included photos were compressed with `convert -resize 1600x1600> -strip -sampling-factor 4:2:0 -quality 76`). Two of the destinations (Nuwara Eliya, Ella) currently reuse the closest-fitting photo from the set rather than a location-specific shot — swap in real photos of those places when you have them for a more accurate gallery.
 
 ## Setting up Supabase (for the booking form)
 
@@ -90,6 +94,18 @@ The easiest path for a Next.js site like this is **Vercel** (made by the Next.js
 2. Go to [vercel.com/new](https://vercel.com/new), import the repo.
 3. Add the same environment variables from `.env.local` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_WHATSAPP_NUMBER`) in the Vercel project settings.
 4. Deploy. Point `krishlankatours.com`'s DNS at Vercel following their custom domain instructions.
+
+## Performance notes
+
+A few concrete things were done to keep this fast:
+
+- Photos are re-compressed (max 1600px edge, quality 76, 4:2:0 chroma subsampling) — the full set is ~4MB instead of ~7MB, with no visible quality loss.
+- The logo files are sized for how large they actually render (they were previously much bigger than needed).
+- `next.config.mjs` explicitly requests AVIF/WebP output and sets device breakpoints, so each visitor downloads an image sized for their screen, not a full-size original.
+- Fonts are self-hosted (no request to Google Fonts at runtime) and loaded as variable fonts, so one file covers the whole weight range per family instead of one file per weight.
+- Every page is statically generated at build time (see the `●` markers in `npm run build` output) — there's no server-side data fetching slowing down a page load.
+
+If you want to go further after deploying: Vercel's Analytics/Speed Insights (free tier) will show real-world load times per page, which is more useful than guessing.
 
 ## Notes on the design
 

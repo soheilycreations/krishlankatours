@@ -24,7 +24,7 @@ export default function Footer() {
               />
             </span>
             <div className="font-display text-2xl text-white">
-              Krish Lanka<span className="text-blue-light italic"> Tours</span>
+              Krish Lanka Tours<span className="text-blue-light italic"> &amp; Travels</span>
             </div>
           </div>
           <p className="font-body text-sm text-white/55 max-w-xs">
@@ -38,6 +38,7 @@ export default function Footer() {
           </div>
           <ul className="flex flex-col gap-2 font-body text-sm">
             <li><Link href="/tours" className="hover:text-blue-light transition-colors">{nav("tours")}</Link></li>
+            <li><Link href="/destinations" className="hover:text-blue-light transition-colors">{nav("destinations")}</Link></li>
             <li><Link href="/gallery" className="hover:text-blue-light transition-colors">{nav("gallery")}</Link></li>
             <li><Link href="/about" className="hover:text-blue-light transition-colors">{nav("about")}</Link></li>
             <li><Link href="/contact" className="hover:text-blue-light transition-colors">{nav("contact")}</Link></li>

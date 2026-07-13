@@ -15,6 +15,7 @@ export default function Header() {
   const links = [
     { href: "/", label: t("home") },
     { href: "/tours", label: t("tours") },
+    { href: "/destinations", label: t("destinations") },
     { href: "/gallery", label: t("gallery") },
     { href: "/about", label: t("about") },
     { href: "/contact", label: t("contact") },
@@ -33,12 +34,12 @@ export default function Header() {
               className="object-contain w-9 h-9"
             />
           </span>
-          <span className="font-display text-navy text-base sm:text-xl tracking-tight leading-tight whitespace-nowrap">
-            Krish Lanka<span className="text-blue italic"> Tours</span>
+          <span className="font-display text-navy text-sm sm:text-lg lg:text-xl tracking-tight leading-tight whitespace-nowrap">
+            Krish Lanka Tours<span className="hidden sm:inline text-blue italic"> &amp; Travels</span>
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-7">
           {links.map((l) => (
             <Link
               key={l.href}
