@@ -54,7 +54,7 @@ export default async function TourDetailPage({
         </div>
       </section>
 
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-paper-textured py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-5 sm:px-8 grid lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2">
             <Reveal>
@@ -151,7 +151,7 @@ export default async function TourDetailPage({
         </div>
       </section>
 
-      <section className="bg-paper-2/50 py-16 sm:py-20">
+      <section className="bg-paper-2-textured py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <h2 className="font-display text-2xl sm:text-3xl text-navy mb-8">
             {t("otherTours")}

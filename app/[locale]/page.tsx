@@ -39,13 +39,17 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-paper-2/70 via-white to-white pt-14 pb-16 sm:pt-20 sm:pb-20">
+      <section className="relative overflow-hidden bg-paper-textured pt-14 pb-16 sm:pt-20 sm:pb-20">
+        {/* soft decorative gradient blobs for depth */}
+        <div className="absolute -top-24 -right-24 w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-blue/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-32 -left-20 w-72 h-72 rounded-full bg-clay/10 blur-3xl pointer-events-none" />
+
         <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 grid lg:grid-cols-[1.35fr_1fr] gap-10 items-center">
           <div>
             <Reveal>
-              <p className="font-stamp text-xs sm:text-sm uppercase tracking-[0.2em] text-blue mb-5">
+              <span className="inline-flex items-center gap-2 font-stamp text-xs sm:text-sm uppercase tracking-[0.15em] text-blue bg-blue/8 border border-blue/15 rounded-full px-4 py-1.5 mb-6">
                 {t("heroEyebrow")}
-              </p>
+              </span>
             </Reveal>
             <Reveal delay={0.08}>
               <h1 className="font-display text-4xl sm:text-6xl lg:text-6xl text-navy leading-[1.05] max-w-2xl text-balance">
@@ -61,7 +65,7 @@ export default async function HomePage() {
               <div className="flex flex-wrap gap-4 mt-9">
                 <Link
                   href="/tours"
-                  className="inline-flex items-center gap-2 bg-blue text-white px-6 py-3.5 rounded-full font-body font-medium hover:bg-blue-light transition-colors"
+                  className="inline-flex items-center gap-2 bg-blue text-white px-6 py-3.5 rounded-full font-body font-medium shadow-lg shadow-blue/20 hover:bg-blue-light hover:shadow-blue/30 transition-all"
                 >
                   {t("heroCtaPrimary")} <ArrowRight size={17} />
                 </Link>
@@ -73,18 +77,26 @@ export default async function HomePage() {
                 </Link>
               </div>
             </Reveal>
+            <Reveal delay={0.36}>
+              <div className="flex flex-wrap gap-x-8 gap-y-3 mt-10 pt-8 border-t border-navy/8">
+                <HeroStat value="5" label={t("statTours")} />
+                <HeroStat value="6" label={t("statDestinations")} />
+                <HeroStat value="EN·DE" label={t("statLanguages")} />
+                <HeroStat value="1:1" label={t("statPrivate")} />
+              </div>
+            </Reveal>
           </div>
 
           <HeroCollage />
         </div>
 
-        <Reveal delay={0.35} className="relative z-10 mx-auto max-w-5xl px-5 sm:px-8 mt-10 sm:mt-14">
+        <Reveal delay={0.44} className="relative z-10 mx-auto max-w-5xl px-5 sm:px-8 mt-10 sm:mt-14">
           <HeroSearchBar />
         </Reveal>
       </section>
 
       {/* CATEGORIES */}
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-paper-textured py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal className="text-center mb-12">
             <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
@@ -99,14 +111,14 @@ export default async function HomePage() {
       </section>
 
       {/* TRUST BADGES */}
-      <section className="bg-paper-2/50 py-16 sm:py-20">
+      <section className="bg-paper-2-textured py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <TrustBadges items={trustItems} />
         </div>
       </section>
 
       {/* INTRO */}
-      <section className="bg-white py-20 sm:py-28">
+      <section className="bg-paper-textured py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8 grid md:grid-cols-2 gap-12 items-center">
           <Reveal>
             <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
@@ -134,7 +146,7 @@ export default async function HomePage() {
       </section>
 
       {/* ROUTE PATH */}
-      <section className="bg-paper-2/50 py-20 sm:py-28">
+      <section className="bg-paper-2-textured py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal className="text-center mb-16">
             <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
@@ -149,7 +161,7 @@ export default async function HomePage() {
       </section>
 
       {/* TOURS SCROLLER */}
-      <section className="bg-white py-20 sm:py-28">
+      <section className="bg-paper-textured py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
@@ -193,7 +205,7 @@ export default async function HomePage() {
       </section>
 
       {/* POPULAR DESTINATIONS */}
-      <section className="bg-paper-2/50 py-20 sm:py-28">
+      <section className="bg-paper-2-textured py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
@@ -226,7 +238,7 @@ export default async function HomePage() {
       </section>
 
       {/* GALLERY TEASER */}
-      <section className="bg-paper-2/50 py-20 sm:py-28">
+      <section className="bg-paper-2-textured py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal className="text-center mb-12">
             <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
@@ -267,7 +279,7 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="bg-white py-20 sm:py-28">
+      <section className="bg-paper-textured py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal className="text-center mb-14">
             <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
@@ -305,7 +317,7 @@ export default async function HomePage() {
       </section>
 
       {/* FAQ */}
-      <section className="bg-paper-2/50 py-20 sm:py-28">
+      <section className="bg-paper-2-textured py-20 sm:py-28">
         <div className="mx-auto max-w-3xl px-5 sm:px-8">
           <Reveal className="text-center mb-12">
             <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
@@ -339,5 +351,14 @@ export default async function HomePage() {
         </div>
       </section>
     </>
+  );
+}
+
+function HeroStat({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="flex flex-col">
+      <span className="font-display text-xl text-navy leading-none">{value}</span>
+      <span className="font-body text-xs text-ink-text/50 mt-1">{label}</span>
+    </div>
   );
 }

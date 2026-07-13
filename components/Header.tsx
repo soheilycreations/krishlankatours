@@ -23,7 +23,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-navy/8">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 flex items-center justify-between h-20">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 grid grid-cols-[auto_1fr_auto] items-center h-20 gap-4">
         <Link href="/" className="flex items-center gap-3 shrink-0">
           <span className="relative w-11 h-11 rounded-full bg-paper-2 flex items-center justify-center overflow-hidden shrink-0">
             <Image
@@ -39,12 +39,12 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-7">
+        <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-8">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className={`font-body text-sm tracking-wide transition-colors ${
+              className={`font-body text-sm tracking-wide whitespace-nowrap transition-colors ${
                 pathname === l.href
                   ? "text-blue"
                   : "text-ink-text/70 hover:text-blue"
@@ -55,11 +55,11 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-3 justify-self-end">
           <LangSwitcher locale={locale} pathname={pathname} />
           <Link
             href="/contact"
-            className="font-body text-sm bg-blue text-white px-5 py-2.5 rounded-full font-medium hover:bg-blue-light transition-colors"
+            className="font-body text-sm bg-blue text-white px-5 py-2.5 rounded-full font-medium hover:bg-blue-light transition-colors whitespace-nowrap"
           >
             {t("bookNow")}
           </Link>
@@ -67,7 +67,7 @@ export default function Header() {
 
         <button
           aria-label="Toggle menu"
-          className="lg:hidden text-navy"
+          className="lg:hidden text-navy justify-self-end"
           onClick={() => setOpen(!open)}
         >
           {open ? <X size={26} /> : <Menu size={26} />}

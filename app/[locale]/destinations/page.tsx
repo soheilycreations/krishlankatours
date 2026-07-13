@@ -18,7 +18,7 @@ export default async function DestinationsPage({
 
   return (
     <>
-      <section className="bg-white pt-16 pb-14 sm:pt-20 sm:pb-16">
+      <section className="bg-paper-textured pt-16 pb-14 sm:pt-20 sm:pb-16">
         <div className="mx-auto max-w-4xl px-5 sm:px-8 text-center">
           <Reveal>
             <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">
@@ -42,7 +42,7 @@ export default async function DestinationsPage({
           <section
             key={dest.slug}
             id={dest.slug}
-            className={`scroll-mt-20 ${i % 2 === 0 ? "bg-paper-2/50" : "bg-white"}`}
+            className={`scroll-mt-20 ${i % 2 === 0 ? "bg-paper-2-textured" : "bg-paper-textured"}`}
           >
             <div className="mx-auto max-w-6xl px-5 sm:px-8 py-16 sm:py-20">
               <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">

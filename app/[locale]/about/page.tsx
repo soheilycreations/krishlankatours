@@ -27,7 +27,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-paper-textured py-16 sm:py-20">
         <div className="mx-auto max-w-3xl px-5 sm:px-8">
           <Reveal>
             <p className="font-body text-lg text-ink-text/80 leading-relaxed mb-6">
@@ -65,7 +65,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-paper-textured py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-5 sm:px-8 grid md:grid-cols-2 gap-12 items-center">
           <Reveal className="relative h-72 sm:h-96 rounded-2xl overflow-hidden postcard-edge order-2 md:order-1">
             <Image

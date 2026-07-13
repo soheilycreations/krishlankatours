@@ -10,7 +10,7 @@ export default async function ContactPage() {
   const pickupAreas = t.raw("pickupAreas") as string[];
 
   return (
-    <section className="bg-paper-2/50 min-h-screen pt-16 pb-24">
+    <section className="bg-paper-2-textured min-h-screen pt-16 pb-24">
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
         <Reveal className="mb-12 max-w-2xl">
           <p className="font-stamp text-xs uppercase tracking-[0.2em] text-blue mb-4">

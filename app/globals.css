@@ -66,6 +66,22 @@ body {
   .scrollbar-hidden::-webkit-scrollbar {
     display: none;
   }
+
+  /* subtle brand-motif texture (wave + sun + palm), used on full-bleed
+     white page sections instead of flat white */
+  .bg-paper-textured {
+    background-color: #FFFFFF;
+    background-image: url('/patterns/sri-lanka-motif.svg');
+    background-repeat: repeat;
+    background-size: 180px 180px;
+  }
+
+  .bg-paper-2-textured {
+    background-color: rgba(238, 243, 252, 0.65);
+    background-image: url('/patterns/sri-lanka-motif.svg');
+    background-repeat: repeat;
+    background-size: 180px 180px;
+  }
 }
 
 /* Visible keyboard focus */
