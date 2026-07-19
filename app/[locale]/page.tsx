@@ -136,7 +136,7 @@ export default async function HomePage() {
           <Reveal delay={0.15}>
             <div className="relative h-80 sm:h-96 rounded-2xl overflow-hidden postcard-edge">
               <Image
-                src="/images/monk-meditation-cliff.jpg"
+                src="/images/stock3/tuktuk-forest-road.jpg"
                 alt=""
                 fill
                 sizes="(max-width: 768px) 100vw, 500px"
