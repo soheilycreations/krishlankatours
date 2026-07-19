@@ -23,7 +23,7 @@ export default function ImageUploadField({
     setError("");
     const supabase = createSupabaseBrowserClient();
     if (!supabase) {
-      setError("Supabase isn't configured.");
+      setError("Image uploads aren't connected yet. Please contact your developer.");
       return;
     }
 

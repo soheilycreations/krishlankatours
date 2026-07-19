@@ -32,10 +32,12 @@ export default function LanguageDropdown({
   locale,
   pathname,
   variant = "light",
+  compact = false,
 }: {
   locale: string;
   pathname: string;
   variant?: "light" | "dark";
+  compact?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [activeCode, setActiveCode] = useState(locale);
@@ -69,20 +71,35 @@ export default function LanguageDropdown({
 
   return (
     <div className="relative" ref={ref}>
-      <button
-        onClick={() => setOpen(!open)}
-        aria-label="Choose language"
-        aria-expanded={open}
-        className={`flex items-center gap-1.5 font-body text-sm px-3 py-1.5 rounded-full border transition-colors ${
-          isDark
-            ? "border-white/20 text-white/80 hover:border-white/40"
-            : "border-navy/15 text-ink-text/70 hover:border-blue/40"
-        }`}
-      >
-        <span className="text-base leading-none notranslate">{current.flag}</span>
-        <span className="notranslate">{current.label}</span>
-        <ChevronDown size={14} className={`transition-transform ${open ? "rotate-180" : ""}`} />
-      </button>
+      {compact ? (
+        <button
+          onClick={() => setOpen(!open)}
+          aria-label="Choose language"
+          aria-expanded={open}
+          className={`flex items-center justify-center w-10 h-10 rounded-full border transition-colors ${
+            isDark
+              ? "border-white/20 hover:border-white/40"
+              : "border-navy/15 hover:border-blue/40"
+          }`}
+        >
+          <span className="text-lg leading-none notranslate">{current.flag}</span>
+        </button>
+      ) : (
+        <button
+          onClick={() => setOpen(!open)}
+          aria-label="Choose language"
+          aria-expanded={open}
+          className={`flex items-center gap-1.5 font-body text-sm px-3 py-1.5 rounded-full border transition-colors ${
+            isDark
+              ? "border-white/20 text-white/80 hover:border-white/40"
+              : "border-navy/15 text-ink-text/70 hover:border-blue/40"
+          }`}
+        >
+          <span className="text-base leading-none notranslate">{current.flag}</span>
+          <span className="notranslate">{current.label}</span>
+          <ChevronDown size={14} className={`transition-transform ${open ? "rotate-180" : ""}`} />
+        </button>
+      )}
 
       {open && (
         <div className="absolute right-0 mt-2 w-52 max-h-80 overflow-y-auto bg-white border border-navy/10 rounded-xl shadow-xl py-2 z-50">

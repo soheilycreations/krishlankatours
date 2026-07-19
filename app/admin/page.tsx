@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Plus, Pencil, ImageOff, AlertTriangle } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { tours as staticTours } from "@/lib/tours";
 import DeleteTourButton from "@/app/admin/DeleteTourButton";
 
 export const dynamic = "force-dynamic";
@@ -23,12 +22,9 @@ export default async function AdminDashboard() {
     return (
       <div className="bg-white rounded-2xl border border-navy/10 p-8 text-center">
         <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
-        <h1 className="font-display text-xl text-navy mb-2">Supabase isn&apos;t configured</h1>
+        <h1 className="font-display text-xl text-navy mb-2">Not connected yet</h1>
         <p className="font-body text-sm text-ink-text/60 max-w-md mx-auto">
-          Add <code className="bg-paper-2 px-1.5 py-0.5 rounded">NEXT_PUBLIC_SUPABASE_URL</code> and{" "}
-          <code className="bg-paper-2 px-1.5 py-0.5 rounded">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> to
-          your environment, run <code className="bg-paper-2 px-1.5 py-0.5 rounded">supabase/schema.sql</code>,
-          then reload this page.
+          The tour management system isn&apos;t connected yet. Please contact your developer to finish setting this up.
         </p>
       </div>
     );
@@ -49,8 +45,8 @@ export default async function AdminDashboard() {
           <h1 className="font-display text-2xl text-navy">Tours</h1>
           <p className="font-body text-sm text-ink-text/55 mt-1">
             {usingFallback
-              ? "No tours in the database yet — the public site is showing the starter content from lib/tours.ts."
-              : `${tours.length} tour${tours.length === 1 ? "" : "s"} in the database.`}
+              ? "No tours added yet — the public site is showing the default starter tours for now."
+              : `${tours.length} tour${tours.length === 1 ? "" : "s"} added.`}
           </p>
         </div>
         <Link
@@ -63,8 +59,8 @@ export default async function AdminDashboard() {
 
       {usingFallback && (
         <div className="bg-clay/10 border border-clay/25 rounded-xl p-4 mb-8 font-body text-sm text-ink-text/70">
-          Tip: run <code className="bg-white px-1.5 py-0.5 rounded">supabase/seed.sql</code> in your
-          Supabase SQL editor to load the same 12 tours currently on the site, then edit them from here.
+          Tip: ask your developer to load the starter tours into this system, so you can start editing them
+          straight away instead of beginning from a blank list.
         </div>
       )}
 
@@ -98,16 +94,10 @@ export default async function AdminDashboard() {
         ))}
         {tours.length === 0 && (
           <div className="p-8 text-center font-body text-sm text-ink-text/50">
-            No tours yet. Click &ldquo;New tour&rdquo; to add one, or run the seed script mentioned above.
+            No tours yet. Click &ldquo;New tour&rdquo; to add one.
           </div>
         )}
       </div>
-
-      <p className="font-body text-xs text-ink-text/40 mt-6">
-        Showing {staticTours.length} starter tours as reference in{" "}
-        <code className="bg-white px-1.5 py-0.5 rounded border border-navy/10">lib/tours.ts</code> — these
-        aren&apos;t affected by anything you do here.
-      </p>
     </div>
   );
 }

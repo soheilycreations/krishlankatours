@@ -10,7 +10,7 @@ export async function signIn(prevState: unknown, formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   if (!supabase) {
-    return { error: "Supabase isn't configured yet. See .env.example and the README." };
+    return { error: "This isn't connected yet. Please contact your developer." };
   }
 
   const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -77,7 +77,7 @@ export async function saveTour(
 ): Promise<TourFormResult> {
   const supabase = await createSupabaseServerClient();
   if (!supabase) {
-    return { error: "Supabase isn't configured yet." };
+    return { error: "This isn't connected yet. Please contact your developer." };
   }
 
   const {

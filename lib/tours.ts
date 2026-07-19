@@ -224,7 +224,8 @@ export const tours: Tour[] = [
     durationDays: 1,
     priceFromUsd: 65,
     groupSize: "1–6 people, one vehicle",
-    gallery: [],
+    heroImage: "/images/stock2/galle-fort-rampart.jpg",
+    gallery: ["/images/stock2/galle-fort-rampart.jpg", "/images/stock3/galle-clocktower.jpg"],
     title: { en: "Galle Day Tour", de: "Galle Tagestour" },
     tagline: {
       en: "A walled Dutch fort you can still live inside, right on the coast.",
@@ -290,7 +291,8 @@ export const tours: Tour[] = [
     durationDays: 1,
     priceFromUsd: 75,
     groupSize: "1–6 people, one vehicle",
-    gallery: [],
+    heroImage: "/images/stock2/sigiriya-sunset.jpg",
+    gallery: ["/images/stock2/sigiriya-sunset.jpg", "/images/stock3/sigiriya-landscape-view.jpg"],
     title: { en: "Sigiriya Lion Rock", de: "Sigiriya-Löwenfelsen" },
     tagline: {
       en: "A 5th-century palace on top of a 200-metre rock, and it's exactly as dramatic as that sounds.",
@@ -323,7 +325,11 @@ export const tours: Tour[] = [
     durationDays: 1,
     priceFromUsd: 80,
     groupSize: "1–6 people, one vehicle",
-    gallery: [],
+    heroImage: "/images/stock2/kandy-colonial-street.jpg",
+    gallery: [
+      "/images/stock2/kandy-colonial-street.jpg",
+      "/images/stock2/mountain-road-teacountry.jpg",
+    ],
     title: { en: "Kandy Day Tour", de: "Kandy Tagestour" },
     tagline: {
       en: "The Tooth Relic, a working tea factory, and the lake in between.",
@@ -389,7 +395,8 @@ export const tours: Tour[] = [
     durationDays: 1,
     priceFromUsd: 85,
     groupSize: "1–6 people, shared boat",
-    gallery: [],
+    heroImage: "/images/stock2/harbor-boats-misty.jpg",
+    gallery: ["/images/stock2/harbor-boats-misty.jpg"],
     title: { en: "Mirissa Whale Watching", de: "Mirissa Walbeobachtung" },
     tagline: {
       en: "Blue whales, the largest animal that has ever lived, off Sri Lanka's south coast.",
@@ -422,7 +429,12 @@ export const tours: Tour[] = [
     durationDays: 1,
     priceFromUsd: 60,
     groupSize: "1–6 people, one vehicle",
-    gallery: [],
+    heroImage: "/images/stock2/colombo-lotus-tower.jpg",
+    gallery: [
+      "/images/stock2/colombo-lotus-tower.jpg",
+      "/images/stock2/colombo-galle-face.jpg",
+      "/images/stock3/colombo-market-stall.jpg",
+    ],
     title: { en: "Colombo City Tour", de: "Colombo Stadttour" },
     tagline: {
       en: "Old and new side by side — colonial streets, temples, and the skyline over it all.",

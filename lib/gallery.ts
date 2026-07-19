@@ -75,4 +75,48 @@ export const galleryImages: GalleryImage[] = [
     src: "/images/bee-eater-bird.jpg",
     caption: { en: "A bee-eater catching the light", de: "Ein Bienenfresser im Licht" },
   },
+  {
+    src: "/images/stock2/palm-point-coast.jpg",
+    caption: { en: "A quiet point on the south coast", de: "Ein ruhiger Punkt an der Südküste" },
+    tall: true,
+  },
+  {
+    src: "/images/stock2/rattan-craft-shop.jpg",
+    caption: { en: "A roadside cane and rattan workshop", de: "Eine Rattan-Werkstatt am Straßenrand" },
+  },
+  {
+    src: "/images/stock2/small-island-lagoon.jpg",
+    caption: { en: "A small island, a lagoon", de: "Eine kleine Insel, eine Lagune" },
+  },
+  {
+    src: "/images/stock2/rocky-coast-cloudy.jpg",
+    caption: { en: "Rock pools on a quiet morning", de: "Felsenpools an einem ruhigen Morgen" },
+    tall: true,
+  },
+  {
+    src: "/images/stock2/beach-villa-coast.jpg",
+    caption: { en: "A stretch of the south coast", de: "Ein Abschnitt der Südküste" },
+  },
+  {
+    src: "/images/stock3/rice-paddy-aerial.jpg",
+    caption: { en: "Rice paddies, seen from above", de: "Reisfelder aus der Vogelperspektive" },
+    tall: true,
+  },
+  {
+    src: "/images/stock3/tuktuk-forest-road.jpg",
+    caption: { en: "The everyday way to get around", de: "Das alltägliche Fortbewegungsmittel" },
+  },
+  {
+    src: "/images/stock3/aerial-coastal-boats.jpg",
+    caption: { en: "Fishing boats off the south coast", de: "Fischerboote vor der Südküste" },
+  },
+  {
+    src: "/images/stock3/beach-hut-remote.jpg",
+    caption: { en: "A quiet, unmarked stretch of sand", de: "Ein ruhiger, unbenannter Sandstreifen" },
+    tall: true,
+  },
+  {
+    src: "/images/stock3/stormy-coastal-sunset.jpg",
+    caption: { en: "Storm light over the coast", de: "Gewitterlicht über der Küste" },
+  },
 ];

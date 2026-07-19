@@ -67,11 +67,6 @@ export default function AdminLoginPage() {
             {pending ? "Signing in..." : "Sign in"} <LogIn size={16} />
           </button>
         </form>
-
-        <p className="font-body text-xs text-ink-text/40 mt-6 leading-relaxed">
-          No account yet? Create one in your Supabase dashboard under
-          Authentication → Users → Add user. See the README for details.
-        </p>
       </div>
     </div>
   );

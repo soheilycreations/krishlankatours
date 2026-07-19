@@ -81,7 +81,7 @@ export const destinations: Destination[] = [
       en: "Cool mountain air, tea estates, and a strange colonial hangover.",
       de: "Kühle Bergluft, Teeplantagen und ein eigenartiges koloniales Erbe.",
     },
-    image: "/images/golden-temple-hills.jpg",
+    image: "/images/stock2/nuwaraeliya-lake-aerial.jpg",
     description: [
       {
         en: "At close to 2,000 metres, Nuwara Eliya is noticeably cold in the evenings — locals call it 'Little England' for the old bungalows, the golf course, and the tea rolling out over every hillside as far as you can see.",
@@ -111,7 +111,7 @@ export const destinations: Destination[] = [
       en: "Small hill town, big views — and the train ride everyone talks about.",
       de: "Kleine Bergstadt, große Aussichten — und die Zugfahrt, von der alle sprechen.",
     },
-    image: "/images/monk-meditation-cliff.jpg",
+    image: "/images/stock2/hillcountry-misty-dusk.jpg",
     description: [
       {
         en: "Ella is compact enough to walk everywhere, which is most of its appeal: Little Adam's Peak is an easy sunrise walk, Ella Rock a longer one, and the Nine Arch Bridge sits right in the middle of tea country with a train crossing it a few times a day.",
@@ -141,7 +141,7 @@ export const destinations: Destination[] = [
       en: "Sri Lanka's first capital, and one of the oldest continuously restored cities on earth.",
       de: "Sri Lankas erste Hauptstadt und eine der ältesten fortlaufend restaurierten Städte der Erde.",
     },
-    image: "/images/ancient-statue-polonnaruwa.jpg",
+    image: "/images/stock3/anuradhapura-stupa-dusk.jpg",
     description: [
       {
         en: "Founded around the 4th century BC, Anuradhapura was the island's capital for over a thousand years. The scale is what surprises most visitors — dagobas (stupas) like Ruwanwelisaya and Jetavanaramaya were among the tallest structures in the ancient world, built entirely of brick.",
