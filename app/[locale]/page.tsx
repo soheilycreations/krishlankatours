@@ -13,7 +13,7 @@ import CategoryIcons from "@/components/CategoryIcons";
 import HorizontalScroller from "@/components/HorizontalScroller";
 import DestinationCard from "@/components/DestinationCard";
 import CornerMotif from "@/components/motifs/CornerMotif";
-import { destinations } from "@/lib/destinations";
+import { getDestinations } from "@/lib/destinations-data";
 import { getTours } from "@/lib/tours-data";
 
 export const revalidate = 60;
@@ -22,6 +22,7 @@ export default async function HomePage() {
   const t = await getTranslations("home");
   const td = await getTranslations("destinations");
   const tours = await getTours();
+  const destinations = await getDestinations();
   const routeStops = t.raw("routeStops") as { label: string; note: string }[];
   const testimonials = t.raw("testimonials") as {
     quote: string;

@@ -143,3 +143,104 @@ export async function deleteTour(tourId: string) {
   revalidatePath("/[locale]", "layout");
   revalidatePath("/admin");
 }
+
+export async function updateInquiryStatus(inquiryId: string, status: string) {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return;
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  await supabase.from("inquiries").update({ status }).eq("id", inquiryId);
+  revalidatePath("/admin/enquiries");
+  revalidatePath("/admin");
+}
+
+export async function deleteInquiry(inquiryId: string) {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return;
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  await supabase.from("inquiries").delete().eq("id", inquiryId);
+  revalidatePath("/admin/enquiries");
+  revalidatePath("/admin");
+}
+
+interface DestinationFormResult {
+  error?: string;
+  success?: boolean;
+}
+
+export async function saveDestination(
+  destinationId: string | null,
+  prevState: unknown,
+  formData: FormData
+): Promise<DestinationFormResult> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) {
+    return { error: "This isn't connected yet." };
+  }
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "You're not signed in." };
+  }
+
+  const description = parseLocalizedList(formData, "description");
+  const highlights = parseLocalizedList(formData, "highlight");
+
+  const payload = {
+    slug: String(formData.get("slug") || "").trim(),
+    name_en: String(formData.get("name_en") || ""),
+    name_de: String(formData.get("name_de") || ""),
+    region_en: String(formData.get("region_en") || ""),
+    region_de: String(formData.get("region_de") || ""),
+    tagline_en: String(formData.get("tagline_en") || ""),
+    tagline_de: String(formData.get("tagline_de") || ""),
+    image: String(formData.get("image") || "") || null,
+    description,
+    highlights,
+    best_time_en: String(formData.get("best_time_en") || ""),
+    best_time_de: String(formData.get("best_time_de") || ""),
+    related_tour_slug: String(formData.get("related_tour_slug") || ""),
+    published: formData.get("published") === "on",
+  };
+
+  if (!payload.slug || !payload.name_en) {
+    return { error: "Slug and English name are required." };
+  }
+
+  const { error } = destinationId
+    ? await supabase.from("destinations").update(payload).eq("id", destinationId)
+    : await supabase.from("destinations").insert(payload);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/[locale]", "layout");
+  revalidatePath("/admin/destinations");
+  redirect("/admin/destinations");
+}
+
+export async function deleteDestination(destinationId: string) {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return;
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  await supabase.from("destinations").delete().eq("id", destinationId);
+  revalidatePath("/[locale]", "layout");
+  revalidatePath("/admin/destinations");
+}

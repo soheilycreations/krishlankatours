@@ -127,6 +127,50 @@ create policy "Authenticated users can delete tour images"
   using (bucket_id = 'tour-images');
 
 -- =========================================================
+-- 2c. DESTINATIONS  (the admin panel manages these too, same
+--     pattern as tours — public site falls back to
+--     lib/destinations.ts if this table is empty)
+-- =========================================================
+create table if not exists destinations (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  name_en text not null,
+  name_de text,
+  region_en text,
+  region_de text,
+  tagline_en text,
+  tagline_de text,
+  image text,
+  description jsonb default '[]',
+  highlights jsonb default '[]',
+  best_time_en text,
+  best_time_de text,
+  related_tour_slug text,
+  published boolean not null default true,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table destinations enable row level security;
+
+create policy "Published destinations are publicly readable"
+  on destinations for select
+  to anon
+  using (published = true);
+
+create policy "Only authenticated users can manage destinations"
+  on destinations for all
+  to authenticated
+  using (true)
+  with check (true);
+
+drop trigger if exists destinations_set_updated_at on destinations;
+create trigger destinations_set_updated_at
+  before update on destinations
+  for each row execute function set_updated_at();
+
+-- =========================================================
 -- 3. NEWSLETTER SUBSCRIBERS (footer "Stay inspired" signup)
 -- =========================================================
 create table if not exists newsletter_subscribers (

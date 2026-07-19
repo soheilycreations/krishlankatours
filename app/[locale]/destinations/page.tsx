@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, MapPin, Calendar, Sparkles } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import { destinations } from "@/lib/destinations";
+import { getDestinations } from "@/lib/destinations-data";
 import type { Locale } from "@/i18n/routing";
 
 export const revalidate = 60;
@@ -16,6 +16,7 @@ export default async function DestinationsPage({
   const { locale } = await params;
   const loc = locale as Locale;
   const t = await getTranslations("destinations");
+  const destinations = await getDestinations();
 
   return (
     <>

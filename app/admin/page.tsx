@@ -1,18 +1,17 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Plus, Pencil, ImageOff, AlertTriangle } from "lucide-react";
+import { Mail, Map, MapPin, Send, ArrowRight, AlertTriangle } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import DeleteTourButton from "@/app/admin/DeleteTourButton";
 
 export const dynamic = "force-dynamic";
 
-interface TourRow {
+interface InquiryRow {
   id: string;
-  slug: string;
-  title_en: string;
-  category: string;
-  hero_image: string | null;
-  published: boolean;
+  created_at: string;
+  name: string;
+  email: string;
+  tour_slug: string | null;
+  message: string | null;
+  status: string;
 }
 
 export default async function AdminDashboard() {
@@ -24,79 +23,122 @@ export default async function AdminDashboard() {
         <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
         <h1 className="font-display text-xl text-navy mb-2">Not connected yet</h1>
         <p className="font-body text-sm text-ink-text/60 max-w-md mx-auto">
-          The tour management system isn&apos;t connected yet. Please contact your developer to finish setting this up.
+          This system isn&apos;t connected yet. Please contact your developer to finish setting this up.
         </p>
       </div>
     );
   }
 
-  const { data } = await supabase
-    .from("tours")
-    .select("id, slug, title_en, category, hero_image, published")
-    .order("sort_order", { ascending: true });
+  const [{ count: newEnquiries }, { count: totalEnquiries }, { count: totalTours }, { count: totalSubs }, { data: recent }] =
+    await Promise.all([
+      supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "new"),
+      supabase.from("inquiries").select("id", { count: "exact", head: true }),
+      supabase.from("tours").select("id", { count: "exact", head: true }),
+      supabase.from("newsletter_subscribers").select("id", { count: "exact", head: true }),
+      supabase
+        .from("inquiries")
+        .select("id, created_at, name, email, tour_slug, message, status")
+        .order("created_at", { ascending: false })
+        .limit(5),
+    ]);
 
-  const tours = (data as TourRow[]) ?? [];
-  const usingFallback = tours.length === 0;
+  const recentInquiries = (recent as InquiryRow[]) ?? [];
+
+  const stats = [
+    { label: "New enquiries", value: newEnquiries ?? 0, icon: Mail, href: "/admin/enquiries", highlight: true },
+    { label: "Total enquiries", value: totalEnquiries ?? 0, icon: Mail, href: "/admin/enquiries" },
+    { label: "Tours", value: totalTours ?? 0, icon: Map, href: "/admin/tours" },
+    { label: "Newsletter subscribers", value: totalSubs ?? 0, icon: Send, href: "/admin/newsletter" },
+  ];
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="font-display text-2xl text-navy">Tours</h1>
-          <p className="font-body text-sm text-ink-text/55 mt-1">
-            {usingFallback
-              ? "No tours added yet — the public site is showing the default starter tours for now."
-              : `${tours.length} tour${tours.length === 1 ? "" : "s"} added.`}
-          </p>
-        </div>
-        <Link
-          href="/admin/tours/new"
-          className="inline-flex items-center gap-2 bg-blue text-white px-4 py-2.5 rounded-full font-body text-sm font-medium hover:bg-blue-light transition-colors shrink-0"
-        >
-          <Plus size={16} /> New tour
-        </Link>
+      <h1 className="font-display text-2xl text-navy mb-1">Dashboard</h1>
+      <p className="font-body text-sm text-ink-text/55 mb-8">An overview of what&apos;s happening on the site.</p>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        {stats.map((s) => {
+          const Icon = s.icon;
+          return (
+            <Link
+              key={s.label}
+              href={s.href}
+              className={`rounded-2xl border p-5 transition-colors ${
+                s.highlight && s.value > 0
+                  ? "bg-clay/10 border-clay/30 hover:border-clay/50"
+                  : "bg-white border-navy/10 hover:border-blue/30"
+              }`}
+            >
+              <Icon className={s.highlight && s.value > 0 ? "text-clay" : "text-blue"} size={20} />
+              <p className="font-display text-3xl text-navy mt-3">{s.value}</p>
+              <p className="font-body text-xs text-ink-text/55 mt-1">{s.label}</p>
+            </Link>
+          );
+        })}
       </div>
 
-      {usingFallback && (
-        <div className="bg-clay/10 border border-clay/25 rounded-xl p-4 mb-8 font-body text-sm text-ink-text/70">
-          Tip: ask your developer to load the starter tours into this system, so you can start editing them
-          straight away instead of beginning from a blank list.
+      <div className="bg-white rounded-2xl border border-navy/10 overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-navy/8">
+          <h2 className="font-display text-lg text-navy">Recent enquiries</h2>
+          <Link
+            href="/admin/enquiries"
+            className="inline-flex items-center gap-1 font-body text-xs text-blue hover:text-blue-light"
+          >
+            View all <ArrowRight size={13} />
+          </Link>
         </div>
-      )}
-
-      <div className="bg-white rounded-2xl border border-navy/10 divide-y divide-navy/8 overflow-hidden">
-        {tours.map((tour) => (
-          <div key={tour.id} className="flex items-center gap-4 p-4">
-            <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-paper-2 shrink-0">
-              {tour.hero_image ? (
-                <Image src={tour.hero_image} alt="" fill sizes="64px" className="object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-ink-text/30">
-                  <ImageOff size={20} />
-                </div>
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-display text-base text-navy truncate">{tour.title_en}</p>
-              <p className="font-body text-xs text-ink-text/50">
-                {tour.category} · {tour.slug} {!tour.published && "· draft"}
-              </p>
-            </div>
+        <div className="divide-y divide-navy/8">
+          {recentInquiries.map((inq) => (
             <Link
-              href={`/admin/tours/${tour.id}`}
-              className="shrink-0 w-9 h-9 rounded-full border border-navy/15 flex items-center justify-center text-navy hover:bg-blue hover:text-white hover:border-blue transition-colors"
-              aria-label="Edit"
+              key={inq.id}
+              href="/admin/enquiries"
+              className="flex items-center gap-4 px-6 py-4 hover:bg-paper-2/50 transition-colors"
             >
-              <Pencil size={15} />
+              <div className="flex-1 min-w-0">
+                <p className="font-display text-sm text-navy truncate">{inq.name}</p>
+                <p className="font-body text-xs text-ink-text/50 truncate">
+                  {inq.email} {inq.tour_slug && `· ${inq.tour_slug}`}
+                </p>
+              </div>
+              <span
+                className={`shrink-0 font-stamp text-[10px] uppercase tracking-wide px-2.5 py-1 rounded-full ${
+                  inq.status === "new"
+                    ? "bg-clay/15 text-clay"
+                    : "bg-paper-2 text-ink-text/50"
+                }`}
+              >
+                {inq.status}
+              </span>
+              <span className="shrink-0 font-body text-xs text-ink-text/40 w-20 text-right">
+                {new Date(inq.created_at).toLocaleDateString()}
+              </span>
             </Link>
-            <DeleteTourButton tourId={tour.id} tourTitle={tour.title_en} />
-          </div>
-        ))}
-        {tours.length === 0 && (
-          <div className="p-8 text-center font-body text-sm text-ink-text/50">
-            No tours yet. Click &ldquo;New tour&rdquo; to add one.
-          </div>
-        )}
+          ))}
+          {recentInquiries.length === 0 && (
+            <div className="px-6 py-8 text-center font-body text-sm text-ink-text/50">
+              No enquiries yet.
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-4 mt-6">
+        <Link
+          href="/admin/tours/new"
+          className="flex items-center gap-3 bg-white rounded-2xl border border-navy/10 p-5 hover:border-blue/30 transition-colors"
+        >
+          <Map className="text-blue" size={20} />
+          <span className="font-body text-sm text-navy">Add a new tour</span>
+          <ArrowRight size={15} className="text-ink-text/30 ml-auto" />
+        </Link>
+        <Link
+          href="/admin/destinations/new"
+          className="flex items-center gap-3 bg-white rounded-2xl border border-navy/10 p-5 hover:border-blue/30 transition-colors"
+        >
+          <MapPin className="text-blue" size={20} />
+          <span className="font-body text-sm text-navy">Add a new destination</span>
+          <ArrowRight size={15} className="text-ink-text/30 ml-auto" />
+        </Link>
       </div>
     </div>
   );
