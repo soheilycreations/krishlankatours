@@ -41,33 +41,33 @@ create policy "Only authenticated users can update inquiries"
   using (true);
 
 -- =========================================================
--- 2. TOURS  (optional — for later, if you want to manage tour
---    packages from Supabase/a CMS instead of editing lib/tours.ts
---    in code). The site currently reads tour content from code
---    for speed and reliability; this table is here so you can
---    migrate to database-driven tours later without redesigning
---    anything.
+-- 2. TOURS  (the admin panel at /admin reads and writes this
+--    table. The public site fetches from here; if this table is
+--    empty or Supabase isn't configured, the site automatically
+--    falls back to the starter content in lib/tours.ts so it
+--    never breaks.)
 -- =========================================================
 create table if not exists tours (
   id uuid primary key default gen_random_uuid(),
   slug text unique not null,
   category text not null,
-  duration_days int not null,
-  price_from_usd numeric not null,
+  duration_days int not null default 1,
+  price_from_usd numeric,
   group_size text,
   hero_image text,
-  gallery text[],
+  gallery text[] default '{}',
   title_en text not null,
   title_de text,
   tagline_en text,
   tagline_de text,
   summary_en text,
   summary_de text,
-  highlights_en text[],
-  highlights_de text[],
-  itinerary jsonb,
+  highlights jsonb default '[]',
+  itinerary jsonb default '[]',
   published boolean not null default true,
-  created_at timestamptz not null default now()
+  sort_order int not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
 
 alter table tours enable row level security;
@@ -77,11 +77,54 @@ create policy "Published tours are publicly readable"
   to anon
   using (published = true);
 
+-- The admin panel signs in with Supabase Auth (see README), so any
+-- authenticated user can manage tours. There's no public sign-up, so in
+-- practice this means only the account(s) you create yourself.
 create policy "Only authenticated users can manage tours"
   on tours for all
   to authenticated
   using (true)
   with check (true);
+
+create or replace function set_updated_at()
+returns trigger as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists tours_set_updated_at on tours;
+create trigger tours_set_updated_at
+  before update on tours
+  for each row execute function set_updated_at();
+
+-- =========================================================
+-- 2b. STORAGE  (photo uploads from the admin panel)
+-- =========================================================
+insert into storage.buckets (id, name, public)
+values ('tour-images', 'tour-images', true)
+on conflict (id) do nothing;
+
+create policy "Public can view tour images"
+  on storage.objects for select
+  to public
+  using (bucket_id = 'tour-images');
+
+create policy "Authenticated users can upload tour images"
+  on storage.objects for insert
+  to authenticated
+  with check (bucket_id = 'tour-images');
+
+create policy "Authenticated users can update tour images"
+  on storage.objects for update
+  to authenticated
+  using (bucket_id = 'tour-images');
+
+create policy "Authenticated users can delete tour images"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'tour-images');
 
 -- =========================================================
 -- 3. NEWSLETTER SUBSCRIBERS (footer "Stay inspired" signup)

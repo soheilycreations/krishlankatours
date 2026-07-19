@@ -5,12 +5,12 @@ import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle2, AlertCircle } from "lucide-react";
-import { tours } from "@/lib/tours";
+import type { Tour } from "@/lib/tours";
 import type { Locale } from "@/i18n/routing";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export default function ContactForm() {
+export default function ContactForm({ tours }: { tours: Tour[] }) {
   const t = useTranslations("contact");
   const locale = useLocale() as Locale;
   const searchParams = useSearchParams();

@@ -95,6 +95,39 @@ The easiest path for a Next.js site like this is **Vercel** (made by the Next.js
 3. Add the same environment variables from `.env.local` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_WHATSAPP_NUMBER`) in the Vercel project settings.
 4. Deploy. Point `krishlankatours.com`'s DNS at Vercel following their custom domain instructions.
 
+## Admin panel (manage tours & photos yourself)
+
+The site has a password-protected admin panel at **`/admin`** where you can add, edit, and delete tour packages — including uploading photos — without touching any code. It's connected to the same Supabase project as the rest of the site.
+
+### One-time setup
+
+1. Make sure you've already run `supabase/schema.sql` (see above) — it creates the `tours` table, sets up row-level security so only signed-in users can edit, and creates a `tour-images` storage bucket for photo uploads.
+2. **Create your admin login**: in the Supabase dashboard, go to **Authentication → Users → Add user**, enter your email and a password. (There's no public sign-up page — this is the only way to create an account, which keeps the admin panel private to you.)
+3. **Load starter content (optional but recommended)**: open **SQL Editor → New query**, paste the contents of `supabase/seed.sql`, and run it. This copies the same 12 tours already on the site into the database, so you're editing real content from day one instead of starting blank. If you skip this, the public site keeps showing the built-in starter content automatically until you add your own tours.
+4. Deploy (or restart your dev server) with the Supabase environment variables set, then go to `/admin` and sign in with the account from step 2.
+
+### Using it
+
+- **Tour list** (`/admin`): every tour in the database, with a thumbnail, quick edit and delete buttons, and a "New tour" button.
+- **Add/edit a tour**: one form covering everything — slug, category, duration, group size, hero image, gallery, English/German text for the title/tagline/summary, highlights (add/remove rows), and the full day-by-day itinerary (add/remove days). A price field is there too, but it's optional and never shown publicly — the site quotes trips on enquiry instead.
+- **Photos**: click "Upload" next to any image field to upload directly from your device (stored in Supabase Storage, publicly served) — or paste a path/URL if you'd rather point at an existing image already in `public/images/`.
+- **Publish toggle**: uncheck "Published" to hide a tour from the public site without deleting it (handy for drafts or seasonal tours).
+- Changes appear on the live site within about a minute (it re-checks the database periodically rather than needing a redeploy).
+
+### Notes
+
+- Only the `tours` content is admin-managed right now — Destinations, the Gallery, and page copy still live in `lib/destinations.ts`, `lib/gallery.ts`, and `messages/*.json` respectively, the same as before.
+- The admin panel and the public site share the same Supabase project but are otherwise independent — deleting or unpublishing a tour in the admin panel is the only way it disappears from the public site.
+
+## Language dropdown (English/German + auto-translate)
+
+The header's language dropdown (`components/LanguageDropdown.tsx`) has two tiers:
+
+- **English and German** are hand-translated via next-intl, same as the rest of the site — full quality, proper routing (`/` and `/de`).
+- **The other 11 languages** (French, Spanish, Italian, Dutch, Russian, Chinese, Japanese, Korean, Arabic, Portuguese, Hindi) run through the free Google Translate website widget (`components/GoogleTranslate.tsx`), loaded invisibly and triggered by the flag dropdown. This gives broad language coverage without hand-translating everything, but it's machine translation — quality won't match the English/German copy, and it can occasionally mistranslate names or specific terms. The dropdown shows a small note about this.
+- To add another fully hand-translated language later, add a new locale to `i18n/routing.ts` and a matching `messages/xx.json` file — same pattern as `de.json`.
+- The brand name ("Krish Lanka Tours & Travels") is marked `notranslate` throughout so Google Translate leaves it alone.
+
 ## Performance notes
 
 A few concrete things were done to keep this fast:

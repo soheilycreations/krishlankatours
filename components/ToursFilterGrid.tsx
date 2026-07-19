@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import TourCard from "@/components/TourCard";
 import Reveal from "@/components/Reveal";
-import { tours, categoryLabels, type TourCategory } from "@/lib/tours";
+import { categoryLabels, type TourCategory, type Tour } from "@/lib/tours";
 import type { Locale } from "@/i18n/routing";
 
 const categories: TourCategory[] = [
@@ -17,7 +17,7 @@ const categories: TourCategory[] = [
   "city",
 ];
 
-export default function ToursFilterGrid() {
+export default function ToursFilterGrid({ tours }: { tours: Tour[] }) {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category") as TourCategory | null;
   const [active, setActive] = useState<TourCategory | "all">(

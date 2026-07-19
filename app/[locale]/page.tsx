@@ -5,20 +5,23 @@ import { ArrowRight, Quote, Star } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import TourCard from "@/components/TourCard";
 import RoutePath from "@/components/RoutePath";
-import HeroCollage from "@/components/HeroCollage";
 import HeroSearchBar from "@/components/HeroSearchBar";
+import HeroBackgroundImage from "@/components/HeroBackgroundImage";
 import TrustBadges from "@/components/TrustBadges";
 import FaqAccordion from "@/components/FaqAccordion";
 import CategoryIcons from "@/components/CategoryIcons";
 import HorizontalScroller from "@/components/HorizontalScroller";
 import DestinationCard from "@/components/DestinationCard";
 import CornerMotif from "@/components/motifs/CornerMotif";
-import { tours } from "@/lib/tours";
 import { destinations } from "@/lib/destinations";
+import { getTours } from "@/lib/tours-data";
+
+export const revalidate = 60;
 
 export default async function HomePage() {
   const t = await getTranslations("home");
   const td = await getTranslations("destinations");
+  const tours = await getTours();
   const routeStops = t.raw("routeStops") as { label: string; note: string }[];
   const testimonials = t.raw("testimonials") as {
     quote: string;
@@ -40,56 +43,58 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-paper-textured pt-14 pb-16 sm:pt-20 sm:pb-24">
-        {/* soft decorative gradient blobs for depth */}
-        <div className="absolute -top-24 -right-24 w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-blue/10 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-32 -left-20 w-72 h-72 rounded-full bg-clay/10 blur-3xl pointer-events-none" />
+      <section className="relative overflow-hidden">
+        <div className="relative h-[78vh] min-h-[560px] sm:min-h-[620px] flex items-center">
+          <HeroBackgroundImage src="/images/golden-temple-hills.jpg" />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/60 to-navy/25" />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy/50 via-transparent to-transparent" />
 
-        {/* single decorative motif, not tiled — sits quietly in one corner */}
-        <CornerMotif className="hidden md:block absolute top-0 right-0 w-[420px] h-[420px] text-blue/25 pointer-events-none" />
-
-        <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 grid lg:grid-cols-[1.35fr_1fr] gap-10 items-center">
-          <div>
+          <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 w-full">
             <Reveal>
-              <span className="inline-flex items-center gap-2 font-stamp text-xs sm:text-sm uppercase tracking-[0.15em] text-blue bg-blue/8 border border-blue/15 rounded-full px-4 py-1.5 mb-6">
+              <span className="inline-flex items-center gap-2 font-stamp text-xs sm:text-sm uppercase tracking-[0.2em] text-clay mb-6">
+                <span className="w-8 h-px bg-clay/60" />
                 {t("heroEyebrow")}
               </span>
             </Reveal>
-            <Reveal delay={0.08}>
-              <h1 className="font-display text-4xl sm:text-6xl lg:text-6xl text-navy leading-[1.05] max-w-2xl text-balance">
+            <Reveal delay={0.1}>
+              <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl text-white leading-[1.05] max-w-2xl text-balance">
                 {t("heroTitle")}
               </h1>
             </Reveal>
-            <Reveal delay={0.18}>
-              <p className="font-body text-base sm:text-lg text-ink-text/65 max-w-xl mt-6 leading-relaxed">
+            <Reveal delay={0.2}>
+              <p className="font-body text-base sm:text-lg text-white/80 max-w-xl mt-6 leading-relaxed">
                 {t("heroSubtitle")}
               </p>
             </Reveal>
-            <Reveal delay={0.28}>
+            <Reveal delay={0.3}>
               <div className="flex flex-wrap gap-4 mt-9">
                 <Link
                   href="/tours"
-                  className="inline-flex items-center gap-2 bg-blue text-white px-6 py-3.5 rounded-full font-body font-medium shadow-lg shadow-blue/20 hover:bg-blue-light hover:shadow-blue/30 transition-all"
+                  className="inline-flex items-center gap-2 bg-clay text-navy px-6 py-3.5 rounded-full font-body font-semibold shadow-lg shadow-navy/30 hover:bg-clay/90 transition-all"
                 >
                   {t("heroCtaPrimary")} <ArrowRight size={17} />
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 border border-navy/20 text-navy px-6 py-3.5 rounded-full font-body font-medium hover:border-blue hover:text-blue transition-colors"
+                  className="inline-flex items-center gap-2 border border-white/40 text-white px-6 py-3.5 rounded-full font-body font-medium hover:border-white hover:bg-white/10 transition-colors"
                 >
                   {t("heroCtaSecondary")}
                 </Link>
               </div>
             </Reveal>
           </div>
-
-          <HeroCollage />
         </div>
 
-        <Reveal delay={0.36} className="relative z-10 mx-auto max-w-5xl px-5 sm:px-8 mt-12 sm:mt-16">
-          <HeroSearchBar />
-        </Reveal>
+        {/* floating glass search card, overlapping the photo edge */}
+        <div className="relative z-20 mx-auto max-w-5xl px-5 sm:px-8 -mt-10 sm:-mt-12">
+          <Reveal delay={0.4}>
+            <HeroSearchBar />
+          </Reveal>
+        </div>
       </section>
+
+      {/* spacer for the floating search card's overlap */}
+      <div className="h-6 sm:h-8 bg-paper-textured" />
 
       {/* CATEGORIES */}
       <section className="bg-paper-textured py-16 sm:py-20">

@@ -28,11 +28,26 @@
     "routeEyebrow": "How a trip usually goes",
     "routeTitle": "From the airport to wherever you want to end up",
     "routeStops": [
-      { "label": "Airport pickup", "note": "We talk through your trip on the drive in" },
-      { "label": "Wild places", "note": "Elephants, birds, and early starts for good light" },
-      { "label": "Old stone cities", "note": "Ruins and carvings a thousand years old" },
-      { "label": "The hills", "note": "Tea country, temples above the clouds" },
-      { "label": "The coast", "note": "Slow days, or none at all" }
+      {
+        "label": "Airport pickup",
+        "note": "We talk through your trip on the drive in"
+      },
+      {
+        "label": "Wild places",
+        "note": "Elephants, birds, and early starts for good light"
+      },
+      {
+        "label": "Old stone cities",
+        "note": "Ruins and carvings a thousand years old"
+      },
+      {
+        "label": "The hills",
+        "note": "Tea country, temples above the clouds"
+      },
+      {
+        "label": "The coast",
+        "note": "Slow days, or none at all"
+      }
     ],
     "toursEyebrow": "Tour packages",
     "toursTitle": "Five ways to see the island",
@@ -65,10 +80,22 @@
     "ctaButton": "Start planning",
     "trustEyebrow": "Why book directly",
     "trust": [
-      { "title": "One driver, start to finish", "body": "The person who plans your trip is the one behind the wheel." },
-      { "title": "Reply within a day", "body": "Every enquiry gets a personal reply, usually much sooner." },
-      { "title": "English & German spoken", "body": "No translation gaps on the road or over WhatsApp." },
-      { "title": "Nothing fixed in stone", "body": "Every itinerary on this site is a starting point you can reshape." }
+      {
+        "title": "One driver, start to finish",
+        "body": "The person who plans your trip is the one behind the wheel."
+      },
+      {
+        "title": "Reply within a day",
+        "body": "Every enquiry gets a personal reply, usually much sooner."
+      },
+      {
+        "title": "English & German spoken",
+        "body": "No translation gaps on the road or over WhatsApp."
+      },
+      {
+        "title": "Nothing fixed in stone",
+        "body": "Every itinerary on this site is a starting point you can reshape."
+      }
     ],
     "faqEyebrow": "Questions",
     "faqTitle": "Before you write in",
@@ -102,8 +129,6 @@
     "filterAll": "All",
     "days": "days",
     "day": "day",
-    "from": "from",
-    "perPerson": "per person",
     "viewDetails": "View itinerary",
     "photoComingSoon": "Photo coming soon"
   },
@@ -113,7 +138,7 @@
     "itineraryTitle": "Day by day",
     "day": "Day",
     "groupSize": "Group size",
-    "priceNote": "Final price depends on group size, season, and vehicle. I'll send an exact quote once I know your dates.",
+    "priceNote": "Every trip is quoted individually based on group size, season, and vehicle — send an enquiry and I'll get back to you with the details.",
     "enquire": "Enquire about this trip",
     "otherTours": "Other tour packages"
   },
@@ -144,10 +169,22 @@
     "introBody2": "I grew up around these roads and I still learn something new on most trips. Sri Lanka rewards slowness more than it rewards a packed checklist, and that's the trip I try to build for every guest.",
     "valuesTitle": "How I try to run things",
     "values": [
-      { "title": "Small groups only", "body": "One vehicle, one group. Your trip is never merged with strangers to fill seats." },
-      { "title": "Local, not scripted", "body": "I take you to the places I'd take my own visiting family, not just the stops every bus makes." },
-      { "title": "Honest about pace", "body": "If a route is too rushed for what you want, I'll say so before you book it, not after." },
-      { "title": "Responsible travel", "body": "The small guesthouses, family spice gardens, and local paddlers I work with are part of how the money stays in the community." }
+      {
+        "title": "Small groups only",
+        "body": "One vehicle, one group. Your trip is never merged with strangers to fill seats."
+      },
+      {
+        "title": "Local, not scripted",
+        "body": "I take you to the places I'd take my own visiting family, not just the stops every bus makes."
+      },
+      {
+        "title": "Honest about pace",
+        "body": "If a route is too rushed for what you want, I'll say so before you book it, not after."
+      },
+      {
+        "title": "Responsible travel",
+        "body": "The small guesthouses, family spice gardens, and local paddlers I work with are part of how the money stays in the community."
+      }
     ],
     "experienceTitle": "Years on these roads",
     "experienceBody": "I've driven and guided across the island long enough to have a shortlist of quiet mountain temples the tour buses miss, and to know which park roads are empty at sunrise. That's the experience I bring to every itinerary."

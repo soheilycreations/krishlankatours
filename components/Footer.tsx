@@ -25,7 +25,7 @@ export default function Footer() {
                 className="object-contain w-10 h-10"
               />
             </span>
-            <div className="font-display text-2xl text-white">
+            <div className="notranslate font-display text-2xl text-white">
               Krish Lanka Tours<span className="text-blue-light italic"> &amp; Travels</span>
             </div>
           </div>

@@ -101,3 +101,26 @@ select:focus-visible {
     scroll-behavior: auto !important;
   }
 }
+
+/* Google Translate widget runs invisibly in the background — our own
+   flag dropdown in the header is the only UI the visitor sees. */
+.goog-te-banner-frame,
+.skiptranslate > iframe {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+body {
+  top: 0 !important;
+}
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+}
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+#google_translate_element {
+  display: none !important;
+}

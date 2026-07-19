@@ -2,9 +2,13 @@ import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import ToursFilterGrid from "@/components/ToursFilterGrid";
 import Reveal from "@/components/Reveal";
+import { getTours } from "@/lib/tours-data";
+
+export const revalidate = 60;
 
 export default async function ToursPage() {
   const t = await getTranslations("tours");
+  const tours = await getTours();
 
   return (
     <section className="bg-paper-textured min-h-screen pt-16 pb-24">
@@ -22,7 +26,7 @@ export default async function ToursPage() {
         </Reveal>
 
         <Suspense fallback={null}>
-          <ToursFilterGrid />
+          <ToursFilterGrid tours={tours} />
         </Suspense>
       </div>
     </section>

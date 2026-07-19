@@ -4,8 +4,9 @@ import { Link } from "@/i18n/navigation";
 import { ArrowRight, MapPin, Calendar, Sparkles } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { destinations } from "@/lib/destinations";
-import { getTourBySlug } from "@/lib/tours";
 import type { Locale } from "@/i18n/routing";
+
+export const revalidate = 60;
 
 export default async function DestinationsPage({
   params,
@@ -35,7 +36,7 @@ export default async function DestinationsPage({
       </section>
 
       {destinations.map((dest, i) => {
-        const relatedTour = getTourBySlug(dest.relatedTourSlug);
+        const relatedTour = { slug: dest.relatedTourSlug };
         const imageLeft = i % 2 === 0;
 
         return (

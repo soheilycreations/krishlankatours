@@ -28,11 +28,26 @@
     "routeEyebrow": "Wie eine Reise meist abläuft",
     "routeTitle": "Vom Flughafen bis dorthin, wo du hin willst",
     "routeStops": [
-      { "label": "Flughafenabholung", "note": "Wir besprechen deine Reise schon auf der Fahrt" },
-      { "label": "Wilde Orte", "note": "Elefanten, Vögel und früher Start für gutes Licht" },
-      { "label": "Alte Steinstädte", "note": "Tausend Jahre alte Ruinen und Steinmetzarbeiten" },
-      { "label": "Das Hochland", "note": "Teeland, Tempel über den Wolken" },
-      { "label": "Die Küste", "note": "Ruhige Tage, oder gar keine Pläne" }
+      {
+        "label": "Flughafenabholung",
+        "note": "Wir besprechen deine Reise schon auf der Fahrt"
+      },
+      {
+        "label": "Wilde Orte",
+        "note": "Elefanten, Vögel und früher Start für gutes Licht"
+      },
+      {
+        "label": "Alte Steinstädte",
+        "note": "Tausend Jahre alte Ruinen und Steinmetzarbeiten"
+      },
+      {
+        "label": "Das Hochland",
+        "note": "Teeland, Tempel über den Wolken"
+      },
+      {
+        "label": "Die Küste",
+        "note": "Ruhige Tage, oder gar keine Pläne"
+      }
     ],
     "toursEyebrow": "Touren",
     "toursTitle": "Fünf Wege, die Insel zu erleben",
@@ -65,10 +80,22 @@
     "ctaButton": "Planung starten",
     "trustEyebrow": "Warum direkt buchen",
     "trust": [
-      { "title": "Ein Fahrer, von Anfang bis Ende", "body": "Die Person, die deine Reise plant, sitzt auch am Steuer." },
-      { "title": "Antwort innerhalb eines Tages", "body": "Jede Anfrage bekommt eine persönliche Antwort, meist deutlich schneller." },
-      { "title": "Englisch & Deutsch gesprochen", "body": "Keine Verständigungslücken unterwegs oder über WhatsApp." },
-      { "title": "Nichts ist in Stein gemeißelt", "body": "Jede Reiseroute auf dieser Seite ist ein Ausgangspunkt, den du anpassen kannst." }
+      {
+        "title": "Ein Fahrer, von Anfang bis Ende",
+        "body": "Die Person, die deine Reise plant, sitzt auch am Steuer."
+      },
+      {
+        "title": "Antwort innerhalb eines Tages",
+        "body": "Jede Anfrage bekommt eine persönliche Antwort, meist deutlich schneller."
+      },
+      {
+        "title": "Englisch & Deutsch gesprochen",
+        "body": "Keine Verständigungslücken unterwegs oder über WhatsApp."
+      },
+      {
+        "title": "Nichts ist in Stein gemeißelt",
+        "body": "Jede Reiseroute auf dieser Seite ist ein Ausgangspunkt, den du anpassen kannst."
+      }
     ],
     "faqEyebrow": "Fragen",
     "faqTitle": "Bevor du schreibst",
@@ -102,8 +129,6 @@
     "filterAll": "Alle",
     "days": "Tage",
     "day": "Tag",
-    "from": "ab",
-    "perPerson": "pro Person",
     "viewDetails": "Reiseplan ansehen",
     "photoComingSoon": "Foto folgt in Kürze"
   },
@@ -113,7 +138,7 @@
     "itineraryTitle": "Tag für Tag",
     "day": "Tag",
     "groupSize": "Gruppengröße",
-    "priceNote": "Der endgültige Preis hängt von Gruppengröße, Saison und Fahrzeug ab. Ich sende dir ein genaues Angebot, sobald ich deine Reisedaten kenne.",
+    "priceNote": "Jede Reise wird individuell kalkuliert, je nach Gruppengröße, Saison und Fahrzeug — schick mir eine Anfrage und ich melde mich mit den Details.",
     "enquire": "Zu dieser Reise anfragen",
     "otherTours": "Weitere Touren"
   },
@@ -144,10 +169,22 @@
     "introBody2": "Ich bin an diesen Straßen aufgewachsen und lerne bei den meisten Reisen noch etwas Neues. Sri Lanka belohnt Langsamkeit mehr als ein vollgepacktes Programm, und genau diese Reise versuche ich für jeden Gast zu gestalten.",
     "valuesTitle": "Wie ich arbeite",
     "values": [
-      { "title": "Nur kleine Gruppen", "body": "Ein Fahrzeug, eine Gruppe. Deine Reise wird nie mit Fremden zusammengelegt, um Plätze zu füllen." },
-      { "title": "Lokal, nicht nach Schema", "body": "Ich zeige dir die Orte, die ich auch meiner eigenen Familie zeigen würde, nicht nur die Stopps jedes Reisebusses." },
-      { "title": "Ehrlich beim Tempo", "body": "Wenn eine Route zu gehetzt für das ist, was du möchtest, sage ich es vor der Buchung, nicht danach." },
-      { "title": "Verantwortungsvoll reisen", "body": "Die kleinen Gästehäuser, familiengeführten Gewürzgärten und lokalen Paddler, mit denen ich arbeite, sorgen dafür, dass das Geld in der Gemeinschaft bleibt." }
+      {
+        "title": "Nur kleine Gruppen",
+        "body": "Ein Fahrzeug, eine Gruppe. Deine Reise wird nie mit Fremden zusammengelegt, um Plätze zu füllen."
+      },
+      {
+        "title": "Lokal, nicht nach Schema",
+        "body": "Ich zeige dir die Orte, die ich auch meiner eigenen Familie zeigen würde, nicht nur die Stopps jedes Reisebusses."
+      },
+      {
+        "title": "Ehrlich beim Tempo",
+        "body": "Wenn eine Route zu gehetzt für das ist, was du möchtest, sage ich es vor der Buchung, nicht danach."
+      },
+      {
+        "title": "Verantwortungsvoll reisen",
+        "body": "Die kleinen Gästehäuser, familiengeführten Gewürzgärten und lokalen Paddler, mit denen ich arbeite, sorgen dafür, dass das Geld in der Gemeinschaft bleibt."
+      }
     ],
     "experienceTitle": "Jahre auf diesen Straßen",
     "experienceBody": "Ich fahre und führe schon lange genug durch die Insel, um eine eigene Liste ruhiger Bergtempel zu haben, die Reisebusse übersehen, und um zu wissen, welche Parkstraßen bei Sonnenaufgang leer sind. Diese Erfahrung bringe ich in jede Reiseroute ein."

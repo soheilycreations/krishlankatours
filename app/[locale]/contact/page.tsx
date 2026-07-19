@@ -3,11 +3,15 @@ import { getTranslations } from "next-intl/server";
 import { MessageCircle, Mail, Phone, MapPin, Plane } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import ContactForm from "@/components/ContactForm";
+import { getTours } from "@/lib/tours-data";
+
+export const revalidate = 60;
 
 export default async function ContactPage() {
   const t = await getTranslations("contact");
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
   const pickupAreas = t.raw("pickupAreas") as string[];
+  const tours = await getTours();
 
   return (
     <section className="bg-paper-2-textured min-h-screen pt-16 pb-24">
@@ -25,7 +29,7 @@ export default async function ContactPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           <Reveal delay={0.05} className="lg:col-span-2">
             <Suspense fallback={null}>
-              <ContactForm />
+              <ContactForm tours={tours} />
             </Suspense>
           </Reveal>
 

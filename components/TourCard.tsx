@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { Users, ArrowRight } from "lucide-react";
 import type { Tour } from "@/lib/tours";
 import { categoryLabels } from "@/lib/tours";
 import type { Locale } from "@/i18n/routing";
@@ -54,12 +55,12 @@ export default function TourCard({ tour }: { tour: Tour }) {
         </p>
         <div className="dotted-rule pb-4 mb-1" />
         <div className="flex items-center justify-between">
-          <span className="font-stamp text-xs text-ink-text/45 uppercase tracking-wide">
-            {t("from")}
+          <span className="flex items-center gap-1.5 font-body text-xs text-ink-text/50">
+            <Users size={13} className="text-blue shrink-0" />
+            {tour.groupSize}
           </span>
-          <span className="font-display text-lg text-blue">
-            ${tour.priceFromUsd}
-            <span className="font-body text-xs text-ink-text/45"> /{t("perPerson")}</span>
+          <span className="flex items-center gap-1 font-body text-xs font-medium text-blue group-hover:gap-1.5 transition-all">
+            {t("viewDetails")} <ArrowRight size={13} />
           </span>
         </div>
       </div>

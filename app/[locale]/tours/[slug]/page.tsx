@@ -6,11 +6,14 @@ import { ArrowLeft, ArrowRight, Users, Calendar, Check } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import TourCard from "@/components/TourCard";
 import TourImagePlaceholder from "@/components/TourImagePlaceholder";
-import { tours, getTourBySlug, categoryLabels } from "@/lib/tours";
+import { tours as staticTours, categoryLabels } from "@/lib/tours";
+import { getTours, getTourBySlugFromDb } from "@/lib/tours-data";
 import type { Locale } from "@/i18n/routing";
 
+export const revalidate = 60;
+
 export function generateStaticParams() {
-  return tours.map((t) => ({ slug: t.slug }));
+  return staticTours.map((t) => ({ slug: t.slug }));
 }
 
 export default async function TourDetailPage({
@@ -19,13 +22,14 @@ export default async function TourDetailPage({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  const tour = getTourBySlug(slug);
+  const tour = await getTourBySlugFromDb(slug);
   if (!tour) notFound();
 
   const loc = locale as Locale;
   const t = await getTranslations("tourDetail");
   const tListing = await getTranslations("tours");
-  const others = tours.filter((tr) => tr.slug !== tour.slug).slice(0, 3);
+  const allTours = await getTours();
+  const others = allTours.filter((tr) => tr.slug !== tour.slug).slice(0, 3);
 
   return (
     <>
@@ -134,15 +138,7 @@ export default async function TourDetailPage({
 
           <div className="lg:col-span-1">
             <Reveal delay={0.1} className="sticky top-28 bg-white rounded-2xl p-7 border border-navy/10 shadow-lg">
-              <div className="flex items-center justify-between mb-5 pb-5 border-b border-navy/8">
-                <span className="font-stamp text-xs text-ink-text/50 uppercase">
-                  {tListing("from")}
-                </span>
-                <span className="font-display text-3xl text-blue">
-                  ${tour.priceFromUsd}
-                </span>
-              </div>
-              <div className="flex items-center gap-3 mb-3 font-body text-sm text-ink-text/70">
+              <div className="flex items-center gap-3 mb-4 pb-4 border-b border-navy/8 font-body text-sm text-ink-text/70">
                 <Calendar size={16} className="text-blue shrink-0" />
                 {tour.durationDays} {tour.durationDays === 1 ? tListing("day") : tListing("days")}
               </div>
