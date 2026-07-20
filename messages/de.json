@@ -78,6 +78,12 @@
     "ctaTitle": "Erzähl mir, was dir vorschwebt.",
     "ctaBody": "Schreib mir ein paar Zeilen zu deinen Reisedaten und Interessen, und ich antworte mit einer passenden Route.",
     "ctaButton": "Planung starten",
+    "sriLankaStats": [
+      { "value": "8", "label": "UNESCO-Welterbestätten" },
+      { "value": "26", "label": "Nationalparks" },
+      { "value": "1.340 km", "label": "Küstenlinie" },
+      { "value": "2.500+", "label": "Jahre dokumentierter Geschichte" }
+    ],
     "trustEyebrow": "Warum direkt buchen",
     "trust": [
       {

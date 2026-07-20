@@ -44,6 +44,18 @@ export const categoryLabels: Record<TourCategory, LocalizedText> = {
   city: { en: "City", de: "Stadt" },
 };
 
+/** Each category gets its own accent color so tour cards, chips, and
+ *  category icons read as varied and colorful rather than one blue tone
+ *  repeated everywhere. Values are Tailwind background/text pairs. */
+export const categoryColors: Record<TourCategory, { bg: string; text: string; ring: string }> = {
+  wildlife: { bg: "bg-emerald-600", text: "text-emerald-700", ring: "group-hover:ring-emerald-500" },
+  heritage: { bg: "bg-amber-600", text: "text-amber-700", ring: "group-hover:ring-amber-500" },
+  hillcountry: { bg: "bg-teal-600", text: "text-teal-700", ring: "group-hover:ring-teal-500" },
+  wetland: { bg: "bg-cyan-600", text: "text-cyan-700", ring: "group-hover:ring-cyan-500" },
+  coastal: { bg: "bg-rose-500", text: "text-rose-600", ring: "group-hover:ring-rose-400" },
+  city: { bg: "bg-violet-600", text: "text-violet-700", ring: "group-hover:ring-violet-500" },
+};
+
 export const tours: Tour[] = [
   {
     slug: "wild-heart-safari",

@@ -13,6 +13,7 @@ import CategoryIcons from "@/components/CategoryIcons";
 import HorizontalScroller from "@/components/HorizontalScroller";
 import DestinationCard from "@/components/DestinationCard";
 import CornerMotif from "@/components/motifs/CornerMotif";
+import SriLankaStats from "@/components/SriLankaStats";
 import { getDestinations } from "@/lib/destinations-data";
 import { getTours } from "@/lib/tours-data";
 
@@ -24,6 +25,7 @@ export default async function HomePage() {
   const tours = await getTours();
   const destinations = await getDestinations();
   const routeStops = t.raw("routeStops") as { label: string; note: string }[];
+  const sriLankaStats = t.raw("sriLankaStats") as { value: string; label: string }[];
   const testimonials = t.raw("testimonials") as {
     quote: string;
     name: string;
@@ -99,6 +101,13 @@ export default async function HomePage() {
           <Reveal delay={0.4}>
             <HeroSearchBar />
           </Reveal>
+        </div>
+      </section>
+
+      {/* SRI LANKA STATS */}
+      <section className="bg-paper-textured pt-14 sm:pt-16 pb-2">
+        <div className="mx-auto max-w-4xl px-5 sm:px-8">
+          <SriLankaStats stats={sriLankaStats} />
         </div>
       </section>
 

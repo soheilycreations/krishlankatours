@@ -78,6 +78,12 @@
     "ctaTitle": "Tell me what you have in mind.",
     "ctaBody": "Send a few lines about your dates and interests, and I'll reply with a route built around them.",
     "ctaButton": "Start planning",
+    "sriLankaStats": [
+      { "value": "8", "label": "UNESCO World Heritage Sites" },
+      { "value": "26", "label": "National Parks" },
+      { "value": "1,340 km", "label": "of Coastline" },
+      { "value": "2,500+", "label": "Years of Recorded History" }
+    ],
     "trustEyebrow": "Why book directly",
     "trust": [
       {
