@@ -46,7 +46,15 @@ export default async function HomePage() {
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="relative h-[78vh] min-h-[560px] sm:min-h-[620px] flex items-center">
-          <HeroBackgroundImage src="/images/golden-temple-hills.jpg" />
+          <HeroBackgroundImage
+            images={[
+              "/images/golden-temple-hills.jpg",
+              "/images/stock2/sigiriya-sunset.jpg",
+              "/images/stock2/galle-fort-rampart.jpg",
+              "/images/stock2/nuwaraeliya-lake-aerial.jpg",
+              "/images/elephants-trio.jpg",
+            ]}
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/60 to-navy/25" />
           <div className="absolute inset-0 bg-gradient-to-r from-navy/50 via-transparent to-transparent" />
 
