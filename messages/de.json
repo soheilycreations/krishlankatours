@@ -1,0 +1,325 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "tours": "Touren",
+    "destinations": "Reiseziele",
+    "gallery": "Galerie",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "bookNow": "Jetzt anfragen"
+  },
+  "home": {
+    "heroEyebrow": "Krish Lanka Tours & Travels",
+    "heroTitle": "Sri Lanka so erleben, wie ich es meiner eigenen Familie zeigen würde.",
+    "heroSubtitle": "Private, fahrergeführte Touren durch die ganze Insel — Tierwelt, alte Königsstädte, Teeland und Küste, geplant um dich herum statt nach starrem Busfahrplan.",
+    "heroCtaPrimary": "Touren ansehen",
+    "heroCtaSecondary": "Individuelle Reise planen",
+    "searchWhere": "Wohin in Sri Lanka?",
+    "searchWhereAny": "Noch unsicher",
+    "searchWhen": "Wann?",
+    "searchWhenPlaceholder": "Deine Reisedaten",
+    "searchTravelers": "Reisende",
+    "searchButton": "Suchen",
+    "introEyebrow": "Warum ein privater Guide",
+    "introTitle": "Ein Fahrer, ein Guide, eine Reise, gebaut um dich herum.",
+    "introBody": "Keine geteilten Busse, keine festen Abfahrtszeiten. Du sagst mir, was du sehen möchtest und wie schnell du reisen willst, und ich baue die Route danach. Die meisten meiner Gäste kommen über eine Empfehlung früherer Gäste zu mir — so läuft dieses Geschäft bis heute.",
+    "categoriesEyebrow": "Kategorien",
+    "categoriesTitle": "Finde Inspiration nach der Art der Reise, die du möchtest",
+    "routeEyebrow": "Wie eine Reise meist abläuft",
+    "routeTitle": "Vom Flughafen bis dorthin, wo du hin willst",
+    "routeStops": [
+      {
+        "label": "Flughafenabholung",
+        "note": "Wir besprechen deine Reise schon auf der Fahrt"
+      },
+      {
+        "label": "Wilde Orte",
+        "note": "Elefanten, Vögel und früher Start für gutes Licht"
+      },
+      {
+        "label": "Alte Steinstädte",
+        "note": "Tausend Jahre alte Ruinen und Steinmetzarbeiten"
+      },
+      {
+        "label": "Das Hochland",
+        "note": "Teeland, Tempel über den Wolken"
+      },
+      {
+        "label": "Die Küste",
+        "note": "Ruhige Tage, oder gar keine Pläne"
+      }
+    ],
+    "toursEyebrow": "Touren",
+    "toursTitle": "Fünf Wege, die Insel zu erleben",
+    "toursSubtitle": "Jede Route lässt sich kürzen, verlängern oder kombinieren — das sind Ausgangspunkte, keine festen Pakete.",
+    "viewAllTours": "Alle Touren ansehen",
+    "galleryEyebrow": "Von unterwegs",
+    "galleryTitle": "Ein paar Aufnahmen aus früheren Reisen",
+    "galleryCta": "Zur vollständigen Galerie",
+    "testimonialsEyebrow": "Frühere Gäste",
+    "testimonialsTitle": "Was Gäste nach der Reise sagen",
+    "testimonials": [
+      {
+        "quote": "Krish hat die Route um den Mittagsschlaf unserer Kinder herum geplant, ohne dass wir zweimal fragen mussten. Es fühlte sich an wie eine Reise mit Familie, nicht mit einem Reiseunternehmen.",
+        "name": "Familienreise",
+        "origin": "Deutschland"
+      },
+      {
+        "quote": "Wir haben den Plan mitten in der Reise zweimal geändert, und es war nie ein Problem. Diese Flexibilität ist mehr wert als jedes Fünf-Sterne-Programm.",
+        "name": "Zwei Reisende",
+        "origin": "Vereinigtes Königreich"
+      },
+      {
+        "quote": "Bestes Licht für die Elefanten, ruhigste Stunde am Tempel — solche Details haben die ganze Woche besser gemacht.",
+        "name": "Alleinreisende",
+        "origin": "Niederlande"
+      }
+    ],
+    "ctaTitle": "Erzähl mir, was dir vorschwebt.",
+    "ctaBody": "Schreib mir ein paar Zeilen zu deinen Reisedaten und Interessen, und ich antworte mit einer passenden Route.",
+    "ctaButton": "Planung starten",
+    "sriLankaStats": [
+      {
+        "value": "8",
+        "label": "UNESCO-Welterbestätten"
+      },
+      {
+        "value": "26",
+        "label": "Nationalparks"
+      },
+      {
+        "value": "1.340 km",
+        "label": "Küstenlinie"
+      },
+      {
+        "value": "2.500+",
+        "label": "Jahre dokumentierter Geschichte"
+      }
+    ],
+    "trustEyebrow": "Warum direkt buchen",
+    "trust": [
+      {
+        "title": "Ein Fahrer, von Anfang bis Ende",
+        "body": "Die Person, die deine Reise plant, sitzt auch am Steuer."
+      },
+      {
+        "title": "Antwort innerhalb eines Tages",
+        "body": "Jede Anfrage bekommt eine persönliche Antwort, meist deutlich schneller."
+      },
+      {
+        "title": "Englisch & Deutsch gesprochen",
+        "body": "Keine Verständigungslücken unterwegs oder über WhatsApp."
+      },
+      {
+        "title": "Nichts ist in Stein gemeißelt",
+        "body": "Jede Reiseroute auf dieser Seite ist ein Ausgangspunkt, den du anpassen kannst."
+      }
+    ],
+    "faqEyebrow": "Fragen",
+    "faqTitle": "Bevor du schreibst",
+    "faq": [
+      {
+        "q": "Holt ihr vom Flughafen ab?",
+        "a": "Ja — Flughafenabholung und -transfer lassen sich für jede Reise arrangieren und sind in den mehrtägigen Paketen bereits enthalten."
+      },
+      {
+        "q": "Kann die Route nach der Buchung noch geändert werden?",
+        "a": "Ja, im vernünftigen Rahmen. Die meisten Gäste passen das Tempo an oder tauschen einen Stopp, sobald sie tatsächlich hier sind — genau das ist der Sinn eines privaten Fahrers."
+      },
+      {
+        "q": "Was ist im Preis inbegriffen?",
+        "a": "Fahrzeug, Treibstoff, Fahrer-Guide sowie Park- oder Eintrittsgebühren, wo bei der jeweiligen Tour angegeben. Unterkunft und Mahlzeiten werden separat nach Wunsch angeboten."
+      },
+      {
+        "q": "Wie viele Personen können an einer Reise teilnehmen?",
+        "a": "Die meisten Fahrzeuge bieten je nach Tour bequem Platz für bis zu 6–8 Personen. Größere Gruppen sind möglich — frag einfach bei der Anfrage nach."
+      },
+      {
+        "q": "Wie weit im Voraus sollte ich buchen?",
+        "a": "Ein paar Wochen im Voraus sind angenehm, besonders in der Hochsaison Dezember–März und Juli–August. Auch kurzfristiger geht oft — frag einfach nach."
+      }
+    ],
+    "postcardsEyebrow": "Postkarten aus dem Paradies",
+    "postcardsTitle": "Schön wär's, du wärst hier —",
+    "postcardsSubtitle": "Kleine Notizen zu den Momenten, an die sich unsere Gäste am liebsten erinnern. Jede Tour schreibt ihre eigene Postkarte.",
+    "heroRatingLabel": "5,0 auf TripAdvisor",
+    "reviewUsGoogle": "Bewertungen auf Google lesen & schreiben"
+  },
+  "tours": {
+    "pageEyebrow": "Touren",
+    "pageTitle": "Fünf Ausgangspunkte für deine Reise",
+    "pageSubtitle": "Jede Route unten lässt sich in Länge, Tempo und Stopps anpassen. Sag mir, worauf es dir ankommt, und wir gestalten sie gemeinsam.",
+    "filterAll": "Alle",
+    "days": "Tage",
+    "day": "Tag",
+    "viewDetails": "Reiseplan ansehen",
+    "photoComingSoon": "Foto folgt in Kürze"
+  },
+  "tourDetail": {
+    "back": "Alle Touren",
+    "highlightsTitle": "Das ist inbegriffen",
+    "itineraryTitle": "Tag für Tag",
+    "day": "Tag",
+    "groupSize": "Gruppengröße",
+    "priceNote": "Jede Reise wird individuell kalkuliert, je nach Gruppengröße, Saison und Fahrzeug — schick mir eine Anfrage und ich melde mich mit den Details.",
+    "enquire": "Zu dieser Reise anfragen",
+    "otherTours": "Weitere Touren"
+  },
+  "destinations": {
+    "pageEyebrow": "Reiseziele",
+    "pageTitle": "Die Orte, um die sich die meisten Reisen drehen",
+    "pageSubtitle": "Sechs Orte, die in fast jeder Reiseroute vorkommen — mit Details dazu, wie sie wirklich sind, damit du weißt, wofür du dich entscheidest.",
+    "regionLabel": "Region",
+    "highlightsTitle": "Gut zu wissen",
+    "bestTimeTitle": "Beste Reisezeit",
+    "relatedTourCta": "Zu einer Tour, die das einschließt",
+    "homeEyebrow": "Beliebte Reiseziele",
+    "homeTitle": "Orte, um die sich eine Reise lohnt",
+    "homeSubtitle": "Sechs Orte, die in fast jedem Gespräch über Sri Lanka vorkommen.",
+    "viewAll": "Alle Reiseziele ansehen",
+    "ctaTitle": "Nicht sicher, welches davon zu deiner Reise passt?",
+    "ctaButton": "Sag mir, was du suchst"
+  },
+  "gallery": {
+    "pageEyebrow": "Galerie",
+    "pageTitle": "Die Insel, wie ich sie sehe",
+    "pageSubtitle": "Eine Mischung aus Tierwelt, altem Gestein, Teeland und Küste — aus mehreren Jahren Reisen.",
+    "youtubeEyebrow": "Von unserem YouTube",
+    "youtubeTitle": "Unsere Reisen ansehen",
+    "youtubeCta": "Alle Videos auf YouTube ansehen"
+  },
+  "about": {
+    "pageEyebrow": "Über uns",
+    "pageTitle": "Die Person hinter dem Steuer",
+    "introBody1": "Krish Lanka Tours & Travels ist ein einzelner Fahrer-Guide, kein Callcenter. Wenn du eine Reise buchst, buchst du mich — ich plane die Route, ich fahre, und ich bin es, der um 5:30 Uhr morgens vor deinem Hotel steht, wenn das Licht über dem Park den verlorenen Schlaf wert ist.",
+    "introBody2": "Ich bin an diesen Straßen aufgewachsen und lerne bei den meisten Reisen noch etwas Neues. Sri Lanka belohnt Langsamkeit mehr als ein vollgepacktes Programm, und genau diese Reise versuche ich für jeden Gast zu gestalten.",
+    "valuesTitle": "Wie ich arbeite",
+    "values": [
+      {
+        "title": "Nur kleine Gruppen",
+        "body": "Ein Fahrzeug, eine Gruppe. Deine Reise wird nie mit Fremden zusammengelegt, um Plätze zu füllen."
+      },
+      {
+        "title": "Lokal, nicht nach Schema",
+        "body": "Ich zeige dir die Orte, die ich auch meiner eigenen Familie zeigen würde, nicht nur die Stopps jedes Reisebusses."
+      },
+      {
+        "title": "Ehrlich beim Tempo",
+        "body": "Wenn eine Route zu gehetzt für das ist, was du möchtest, sage ich es vor der Buchung, nicht danach."
+      },
+      {
+        "title": "Verantwortungsvoll reisen",
+        "body": "Die kleinen Gästehäuser, familiengeführten Gewürzgärten und lokalen Paddler, mit denen ich arbeite, sorgen dafür, dass das Geld in der Gemeinschaft bleibt."
+      }
+    ],
+    "experienceTitle": "Jahre auf diesen Straßen",
+    "experienceBody": "Ich fahre und führe schon lange genug durch die Insel, um eine eigene Liste ruhiger Bergtempel zu haben, die Reisebusse übersehen, und um zu wissen, welche Parkstraßen bei Sonnenaufgang leer sind. Diese Erfahrung bringe ich in jede Reiseroute ein."
+  },
+  "contact": {
+    "pageEyebrow": "Kontakt",
+    "pageTitle": "Lass uns deine Reise planen",
+    "pageSubtitle": "Trag ein, was du schon weißt — Reisedaten, grobe Interessen, Anzahl der Personen. Ich antworte persönlich, meist innerhalb eines Tages.",
+    "formName": "Vollständiger Name",
+    "formEmail": "E-Mail",
+    "formPhone": "Telefon / WhatsApp",
+    "formTour": "Welche Reise interessiert dich?",
+    "formTourPlaceholder": "Noch unsicher / individuelle Reise",
+    "formDates": "Reisedaten (grob reicht)",
+    "formGroupSize": "Anzahl der Reisenden",
+    "formMessage": "Was sollte ich noch wissen?",
+    "formMessagePlaceholder": "Interessen, Tempo, besondere Anlässe, Barrierefreiheit...",
+    "submit": "Anfrage senden",
+    "submitting": "Wird gesendet...",
+    "successTitle": "Angekommen, danke.",
+    "successBody": "Deine Anfrage ist da. Ich antworte persönlich, meist innerhalb eines Tages — schau auch im Spam-Ordner nach.",
+    "errorBody": "Beim Senden ist etwas schiefgelaufen. Bitte versuch es erneut oder schreib mir direkt über WhatsApp.",
+    "whatsappTitle": "Lieber per WhatsApp?",
+    "whatsappBody": "Schreib mir direkt für eine schnellere Antwort.",
+    "whatsappCta": "Auf WhatsApp chatten",
+    "directTitle": "Direktkontakt",
+    "directEmail": "E-Mail",
+    "directPhone": "Telefon",
+    "directLocation": "Sitz in",
+    "locationValue": "Ahungalla, Sri Lanka",
+    "findUsTitle": "Uns in Ahungalla finden",
+    "findUsBody": "Krish Lanka Tours & Travels hat seinen Sitz in Ahungalla, einer ruhigen Küstenregion an der Südwestküste Sri Lankas — praktisch für Reisende, die in Ahungalla und den nahegelegenen Strandhotels wohnen.",
+    "pickupTitle": "Abholung ist möglich ab",
+    "pickupAreas": [
+      "Ahungalla",
+      "Balapitiya",
+      "Kosgoda",
+      "Bentota",
+      "Aluthgama",
+      "Beruwala",
+      "Kalutara",
+      "Wadduwa",
+      "Induruwa",
+      "Ambalangoda",
+      "Hikkaduwa",
+      "Galle",
+      "Nahegelegene Villen und Strandhotels"
+    ],
+    "pickupAirportNote": "Die Abholung vom Flughafen Colombo ist für ausgewählte Touren und Transfers ebenfalls möglich.",
+    "formArrival": "Ankunft",
+    "formDeparture": "Abreise",
+    "formPickDate": "Datum wählen",
+    "followTitle": "Folgen Sie unseren Reisen",
+    "followBody": "Echte Touren, Bewertungen und Inselmomente."
+  },
+  "footer": {
+    "tagline": "Private, fahrergeführte Touren durch ganz Sri Lanka.",
+    "quickLinks": "Schnelllinks",
+    "contactTitle": "Kontakt",
+    "newsletterTitle": "Bleib inspiriert",
+    "newsletterBody": "Reiseideen und saisonale Tipps, ein paar Mal im Jahr — kein Spam.",
+    "newsletterPlaceholder": "Deine E-Mail",
+    "newsletterButton": "Abonnieren",
+    "rights": "Krish Lanka Tours & Travels. Alle Rechte vorbehalten."
+  },
+  "plan": {
+    "pageEyebrow": "Individueller Reiseplaner",
+    "pageTitle": "Stellen Sie Ihre eigene Sri-Lanka-Reise zusammen",
+    "pageSubtitle": "Wählen Sie Ihre Lieblingsorte, Reisedaten, Fahrzeug und Hotelstil — wir planen die Route und senden Ihnen ein persönliches Angebot.",
+    "step1": "Schritt 01",
+    "locationsTitle": "Wählen Sie Ihre Orte",
+    "locationsSubtitle": "Tippen Sie auf jeden Ort, den Sie besuchen möchten — die Nummern zeigen Ihre Routenreihenfolge.",
+    "locationsPicked": "{count} Orte ausgewählt — tolle Route!",
+    "step2": "Schritt 02",
+    "datesTitle": "Wann kommen Sie?",
+    "datesSubtitle": "Wählen Sie zuerst Ihr Ankunftsdatum, dann Ihr Abreisedatum.",
+    "arrival": "Ankunft",
+    "departure": "Abreise",
+    "pickDate": "Datum wählen",
+    "travelers": "Reisende",
+    "step3": "Schritt 03",
+    "vehicleTitle": "Wählen Sie Ihr Fahrzeug",
+    "vehicleSubtitle": "Alle Fahrzeuge mit erfahrenem englischsprachigem Fahrer-Guide.",
+    "seats": "Bis zu {count} Gäste",
+    "step4": "Schritt 04",
+    "hotelTitle": "Hotelstil",
+    "hotelSubtitle": "Welche Art von Unterkünften sollen wir für Sie planen?",
+    "hotel3Title": "3★ Standard",
+    "hotel3Body": "Sauber, komfortabel, preiswert",
+    "hotel4Title": "4★ Komfort",
+    "hotel4Body": "Mehr Komfort mit Pools & Aussicht",
+    "hotel5Title": "5★ Luxus",
+    "hotel5Body": "Die besten Resorts der Insel",
+    "hotelBoutiqueTitle": "Boutique",
+    "hotelBoutiqueBody": "Kleine, charmante Villen & Lodges",
+    "step5": "Schritt 05",
+    "contactTitle": "Wohin senden wir Ihren Plan?",
+    "contactSubtitle": "Wir antworten innerhalb von 24 Stunden mit Route und Angebot.",
+    "name": "Ihr Name",
+    "email": "E-Mail",
+    "phone": "Telefon / WhatsApp",
+    "notes": "Noch etwas?",
+    "notesPlaceholder": "Flitterwochen? Kinder? Besondere Wünsche? Erzählen Sie uns alles...",
+    "submit": "Reiseplan absenden",
+    "submitting": "Wird gesendet...",
+    "error": "Etwas ist schiefgelaufen — bitte versuchen Sie es erneut.",
+    "pickAtLeastOne": "Wählen Sie oben mindestens einen Ort aus.",
+    "successTitle": "Ihr Reiseplan ist unterwegs!",
+    "successScript": "Wir träumen bereits von Ihrer Route...",
+    "successBody": "Vielen Dank! Wir haben Ihre Anfrage erhalten und melden uns innerhalb von 24 Stunden mit einer persönlichen Route und einem Angebot."
+  }
+}

@@ -1,0 +1,487 @@
+-- =========================================================================
+-- KRISH LANKA TOURS & TRAVELS — COMPLETE DATABASE SETUP
+-- =========================================================================
+-- For a FRESH Supabase project. Run this ONCE:
+--   Supabase Dashboard → SQL Editor → New query → paste ALL of this → Run
+--
+-- Creates:  inquiries, tours, destinations, newsletter_subscribers,
+--           vehicles, custom_trip_requests  (+ RLS policies, triggers)
+-- Seeds:    starter tours, destinations, and vehicles
+--
+-- After running, also do:
+--   1. Authentication → Users → Add user  (admin login for /admin)
+--   2. Vercel env vars: NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY
+--      (storage bucket for tour images is created automatically below)
+-- =========================================================================
+
+-- Krish Lanka Tours & Travels — Supabase schema
+-- Run this once in your Supabase project's SQL editor
+-- (Project dashboard → SQL Editor → New query → paste → Run)
+
+-- =========================================================
+-- 1. INQUIRIES  (booking / contact form submissions)
+--    This is the table the live contact form writes to.
+-- =========================================================
+create table if not exists inquiries (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  name text not null,
+  email text not null,
+  phone text,
+  tour_slug text,
+  travel_dates text,
+  group_size text,
+  message text,
+  locale text default 'en',
+  status text not null default 'new' check (status in ('new', 'contacted', 'booked', 'closed'))
+);
+
+alter table inquiries enable row level security;
+
+-- Anyone (the public contact form) can create an inquiry...
+create policy "Public can submit inquiries"
+  on inquiries for insert
+  to anon
+  with check (true);
+
+-- ...but only authenticated dashboard users (you, logged into Supabase
+-- Studio, or a future admin panel using a real login) can read them back.
+create policy "Only authenticated users can read inquiries"
+  on inquiries for select
+  to authenticated
+  using (true);
+
+create policy "Only authenticated users can update inquiries"
+  on inquiries for update
+  to authenticated
+  using (true);
+
+-- =========================================================
+-- 2. TOURS  (the admin panel at /admin reads and writes this
+--    table. The public site fetches from here; if this table is
+--    empty or Supabase isn't configured, the site automatically
+--    falls back to the starter content in lib/tours.ts so it
+--    never breaks.)
+-- =========================================================
+create table if not exists tours (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  category text not null,
+  duration_days int not null default 1,
+  price_from_usd numeric,
+  group_size text,
+  hero_image text,
+  gallery text[] default '{}',
+  title_en text not null,
+  title_de text,
+  tagline_en text,
+  tagline_de text,
+  summary_en text,
+  summary_de text,
+  highlights jsonb default '[]',
+  itinerary jsonb default '[]',
+  published boolean not null default true,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table tours enable row level security;
+
+create policy "Published tours are publicly readable"
+  on tours for select
+  to anon
+  using (published = true);
+
+-- The admin panel signs in with Supabase Auth (see README), so any
+-- authenticated user can manage tours. There's no public sign-up, so in
+-- practice this means only the account(s) you create yourself.
+create policy "Only authenticated users can manage tours"
+  on tours for all
+  to authenticated
+  using (true)
+  with check (true);
+
+create or replace function set_updated_at()
+returns trigger as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists tours_set_updated_at on tours;
+create trigger tours_set_updated_at
+  before update on tours
+  for each row execute function set_updated_at();
+
+-- =========================================================
+-- 2b. STORAGE  (photo uploads from the admin panel)
+-- =========================================================
+insert into storage.buckets (id, name, public)
+values ('tour-images', 'tour-images', true)
+on conflict (id) do nothing;
+
+create policy "Public can view tour images"
+  on storage.objects for select
+  to public
+  using (bucket_id = 'tour-images');
+
+create policy "Authenticated users can upload tour images"
+  on storage.objects for insert
+  to authenticated
+  with check (bucket_id = 'tour-images');
+
+create policy "Authenticated users can update tour images"
+  on storage.objects for update
+  to authenticated
+  using (bucket_id = 'tour-images');
+
+create policy "Authenticated users can delete tour images"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'tour-images');
+
+-- =========================================================
+-- 2c. DESTINATIONS  (the admin panel manages these too, same
+--     pattern as tours — public site falls back to
+--     lib/destinations.ts if this table is empty)
+-- =========================================================
+create table if not exists destinations (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  name_en text not null,
+  name_de text,
+  region_en text,
+  region_de text,
+  tagline_en text,
+  tagline_de text,
+  image text,
+  description jsonb default '[]',
+  highlights jsonb default '[]',
+  best_time_en text,
+  best_time_de text,
+  related_tour_slug text,
+  published boolean not null default true,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table destinations enable row level security;
+
+create policy "Published destinations are publicly readable"
+  on destinations for select
+  to anon
+  using (published = true);
+
+create policy "Only authenticated users can manage destinations"
+  on destinations for all
+  to authenticated
+  using (true)
+  with check (true);
+
+drop trigger if exists destinations_set_updated_at on destinations;
+create trigger destinations_set_updated_at
+  before update on destinations
+  for each row execute function set_updated_at();
+
+-- =========================================================
+-- 3. NEWSLETTER SUBSCRIBERS (footer "Stay inspired" signup)
+-- =========================================================
+create table if not exists newsletter_subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text unique not null,
+  created_at timestamptz not null default now()
+);
+
+alter table newsletter_subscribers enable row level security;
+
+create policy "Public can subscribe"
+  on newsletter_subscribers for insert
+  to anon
+  with check (true);
+
+create policy "Public can update their own subscription (upsert)"
+  on newsletter_subscribers for update
+  to anon
+  using (true)
+  with check (true);
+
+create policy "Only authenticated users can read subscribers"
+  on newsletter_subscribers for select
+  to authenticated
+  using (true);
+
+
+-- =========================================================================
+-- SEED DATA (starter tours & destinations — edit later in /admin)
+-- =========================================================================
+
+-- Auto-generated from lib/tours.ts — seeds the Supabase "tours" table
+-- with the same 12 tours already on the site. Safe to run once after
+-- supabase/schema.sql. Re-running will error on the unique slug
+-- constraint rather than duplicate rows.
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'wild-heart-safari', 'wildlife', 1, 95, '1–6 people, one vehicle',
+  '/images/elephants-trio.jpg', ARRAY['/images/elephants-trio.jpg', '/images/elephant-single.jpg', '/images/macaque-monkey.jpg', '/images/bee-eater-bird.jpg']::text[], 'Wild Heart Safari', 'Wild-Heart-Safari', 'A full day tracking elephants, macaques and jewel-coloured birds.', 'Ein ganzer Tag auf der Spur von Elefanten, Makaken und farbenprächtigen Vögeln.',
+  'I pick you up before sunrise and we drive into the national park while the light is still soft, when the herds are out feeding and the park roads are quiet. This is the trip people ask me to repeat.', 'Ich hole dich vor Sonnenaufgang ab, und wir fahren in den Nationalpark, solange das Licht noch weich ist und die Herden grasen. Diese Tour wird mich am häufigsten gebucht.', '[{"en":"Open-jeep safari with a tracker who knows the herds by name","de":"Jeep-Safari mit einem Guide, der die Elefantenherden persönlich kennt"},{"en":"Best light for photos: 6am departure","de":"Bestes Licht für Fotos: Abfahrt um 6 Uhr"},{"en":"Packed Sri Lankan breakfast eaten trackside","de":"Sri-lankisches Frühstück direkt am Wegesrand"},{"en":"Small groups only, never shared with strangers","de":"Nur kleine Gruppen, nie mit Fremden geteilt"}]'::jsonb, '[{"day":1,"title":{"en":"Park gates to golden hour","de":"Parktor bis zur goldenen Stunde"},"description":{"en":"Early pickup from your hotel, safari jeep entry at first light, two game drives with a lunch break at a lakeside rest stop, return by early evening.","de":"Frühe Abholung im Hotel, Safari-Jeep bei Tagesanbruch, zwei Fahrten mit Mittagspause am See, Rückkehr am frühen Abend."}}]'::jsonb, 0
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'ancient-kingdoms-trail', 'heritage', 3, 260, '1–8 people, air-conditioned vehicle',
+  '/images/polonnaruwa-ruins.jpg', ARRAY['/images/polonnaruwa-ruins.jpg', '/images/ancient-statue-polonnaruwa.jpg', '/images/buddha-carving.jpg']::text[], 'Ancient Kingdoms Trail', 'Pfad der alten Königreiche', 'Three days through the stone capitals of Polonnaruwa and Anuradhapura.', 'Drei Tage durch die steinernen Königsstädte von Polonnaruwa und Anuradhapura.',
+  'This route follows the old royal roads between two capital cities that are over a thousand years old. I walk you through the carvings myself and explain the parts most guidebooks skip.', 'Diese Route folgt den alten Königswegen zwischen zwei über tausend Jahre alten Hauptstädten. Ich zeige dir die Steinmetzarbeiten persönlich und erkläre die Details, die die meisten Reiseführer auslassen.', '[{"en":"Private walking tour of the Polonnaruwa quadrangle","de":"Private Führung durch das Polonnaruwa-Quadrangle"},{"en":"The rock-carved Buddha statues at Gal Vihara at sunrise","de":"Die in Fels gehauenen Buddha-Statuen von Gal Vihara bei Sonnenaufgang"},{"en":"A stop at a family spice garden along the way","de":"Zwischenstopp in einem familiengeführten Gewürzgarten"},{"en":"Air-conditioned vehicle for the long stretches","de":"Klimatisiertes Fahrzeug für die langen Strecken"}]'::jsonb, '[{"day":1,"title":{"en":"Colombo to Polonnaruwa","de":"Colombo nach Polonnaruwa"},"description":{"en":"Morning departure, lunch stop at a roadside curd-and-honey shop, check in and an easy evening walk around the tank bund.","de":"Abfahrt am Morgen, Mittagspause bei einem Curd-and-Honey-Stand, Check-in und ein entspannter Abendspaziergang am Stausee."}},{"day":2,"title":{"en":"The stone city","de":"Die Steinstadt"},"description":{"en":"Full day on foot and by bicycle through the ruins, the royal palace, and Gal Vihara.","de":"Ganztägig zu Fuß und mit dem Fahrrad durch die Ruinen, den Königspalast und Gal Vihara."}},{"day":3,"title":{"en":"Anuradhapura and return","de":"Anuradhapura und Rückkehr"},"description":{"en":"Morning in the older capital, sacred Bodhi tree, then the drive back with a spice garden stop.","de":"Morgen in der älteren Hauptstadt, der heilige Bodhi-Baum, dann die Rückfahrt mit Stopp im Gewürzgarten."}}]'::jsonb, 1
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'hill-country-sacred-peaks', 'hillcountry', 4, 340, '1–6 people, private driver',
+  '/images/golden-temple-hills.jpg', ARRAY['/images/golden-temple-hills.jpg', '/images/monk-meditation-cliff.jpg', '/images/palm-avenue-garden.jpg']::text[], 'Hill Country & Sacred Peaks', 'Hochland & Heilige Gipfel', 'Tea country, misty temples and a hermitage on the rocks above the sea.', 'Teeland, nebelverhangene Tempel und eine Einsiedelei auf den Felsen über dem Meer.',
+  'We climb slowly out of the lowlands into tea country, where the temples sit above the clouds. This is the trip for people who want quiet mornings more than a checklist.', 'Wir steigen langsam aus dem Tiefland ins Teeland auf, wo die Tempel über den Wolken liegen. Diese Tour ist für alle, die ruhige Morgen mehr schätzen als eine Checkliste.', '[{"en":"A mountain temple usually missed by tour buses","de":"Ein Bergtempel, den Reisebusse meist übersehen"},{"en":"Walk beneath the royal palm avenue at a botanical garden","de":"Spaziergang unter der königlichen Palmenallee im botanischen Garten"},{"en":"Tea factory visit with the family who runs it","de":"Besuch einer Teefabrik bei der Familie, die sie führt"},{"en":"Slow pace: two nights in the hills, no long transfers","de":"Ruhiges Tempo: zwei Nächte im Hochland, keine langen Transfers"}]'::jsonb, '[{"day":1,"title":{"en":"Into the hills","de":"Hinauf ins Hochland"},"description":{"en":"Drive up through the tea estates, stopping at waterfalls along the way, evening arrival at a hill-country stay.","de":"Fahrt hinauf durch die Teeplantagen mit Stopps an Wasserfällen, abends Ankunft im Hochland."}},{"day":2,"title":{"en":"Tea, temple and cloud forest","de":"Tee, Tempel und Nebelwald"},"description":{"en":"Morning tea factory tour, afternoon at the mountain temple, walk through the botanical garden''s palm avenue.","de":"Morgens Teefabrik, nachmittags Bergtempel, Spaziergang durch die Palmenallee des botanischen Gartens."}},{"day":3,"title":{"en":"The hermitage above the sea","de":"Die Einsiedelei über dem Meer"},"description":{"en":"Drive to the coastal hermitage rock for a quiet morning, then descend toward the coast.","de":"Fahrt zum Felsen der Küsteneinsiedelei für einen ruhigen Morgen, danach Abstieg zur Küste."}},{"day":4,"title":{"en":"Return","de":"Rückfahrt"},"description":{"en":"Easy morning, return drive with a final stop at a viewpoint.","de":"Ruhiger Morgen, Rückfahrt mit einem letzten Halt an einem Aussichtspunkt."}}]'::jsonb, 2
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'lagoon-wetland-safari', 'wetland', 1, 70, '1–8 people, shared canoe',
+  '/images/real/river-safari-mangrove-silhouette.jpg', ARRAY['/images/real/river-safari-mangrove-silhouette.jpg', '/images/real/river-safari-boat-guests.jpg', '/images/river-boat-safari.jpg']::text[], 'Lagoon & Wetland Safari', 'Lagunen- & Feuchtgebiets-Safari', 'A half-day paddling through mangrove channels most visitors never see.', 'Ein halber Tag durch Mangrovenkanäle, die die meisten Besucher nie zu sehen bekommen.',
+  'We swap the van for a canoe and follow the narrow channels through the wetland, past monitor lizards and kingfishers, ending at a quiet stretch of open lagoon.', 'Wir tauschen den Van gegen ein Kanu und folgen den schmalen Kanälen durch das Feuchtgebiet, vorbei an Warane und Eisvögeln, bis zu einem ruhigen Abschnitt der offenen Lagune.', '[{"en":"Local canoe paddlers who grew up on these channels","de":"Einheimische Kanu-Paddler, die an diesen Kanälen aufgewachsen sind"},{"en":"Mangrove tunnels too narrow for motorboats","de":"Mangroventunnel, zu eng für Motorboote"},{"en":"Best for birdwatchers and slow mornings","de":"Ideal für Vogelbeobachter und ruhige Vormittage"},{"en":"Combine easily with an airport transfer day","de":"Lässt sich leicht mit einem Flughafentransfer kombinieren"}]'::jsonb, '[{"day":1,"title":{"en":"Half-day on the water","de":"Halber Tag auf dem Wasser"},"description":{"en":"Morning pickup, canoe briefing, three hours paddling the channels and open lagoon, return by early afternoon.","de":"Abholung am Morgen, Kanu-Einweisung, drei Stunden auf den Kanälen und der offenen Lagune, Rückkehr am frühen Nachmittag."}}]'::jsonb, 3
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'culture-and-coast-escape', 'coastal', 5, 480, '1–4 people, private driver',
+  '/images/couple-pool-sunset.jpg', ARRAY['/images/kandyan-dance.jpg', '/images/real/turtle-release-beach.jpg', '/images/villa-pool-sunset.jpg', '/images/couple-pool-sunset.jpg']::text[], 'Culture & Coast Escape', 'Kultur- & Küstenflucht', 'A slower five days: one cultural evening, then the coast to do nothing at all.', 'Fünf ruhigere Tage: ein kultureller Abend, dann die Küste, um gar nichts zu tun.',
+  'Built for couples and small families who want one real cultural evening and several days after that with no itinerary at all, just a villa pool and the coast.', 'Für Paare und kleine Familien gedacht, die einen echten kulturellen Abend und danach mehrere Tage ganz ohne Programm wollen, nur ein Pool und die Küste.', '[{"en":"A traditional Kandyan dance evening arranged privately","de":"Ein traditioneller Kandy-Tanzabend, privat arrangiert"},{"en":"A visit to the Ahungalla turtle conservation project","de":"Ein Besuch beim Meeresschildkröten-Schutzprojekt in Ahungalla"},{"en":"Three nights at a quiet villa with a private pool","de":"Drei Nächte in einer ruhigen Villa mit privatem Pool"},{"en":"Zero fixed plans for the coastal half of the trip","de":"Keine festen Pläne für die zweite Hälfte der Reise an der Küste"}]'::jsonb, '[{"day":1,"title":{"en":"Arrival and culture evening","de":"Ankunft und kultureller Abend"},"description":{"en":"Airport pickup, check in, evening Kandyan dance performance arranged for your group.","de":"Flughafenabholung, Check-in, abends Kandy-Tanzaufführung nur für deine Gruppe."}},{"day":2,"title":{"en":"Drive to the coast","de":"Fahrt zur Küste"},"description":{"en":"Relaxed drive south with stops wherever you like, check in to the villa by late afternoon.","de":"Entspannte Fahrt Richtung Süden mit Stopps nach Wunsch, Check-in in der Villa am späten Nachmittag."}},{"day":3,"title":{"en":"Open day","de":"Freier Tag"},"description":{"en":"No plan. The pool, the beach, a turtle hatchery visit in Ahungalla, or a village walk if you feel like it.","de":"Kein Programm. Der Pool, der Strand, ein Besuch der Schildkrötenaufzucht in Ahungalla oder ein Dorfspaziergang, ganz nach Lust."}},{"day":4,"title":{"en":"Open day","de":"Freier Tag"},"description":{"en":"Same as day three. I check in once to see if you''d like anything arranged.","de":"Wie Tag drei. Ich melde mich einmal, falls du doch etwas unternehmen möchtest."}},{"day":5,"title":{"en":"Departure","de":"Abreise"},"description":{"en":"Late check-out and transfer back to the airport.","de":"Später Check-out und Transfer zurück zum Flughafen."}}]'::jsonb, 4
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'galle-day-tour', 'heritage', 1, 65, '1–6 people, one vehicle',
+  null, '{}', 'Galle Day Tour', 'Galle Tagestour', 'A walled Dutch fort you can still live inside, right on the coast.', 'Eine holländische Festungsstadt, in der noch heute gelebt wird, direkt an der Küste.',
+  'Galle Fort is a UNESCO World Heritage site — a walled town the Dutch built in the 1600s that''s still lived in today, just with boutique shops and cafés tucked into the old trading houses. We walk the ramparts, the lighthouse, and the backstreets at a pace that leaves room for a coffee stop.', 'Galle Fort ist UNESCO-Weltkulturerbe — eine von den Niederländern im 17. Jahrhundert erbaute Festungsstadt, die noch heute bewohnt ist, nur mit Boutiquen und Cafés in den alten Handelshäusern. Wir gehen die Wehrmauern, den Leuchtturm und die Seitengassen in einem Tempo ab, das auch für eine Kaffeepause reicht.', '[{"en":"The full rampart walk at golden hour","de":"Der komplette Wehrmauer-Spaziergang zur goldenen Stunde"},{"en":"The 1938 Galle lighthouse","de":"Der Leuchtturm von Galle aus dem Jahr 1938"},{"en":"Dutch Reformed Church and the old gem-trading streets","de":"Die Niederländisch-Reformierte Kirche und die alten Edelsteinhandel-Straßen"},{"en":"Easy to combine with a Bentota or Ahungalla morning","de":"Lässt sich leicht mit einem Vormittag in Bentota oder Ahungalla kombinieren"}]'::jsonb, '[{"day":1,"title":{"en":"Half day in the fort","de":"Halber Tag in der Festung"},"description":{"en":"Late-morning pickup, a couple of hours walking the ramparts and backstreets, lunch at a fort café, return by mid-afternoon.","de":"Abholung am späten Vormittag, ein paar Stunden auf den Wehrmauern und in den Seitengassen, Mittagessen in einem Café der Festung, Rückkehr am frühen Nachmittag."}}]'::jsonb, 5
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'udawalawe-safari-tour', 'wildlife', 1, 90, '1–6 people, one vehicle',
+  null, '{}', 'Udawalawe Safari Tour', 'Udawalawe-Safari', 'The most reliable place on the island to see wild elephants.', 'Der zuverlässigste Ort der Insel, um wilde Elefanten zu sehen.',
+  'Udawalawe''s open grassland makes it the easiest park in Sri Lanka to actually see elephants — herds of thirty or more aren''t unusual. Most trips end at the Elephant Transit Home, where orphaned calves are bottle-fed before release back into the park.', 'Die offene Graslandschaft von Udawalawe macht ihn zum Park, in dem man in Sri Lanka am zuverlässigsten Elefanten sieht — Herden von dreißig oder mehr sind keine Seltenheit. Die meisten Touren enden am Elephant Transit Home, wo verwaiste Kälber mit der Flasche gefüttert werden, bevor sie in den Park entlassen werden.', '[{"en":"Large, easy-to-spot elephant herds","de":"Große, leicht zu entdeckende Elefantenherden"},{"en":"The Elephant Transit Home feeding time","de":"Die Fütterungszeit im Elephant Transit Home"},{"en":"Water buffalo, crocodiles, and birdlife around the reservoir","de":"Wasserbüffel, Krokodile und Vogelwelt rund um den Stausee"},{"en":"A calmer, less crowded alternative to Yala","de":"Eine ruhigere, weniger überlaufene Alternative zu Yala"}]'::jsonb, '[{"day":1,"title":{"en":"Park gates to the transit home","de":"Parktor bis zum Transit Home"},"description":{"en":"Early pickup, morning game drive by open jeep, late-morning stop at the Elephant Transit Home feeding, return by early afternoon.","de":"Frühe Abholung, morgendliche Jeep-Fahrt durch den Park, Halt am späten Vormittag bei der Fütterung im Elephant Transit Home, Rückkehr am frühen Nachmittag."}}]'::jsonb, 6
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'sigiriya-lion-rock', 'heritage', 1, 75, '1–6 people, one vehicle',
+  null, '{}', 'Sigiriya Lion Rock', 'Sigiriya-Löwenfelsen', 'A 5th-century palace on top of a 200-metre rock, and it''s exactly as dramatic as that sounds.', 'Ein Palast aus dem 5. Jahrhundert auf einem 200 Meter hohen Felsen — genauso dramatisch wie es klingt.',
+  'King Kashyapa built his fortress-palace on top of this rock in the 5th century, and what''s left — the giant lion''s paw gateway, the frescoed ''cloud maidens'', the mirror wall covered in thousand-year-old graffiti, the water gardens at the base — still makes this the single most-photographed site in Sri Lanka. It''s a proper climb, so we go early before the heat and the crowds.', 'König Kashyapa erbaute seinen Festungspalast im 5. Jahrhundert auf diesem Felsen, und was übrig ist — das riesige Löwenpfoten-Tor, die freskengeschmückten ''Wolkenmädchen'', die mit tausend Jahre alten Graffiti bedeckte Spiegelwand, die Wassergärten am Fuß — macht diesen Ort bis heute zum meistfotografierten Sri Lankas. Es ist ein echter Aufstieg, daher starten wir früh vor Hitze und Menschenmassen.', '[{"en":"Early start to beat the heat and the crowds","de":"Früher Start, um Hitze und Menschenmassen zu umgehen"},{"en":"The frescoes and the ancient mirror wall","de":"Die Fresken und die antike Spiegelwand"},{"en":"The water gardens at the base, often skipped by bus tours","de":"Die Wassergärten am Fuß, von Bustouren oft übersprungen"},{"en":"Easily combined with Dambulla''s cave temple nearby","de":"Lässt sich leicht mit dem nahegelegenen Höhlentempel von Dambulla kombinieren"}]'::jsonb, '[{"day":1,"title":{"en":"The rock, early","de":"Der Felsen, früh am Morgen"},"description":{"en":"Very early pickup for a cooler climb, two to three hours at the site including the water gardens, breakfast afterward, return by early afternoon.","de":"Sehr frühe Abholung für einen kühleren Aufstieg, zwei bis drei Stunden vor Ort inklusive Wassergärten, danach Frühstück, Rückkehr am frühen Nachmittag."}}]'::jsonb, 7
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'kandy-day-tour', 'hillcountry', 1, 80, '1–6 people, one vehicle',
+  null, '{}', 'Kandy Day Tour', 'Kandy Tagestour', 'The Tooth Relic, a working tea factory, and the lake in between.', 'Die Zahnreliquie, eine aktive Teefabrik und der See dazwischen.',
+  'A single day covering Kandy''s essentials: the Temple of the Sacred Tooth Relic, a walk around the lake, and a working tea factory on the way up or down, where you''ll see the whole process from fresh leaf to the cup. Good for anyone short on time who still wants the highlights without an overnight stay.', 'Ein einzelner Tag deckt das Wesentliche von Kandy ab: den Tempel der Heiligen Zahnreliquie, einen Spaziergang um den See und eine aktive Teefabrik auf dem Hin- oder Rückweg, wo du den gesamten Prozess vom frischen Blatt bis zur Tasse siehst. Gut für alle, die wenig Zeit haben, aber trotzdem die Highlights ohne Übernachtung sehen möchten.', '[{"en":"Temple of the Sacred Tooth Relic","de":"Tempel der Heiligen Zahnreliquie"},{"en":"A working tea factory, floor to cup","de":"Eine aktive Teefabrik, vom Boden bis zur Tasse"},{"en":"A walk around Kandy Lake","de":"Ein Spaziergang um den Kandy-See"},{"en":"Can be arranged as a stop between Colombo and the hill country","de":"Lässt sich als Zwischenstopp zwischen Colombo und dem Hochland einbauen"}]'::jsonb, '[{"day":1,"title":{"en":"Temple, tea, and the lake","de":"Tempel, Tee und der See"},"description":{"en":"Morning drive up, temple visit, lakeside lunch, afternoon tea factory tour, return or onward drive by evening.","de":"Fahrt hinauf am Morgen, Tempelbesuch, Mittagessen am See, Teefabrik-Führung am Nachmittag, Rückfahrt oder Weiterfahrt am Abend."}}]'::jsonb, 8
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'bentota-river-safari', 'wetland', 1, 55, '1–8 people, shared boat',
+  null, '{}', 'Bentota River Safari', 'Bentota-Fluss-Safari', 'Mangroves, a cinnamon island, and monitor lizards, all within an hour of the coast.', 'Mangroven, eine Zimtinsel und Warane — alles innerhalb einer Stunde von der Küste.',
+  'A shorter, easier alternative to the Madu River trip: the Bentota Ganga winds through mangrove forest past a small cinnamon-growing island, with a good chance of monitor lizards and kingfishers along the banks. Easy to fit into a half day.', 'Eine kürzere, einfachere Alternative zur Madu-River-Tour: Der Bentota Ganga schlängelt sich durch Mangrovenwald an einer kleinen Zimtanbau-Insel vorbei, mit guten Chancen auf Warane und Eisvögel an den Ufern. Passt leicht in einen halben Tag.', '[{"en":"A stop at a small cinnamon-growing island","de":"Halt an einer kleinen Zimtanbau-Insel"},{"en":"Monitor lizards and kingfishers along the banks","de":"Warane und Eisvögel entlang der Ufer"},{"en":"Shorter than the Madu River trip — good for a half day","de":"Kürzer als die Madu-River-Tour — gut für einen halben Tag"},{"en":"Easy to combine with a beach morning in Bentota","de":"Lässt sich leicht mit einem Strandvormittag in Bentota kombinieren"}]'::jsonb, '[{"day":1,"title":{"en":"A couple of hours on the river","de":"Ein paar Stunden auf dem Fluss"},"description":{"en":"Morning or afternoon boat departure, roughly two hours through the mangroves and the cinnamon island stop, back on land after.","de":"Bootsabfahrt morgens oder nachmittags, etwa zwei Stunden durch die Mangroven mit Halt an der Zimtinsel, danach zurück an Land."}}]'::jsonb, 9
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'mirissa-whale-watching', 'coastal', 1, 85, '1–6 people, shared boat',
+  null, '{}', 'Mirissa Whale Watching', 'Mirissa Walbeobachtung', 'Blue whales, the largest animal that has ever lived, off Sri Lanka''s south coast.', 'Blauwale, das größte Tier, das je gelebt hat, vor Sri Lankas Südküste.',
+  'The waters off Mirissa are one of the most consistent places on earth to see blue whales, alongside sperm whales and pods of spinner dolphins. Boats leave early, before the wind picks up, and the season runs roughly November to April.', 'Die Gewässer vor Mirissa gehören zu den zuverlässigsten Orten der Welt, um Blauwale zu sehen, zusammen mit Pottwalen und Gruppen von Spinnerdelfinen. Die Boote legen früh ab, bevor der Wind auffrischt, die Saison läuft etwa von November bis April.', '[{"en":"Blue whales and sperm whales, in season","de":"Blauwale und Pottwale, saisonal"},{"en":"Spinner dolphin pods most mornings","de":"Spinnerdelfin-Gruppen an den meisten Vormittagen"},{"en":"Early departure for the calmest water","de":"Frühe Abfahrt für das ruhigste Wasser"},{"en":"Best November to April; other months are hit or miss","de":"Am besten von November bis April; andere Monate sind unsicher"}]'::jsonb, '[{"day":1,"title":{"en":"Early boat, open water","de":"Frühes Boot, offenes Wasser"},"description":{"en":"Very early pickup for the harbour departure, three to four hours on the water, back on land by late morning.","de":"Sehr frühe Abholung für die Abfahrt im Hafen, drei bis vier Stunden auf dem Wasser, zurück an Land am späten Vormittag."}}]'::jsonb, 10
+);
+
+insert into tours (
+  slug, category, duration_days, price_from_usd, group_size,
+  hero_image, gallery, title_en, title_de, tagline_en, tagline_de,
+  summary_en, summary_de, highlights, itinerary, sort_order
+) values (
+  'colombo-city-tour', 'city', 1, 60, '1–6 people, one vehicle',
+  null, '{}', 'Colombo City Tour', 'Colombo Stadttour', 'Old and new side by side — colonial streets, temples, and the skyline over it all.', 'Alt und neu nebeneinander — koloniale Straßen, Tempel und die Skyline über allem.',
+  'Good for an arrival or departure day: Galle Face Green at sunset, the Gangaramaya Temple, the chaos of Pettah market, and the colonial-era Fort district, with the Lotus Tower as the modern skyline marker over it all.', 'Gut für einen An- oder Abreisetag: Galle Face Green bei Sonnenuntergang, der Gangaramaya-Tempel, das Treiben des Pettah-Marktes und das koloniale Fort-Viertel, mit dem Lotus Tower als modernem Skyline-Wahrzeichen über allem.', '[{"en":"Galle Face Green at sunset","de":"Galle Face Green bei Sonnenuntergang"},{"en":"Gangaramaya Temple and Pettah market","de":"Gangaramaya-Tempel und Pettah-Markt"},{"en":"The colonial Fort district","de":"Das koloniale Fort-Viertel"},{"en":"Easy to slot in on an arrival or departure day","de":"Lässt sich leicht an einem An- oder Abreisetag einbauen"}]'::jsonb, '[{"day":1,"title":{"en":"Old town to skyline","de":"Altstadt bis Skyline"},"description":{"en":"Half or full day depending on your flight times — temples and markets by midday, Galle Face Green for sunset if timing allows.","de":"Halber oder ganzer Tag, je nach Flugzeiten — Tempel und Märkte bis Mittag, Galle Face Green zum Sonnenuntergang, wenn es zeitlich passt."}}]'::jsonb, 11
+);
+
+
+
+-- Auto-generated from lib/destinations.ts — seeds the Supabase
+-- "destinations" table with the same 6 destinations already on the site.
+insert into destinations (
+  slug, name_en, name_de, region_en, region_de, tagline_en, tagline_de,
+  image, description, highlights, best_time_en, best_time_de,
+  related_tour_slug, sort_order
+) values (
+  'yala', 'Yala National Park', 'Yala-Nationalpark', 'Southern Province', 'Südprovinz',
+  'One of the highest leopard densities anywhere in the world.', 'Eine der höchsten Leoparden-Dichten weltweit.', '/images/elephants-trio.jpg', '[{"en":"Yala is Sri Lanka''s most visited national park, and the reason most people come: elephants in loose family herds, crocodiles along the tank edges, and — if you''re patient and a little lucky — a leopard crossing the track at first light.","de":"Yala ist Sri Lankas meistbesuchter Nationalpark, und der Grund, warum die meisten Leute kommen: Elefanten in lockeren Familienherden, Krokodile an den Uferrändern der Stauseen, und — mit etwas Geduld und Glück — ein Leopard, der bei Tagesanbruch den Weg kreuzt."},{"en":"The park is split into blocks; Block 1 is the busiest but also the most reliable for sightings. Early morning and late afternoon drives are noticeably quieter and cooler than midday.","de":"Der Park ist in Blöcke unterteilt; Block 1 ist am belebtesten, aber auch am zuverlässigsten für Sichtungen. Fahrten am frühen Morgen und späten Nachmittag sind spürbar ruhiger und kühler als am Mittag."}]'::jsonb, '[{"en":"Highest leopard density in Asia","de":"Höchste Leopardendichte Asiens"},{"en":"Large elephant herds year-round","de":"Große Elefantenherden das ganze Jahr über"},{"en":"Coastal lagoons with crocodiles and waterbirds","de":"Küstenlagunen mit Krokodilen und Wasservögeln"}]'::jsonb,
+  'February–June is driest and best for sightings. The park closes for maintenance most Septembers.', 'Februar–Juni ist am trockensten und am besten für Sichtungen. Der Park schließt meist im September zur Wartung.', 'wild-heart-safari', 0
+);
+
+insert into destinations (
+  slug, name_en, name_de, region_en, region_de, tagline_en, tagline_de,
+  image, description, highlights, best_time_en, best_time_de,
+  related_tour_slug, sort_order
+) values (
+  'kandy', 'Kandy', 'Kandy', 'Central Province', 'Zentralprovinz',
+  'The last hill capital, and home to Sri Lanka''s most sacred relic.', 'Die letzte Hügelhauptstadt und Heimat von Sri Lankas heiligster Reliquie.', '/images/kandyan-dance.jpg', '[{"en":"Kandy was the final stronghold of Sri Lanka''s kings before colonial rule, and it still feels like a capital — a lake at its centre, hills on every side, and the Temple of the Sacred Tooth Relic drawing pilgrims every evening for the drumming that opens its doors.","de":"Kandy war die letzte Hochburg der srilankischen Könige vor der Kolonialzeit und wirkt bis heute wie eine Hauptstadt — ein See im Zentrum, Hügel auf allen Seiten, und der Tempel der Heiligen Zahnreliquie, der jeden Abend Pilger zur Trommelzeremonie anzieht."},{"en":"It''s also the best place on the island to see a full Kandyan dance performance — drummers, fire, and the acrobatic Ves dance in full costume — and it sits right on the scenic train line up to the hill country.","de":"Es ist außerdem der beste Ort auf der Insel, um eine vollständige Kandy-Tanzaufführung zu erleben — Trommler, Feuer und der akrobatische Ves-Tanz in voller Tracht — und liegt direkt an der malerischen Zugstrecke ins Hochland."}]'::jsonb, '[{"en":"Temple of the Sacred Tooth Relic","de":"Tempel der Heiligen Zahnreliquie"},{"en":"Evening Kandyan dance performances","de":"Abendliche Kandy-Tanzaufführungen"},{"en":"Royal Botanical Gardens, Peradeniya, nearby","de":"Königlicher Botanischer Garten Peradeniya in der Nähe"}]'::jsonb,
+  'Pleasant most of the year; the Esala Perahera festival (July/August) is spectacular but very crowded.', 'Angenehm fast das ganze Jahr; das Esala-Perahera-Fest (Juli/August) ist spektakulär, aber sehr voll.', 'culture-and-coast-escape', 1
+);
+
+insert into destinations (
+  slug, name_en, name_de, region_en, region_de, tagline_en, tagline_de,
+  image, description, highlights, best_time_en, best_time_de,
+  related_tour_slug, sort_order
+) values (
+  'nuwara-eliya', 'Nuwara Eliya', 'Nuwara Eliya', 'Central Highlands', 'Zentrales Hochland',
+  'Cool mountain air, tea estates, and a strange colonial hangover.', 'Kühle Bergluft, Teeplantagen und ein eigenartiges koloniales Erbe.', '/images/stock2/nuwaraeliya-lake-aerial.jpg', '[{"en":"At close to 2,000 metres, Nuwara Eliya is noticeably cold in the evenings — locals call it ''Little England'' for the old bungalows, the golf course, and the tea rolling out over every hillside as far as you can see.","de":"Auf fast 2.000 Metern Höhe wird es abends in Nuwara Eliya deutlich kühl — Einheimische nennen es ''Klein England'' wegen der alten Bungalows, des Golfplatzes und des Teeanbaus, der sich über jeden Hügel erstreckt, soweit das Auge reicht."},{"en":"Most visitors combine a working tea factory tour (you''ll walk the same floors the pluckers do) with a slow drive through the estates themselves, where the roads run right along the edge of the tea rows.","de":"Die meisten Besucher kombinieren eine Führung durch eine aktive Teefabrik (du gehst über dieselben Böden wie die Pflückerinnen) mit einer gemütlichen Fahrt durch die Plantagen selbst, wo die Straßen direkt am Rand der Teereihen entlangführen."}]'::jsonb, '[{"en":"Working tea factories open for tours","de":"Aktive Teefabriken mit Führungen"},{"en":"Cool climate — a genuine break from the lowland heat","de":"Kühles Klima — eine echte Abwechslung zur Hitze im Tiefland"},{"en":"Gregory Lake and colonial-era architecture","de":"Gregory Lake und Architektur aus der Kolonialzeit"}]'::jsonb,
+  'Year-round, though April is busiest (and priciest) for the Sri Lankan New Year holidays.', 'Ganzjährig, wobei April wegen der srilankischen Neujahrsferien am belebtesten (und teuersten) ist.', 'hill-country-sacred-peaks', 2
+);
+
+insert into destinations (
+  slug, name_en, name_de, region_en, region_de, tagline_en, tagline_de,
+  image, description, highlights, best_time_en, best_time_de,
+  related_tour_slug, sort_order
+) values (
+  'ella', 'Ella', 'Ella', 'Uva Province', 'Uva-Provinz',
+  'Small hill town, big views — and the train ride everyone talks about.', 'Kleine Bergstadt, große Aussichten — und die Zugfahrt, von der alle sprechen.', '/images/stock2/hillcountry-misty-dusk.jpg', '[{"en":"Ella is compact enough to walk everywhere, which is most of its appeal: Little Adam''s Peak is an easy sunrise walk, Ella Rock a longer one, and the Nine Arch Bridge sits right in the middle of tea country with a train crossing it a few times a day.","de":"Ella ist so kompakt, dass man alles zu Fuß erreicht, und genau das macht einen Großteil des Reizes aus: Little Adam''s Peak ist ein leichter Sonnenaufgangsspaziergang, Ella Rock ein längerer, und die Nine-Arch-Bridge liegt mitten im Teeland, über die mehrmals täglich ein Zug fährt."},{"en":"The train journey up from Kandy — or onward to Badulla — is often called one of the most scenic in the world, and Ella is the natural place to break the trip and stay a night or two.","de":"Die Zugfahrt von Kandy hinauf — oder weiter nach Badulla — gilt oft als eine der landschaftlich schönsten der Welt, und Ella ist der natürliche Ort, um die Reise zu unterbrechen und ein bis zwei Nächte zu bleiben."}]'::jsonb, '[{"en":"Nine Arch Bridge","de":"Nine-Arch-Bridge"},{"en":"Little Adam''s Peak and Ella Rock viewpoints","de":"Aussichtspunkte Little Adam''s Peak und Ella Rock"},{"en":"On the scenic Kandy–Badulla train line","de":"An der malerischen Zugstrecke Kandy–Badulla"}]'::jsonb,
+  'January–March for the clearest views; it''s misty (and green) much of the rest of the year.', 'Januar–März für die klarste Sicht; den Rest des Jahres ist es oft neblig (und sehr grün).', 'hill-country-sacred-peaks', 3
+);
+
+insert into destinations (
+  slug, name_en, name_de, region_en, region_de, tagline_en, tagline_de,
+  image, description, highlights, best_time_en, best_time_de,
+  related_tour_slug, sort_order
+) values (
+  'anuradhapura', 'Anuradhapura', 'Anuradhapura', 'North Central Province', 'Nordzentralprovinz',
+  'Sri Lanka''s first capital, and one of the oldest continuously restored cities on earth.', 'Sri Lankas erste Hauptstadt und eine der ältesten fortlaufend restaurierten Städte der Erde.', '/images/stock3/anuradhapura-stupa-dusk.jpg', '[{"en":"Founded around the 4th century BC, Anuradhapura was the island''s capital for over a thousand years. The scale is what surprises most visitors — dagobas (stupas) like Ruwanwelisaya and Jetavanaramaya were among the tallest structures in the ancient world, built entirely of brick.","de":"Anuradhapura wurde um das 4. Jahrhundert v. Chr. gegründet und war über tausend Jahre lang die Hauptstadt der Insel. Das Ausmaß überrascht die meisten Besucher — Dagobas (Stupas) wie Ruwanwelisaya und Jetavanaramaya gehörten zu den höchsten Bauwerken der antiken Welt, vollständig aus Ziegeln errichtet."},{"en":"The sacred Bodhi tree here, Jaya Sri Maha Bodhi, is grown from a cutting of the original tree in India under which the Buddha is said to have attained enlightenment, and is documented as the oldest human-planted tree in the world with a known planting date.","de":"Der heilige Bodhi-Baum hier, Jaya Sri Maha Bodhi, wuchs aus einem Ableger des Baumes in Indien, unter dem Buddha der Überlieferung nach die Erleuchtung erlangte, und gilt als der älteste von Menschen gepflanzte Baum der Welt mit bekanntem Pflanzdatum."}]'::jsonb, '[{"en":"Jaya Sri Maha Bodhi, the sacred fig tree","de":"Jaya Sri Maha Bodhi, der heilige Bodhi-Baum"},{"en":"Ruwanwelisaya and Jetavanaramaya dagobas","de":"Die Dagobas Ruwanwelisaya und Jetavanaramaya"},{"en":"Best explored slowly, by bicycle","de":"Am besten in Ruhe mit dem Fahrrad erkundet"}]'::jsonb,
+  'May–September is driest; early morning is far more comfortable than midday on the open dagoba platforms.', 'Mai–September ist am trockensten; früher Morgen ist auf den offenen Dagoba-Plattformen deutlich angenehmer als der Mittag.', 'ancient-kingdoms-trail', 4
+);
+
+insert into destinations (
+  slug, name_en, name_de, region_en, region_de, tagline_en, tagline_de,
+  image, description, highlights, best_time_en, best_time_de,
+  related_tour_slug, sort_order
+) values (
+  'polonnaruwa', 'Polonnaruwa', 'Polonnaruwa', 'North Central Province', 'Nordzentralprovinz',
+  'Sri Lanka''s medieval capital, compact enough to see properly in a day.', 'Sri Lankas mittelalterliche Hauptstadt, kompakt genug, um sie an einem Tag richtig zu sehen.', '/images/polonnaruwa-ruins.jpg', '[{"en":"Polonnaruwa succeeded Anuradhapura as the capital in the 11th century, and its ruins are closer together and better preserved — the royal palace, the audience hall, and the quadrangle of temples can all be covered on foot or by bicycle in a single morning.","de":"Polonnaruwa löste Anuradhapura im 11. Jahrhundert als Hauptstadt ab, und seine Ruinen liegen enger beieinander und sind besser erhalten — der Königspalast, die Audienzhalle und das Tempel-Quadrangle lassen sich an einem einzigen Vormittag zu Fuß oder mit dem Fahrrad besichtigen."},{"en":"The highlight for most visitors is Gal Vihara: four Buddha statues carved directly into a single granite outcrop, finished with a precision that still isn''t fully explained.","de":"Der Höhepunkt für die meisten Besucher ist Gal Vihara: vier Buddha-Statuen, direkt aus einem einzigen Granitfelsen gemeißelt, mit einer Präzision vollendet, die bis heute nicht vollständig erklärt ist."}]'::jsonb, '[{"en":"Gal Vihara''s rock-cut Buddha statues","de":"Die aus Fels gehauenen Buddha-Statuen von Gal Vihara"},{"en":"The royal palace and council chamber ruins","de":"Die Ruinen des Königspalasts und der Ratskammer"},{"en":"Compact enough to cycle in half a day","de":"Kompakt genug für eine halbtägige Fahrradtour"}]'::jsonb,
+  'May–September, same dry window as Anuradhapura — the two are usually visited together.', 'Mai–September, dasselbe Trockenfenster wie Anuradhapura — beide werden meist zusammen besucht.', 'ancient-kingdoms-trail', 5
+);
+
+
+
+
+-- =========================================================
+-- CUSTOM TRIP PLANNER MIGRATION
+-- Run this in the Supabase SQL editor (after schema.sql)
+-- =========================================================
+
+-- 1. VEHICLES (managed from /admin/vehicles, picked in the planner)
+create table if not exists vehicles (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  name text not null,
+  type text not null default 'car' check (type in ('car', 'van', 'suv', 'minibus', 'coach')),
+  seats int not null default 4,
+  description text,
+  image_url text,
+  active boolean not null default true,
+  sort_order int not null default 0
+);
+
+alter table vehicles enable row level security;
+
+create policy "Public can view active vehicles"
+  on vehicles for select
+  to anon
+  using (active = true);
+
+create policy "Authenticated can manage vehicles"
+  on vehicles for all
+  to authenticated
+  using (true)
+  with check (true);
+
+-- 2. CUSTOM TRIP REQUESTS (submitted from /plan)
+create table if not exists custom_trip_requests (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  name text not null,
+  email text not null,
+  phone text,
+  arrival_date date,
+  departure_date date,
+  travelers int,
+  locations jsonb not null default '[]'::jsonb,
+  vehicle_id uuid references vehicles(id) on delete set null,
+  vehicle_name text,
+  hotel_category text,
+  notes text,
+  locale text default 'en',
+  status text not null default 'new' check (status in ('new', 'contacted', 'quoted', 'booked', 'closed'))
+);
+
+alter table custom_trip_requests enable row level security;
+
+create policy "Public can submit custom trip requests"
+  on custom_trip_requests for insert
+  to anon
+  with check (true);
+
+create policy "Authenticated can read custom trip requests"
+  on custom_trip_requests for select
+  to authenticated
+  using (true);
+
+create policy "Authenticated can update custom trip requests"
+  on custom_trip_requests for update
+  to authenticated
+  using (true)
+  with check (true);
+
+-- 3. Starter vehicles (edit freely in /admin/vehicles)
+insert into vehicles (name, type, seats, description, sort_order) values
+  ('Toyota Prius / Axio', 'car', 3, 'Comfortable sedan, ideal for couples and solo travellers', 1),
+  ('Toyota KDH High-Roof Van', 'van', 8, 'Spacious air-conditioned van, great for families', 2),
+  ('Toyota Land Cruiser / SUV', 'suv', 5, 'Premium ride with extra comfort for hill country roads', 3),
+  ('Toyota Coaster Mini Coach', 'minibus', 22, 'For bigger groups travelling together', 4)
+on conflict do nothing;
