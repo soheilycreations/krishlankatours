@@ -1,0 +1,184 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, CheckCircle2, AlertCircle } from "lucide-react";
+import type { Tour } from "@/lib/tours";
+import DateRangeField, { type DateRange } from "@/components/DateRangeField";
+import { format } from "date-fns";
+import type { Locale } from "@/i18n/routing";
+
+type Status = "idle" | "submitting" | "success" | "error";
+
+export default function ContactForm({ tours }: { tours: Tour[] }) {
+  const t = useTranslations("contact");
+  const locale = useLocale() as Locale;
+  const searchParams = useSearchParams();
+  const preselectedTour = searchParams.get("tour") || "";
+
+  const [status, setStatus] = useState<Status>("idle");
+  const [dates, setDates] = useState<DateRange | undefined>();
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    tourSlug: preselectedTour,
+    travelDates: "",
+    groupSize: "",
+    message: "",
+  });
+
+  useEffect(() => {
+    if (preselectedTour) {
+      setForm((f) => ({ ...f, tourSlug: preselectedTour }));
+    }
+  }, [preselectedTour]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("submitting");
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          travelDates:
+            dates?.from
+              ? `${format(dates.from, "dd MMM yyyy")}${dates.to ? " → " + format(dates.to, "dd MMM yyyy") : ""}`
+              : form.travelDates,
+          locale,
+        }),
+      });
+      if (!res.ok) throw new Error("failed");
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <div className="bg-white border border-navy/8 shadow-sm rounded-2xl p-10 text-center">
+        <CheckCircle2 className="text-blue mx-auto mb-4" size={40} />
+        <h3 className="font-display text-2xl text-navy mb-2">{t("successTitle")}</h3>
+        <p className="font-body text-ink-text/65 max-w-sm mx-auto">{t("successBody")}</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-white border border-navy/8 shadow-sm rounded-2xl p-6 sm:p-8">
+      <div className="grid sm:grid-cols-2 gap-5">
+        <Field label={t("formName")} name="name" value={form.name} onChange={handleChange} required />
+        <Field label={t("formEmail")} name="email" type="email" value={form.email} onChange={handleChange} required />
+        <Field label={t("formPhone")} name="phone" value={form.phone} onChange={handleChange} />
+        <div>
+          <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-2">
+            {t("formTour")}
+          </label>
+          <select
+            name="tourSlug"
+            value={form.tourSlug}
+            onChange={handleChange}
+            className="w-full bg-paper-2/40 border border-navy/12 rounded-lg px-4 py-3 font-body text-sm text-navy focus:border-blue outline-none"
+          >
+            <option value="">{t("formTourPlaceholder")}</option>
+            {tours.map((tour) => (
+              <option key={tour.slug} value={tour.slug}>
+                {tour.title[locale]}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="sm:col-span-2">
+          <DateRangeField
+            value={dates}
+            onChange={setDates}
+            arrivalLabel={t("formArrival")}
+            departureLabel={t("formDeparture")}
+            placeholder={t("formPickDate")}
+          />
+        </div>
+        <Field label={t("formGroupSize")} name="groupSize" value={form.groupSize} onChange={handleChange} />
+      </div>
+
+      <div className="mt-5">
+        <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-2">
+          {t("formMessage")}
+        </label>
+        <textarea
+          name="message"
+          rows={4}
+          placeholder={t("formMessagePlaceholder")}
+          value={form.message}
+          onChange={handleChange}
+          className="w-full bg-paper-2/40 border border-navy/12 rounded-lg px-4 py-3 font-body text-sm text-navy placeholder:text-ink-text/35 focus:border-blue outline-none resize-none"
+        />
+      </div>
+
+      <AnimatePresence>
+        {status === "error" && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="flex items-start gap-2 mt-5 text-red-500"
+          >
+            <AlertCircle size={16} className="mt-0.5 shrink-0" />
+            <p className="font-body text-sm">{t("errorBody")}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <button
+        type="submit"
+        disabled={status === "submitting"}
+        className="mt-7 w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-blue text-white px-7 py-3.5 rounded-full font-body font-medium hover:bg-blue-light transition-colors disabled:opacity-60"
+      >
+        {status === "submitting" ? t("submitting") : t("submit")}
+        {status !== "submitting" && <Send size={16} />}
+      </button>
+    </form>
+  );
+}
+
+function Field({
+  label,
+  name,
+  value,
+  onChange,
+  type = "text",
+  required = false,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: string;
+  required?: boolean;
+}) {
+  return (
+    <div>
+      <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-2">
+        {label}
+      </label>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+        className="w-full bg-paper-2/40 border border-navy/12 rounded-lg px-4 py-3 font-body text-sm text-navy focus:border-blue outline-none"
+      />
+    </div>
+  );
+}

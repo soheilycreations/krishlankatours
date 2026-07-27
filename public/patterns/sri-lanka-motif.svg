@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <g fill="none" stroke="#0E1C3A" stroke-opacity="0.05" stroke-width="2" stroke-linecap="round">
+    <!-- gentle wave motif, tiles seamlessly left-to-right and top-to-bottom -->
+    <path d="M0 40 Q 22.5 25, 45 40 T 90 40 T 135 40 T 180 40" />
+    <path d="M0 150 Q 22.5 135, 45 150 T 90 150 T 135 150 T 180 150" />
+
+    <!-- small sun-burst motif, echoes the logo -->
+    <g stroke-width="1.6">
+      <circle cx="135" cy="95" r="7" />
+      <path d="M135 82 V86" />
+      <path d="M135 104 V108" />
+      <path d="M122 95 H126" />
+      <path d="M144 95 H148" />
+      <path d="M126.4 86.4 L129 89" />
+      <path d="M141 101 L143.6 103.6" />
+      <path d="M126.4 103.6 L129 101" />
+      <path d="M141 89 L143.6 86.4" />
+    </g>
+
+    <!-- small palm-frond swoosh -->
+    <path d="M35 100 Q 45 85, 60 90" stroke-width="1.6" />
+    <path d="M35 100 Q 47 92, 58 100" stroke-width="1.6" />
+    <path d="M35 100 Q 44 105, 55 112" stroke-width="1.6" />
+  </g>
+</svg>
