@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Plus, Trash2, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import ImageUploadField from "@/components/admin/ImageUploadField";
+import GalleryUploadField from "@/components/admin/GalleryUploadField";
 import { saveTour } from "@/app/admin/actions";
 import { categoryLabels, type TourCategory } from "@/lib/tours";
 
@@ -140,18 +141,11 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
           <h2 className="font-display text-lg text-navy mb-4">Images</h2>
           <div className="flex flex-col gap-5">
             <ImageUploadField label="Hero image" name="hero_image" defaultValue={tour?.hero_image ?? ""} />
-            <div>
-              <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-1.5">
-                Gallery images (one path/URL per line)
-              </label>
-              <textarea
-                name="gallery"
-                rows={4}
-                defaultValue={tour?.gallery?.join("\n")}
-                placeholder="/images/example.jpg"
-                className="w-full border border-navy/12 rounded-lg px-3 py-2 font-body text-xs text-navy focus:border-blue outline-none resize-none"
-              />
-            </div>
+            <GalleryUploadField
+              label="Tour photo gallery"
+              name="gallery"
+              defaultValue={tour?.gallery ?? []}
+            />
           </div>
         </section>
 
