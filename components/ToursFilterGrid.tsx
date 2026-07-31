@@ -20,14 +20,21 @@ const categories: TourCategory[] = [
 export default function ToursFilterGrid({ tours }: { tours: Tour[] }) {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category") as TourCategory | null;
+  const duration = searchParams.get("duration"); // "day" | "multi" | null
   const [active, setActive] = useState<TourCategory | "all">(
     initialCategory && categories.includes(initialCategory) ? initialCategory : "all"
   );
   const locale = useLocale() as Locale;
   const t = useTranslations("tours");
 
+  const byDuration =
+    duration === "day"
+      ? tours.filter((tr) => tr.durationDays <= 1)
+      : duration === "multi"
+        ? tours.filter((tr) => tr.durationDays > 1)
+        : tours;
   const filtered =
-    active === "all" ? tours : tours.filter((tr) => tr.category === active);
+    active === "all" ? byDuration : byDuration.filter((tr) => tr.category === active);
 
   return (
     <div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import LanguageDropdown from "@/components/LanguageDropdown";
 
 export default function Header() {
@@ -30,6 +30,12 @@ export default function Header() {
     { href: "/contact", label: t("contact") },
   ];
 
+  const tourSubLinks = [
+    { href: "/tours?duration=day", label: t("dayTours") },
+    { href: "/tours?duration=multi", label: t("overnightTours") },
+    { href: "/plan", label: t("tailorMade") },
+  ];
+
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-navy/8">
       <div
@@ -51,19 +57,47 @@ export default function Header() {
         </Link>
 
         <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-8">
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className={`font-body text-sm tracking-wide whitespace-nowrap transition-colors ${
-                pathname === l.href
-                  ? "text-blue"
-                  : "text-ink-text/70 hover:text-blue"
-              }`}
-            >
-              {l.label}
-            </Link>
-          ))}
+          {links.map((l) =>
+            l.href === "/tours" ? (
+              <div key={l.href} className="relative group">
+                <Link
+                  href={l.href}
+                  className={`inline-flex items-center gap-1 font-body text-sm tracking-wide whitespace-nowrap transition-colors ${
+                    pathname === l.href ? "text-blue" : "text-ink-text/70 group-hover:text-blue"
+                  }`}
+                >
+                  {l.label}
+                  <ChevronDown size={13} className="transition-transform group-hover:rotate-180" />
+                </Link>
+                {/* dropdown */}
+                <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="bg-white rounded-2xl border border-navy/10 shadow-xl shadow-navy/10 py-2 min-w-[210px]">
+                    {tourSubLinks.map((sl) => (
+                      <Link
+                        key={sl.href}
+                        href={sl.href}
+                        className="block px-5 py-2.5 font-body text-sm text-ink-text/75 hover:text-blue hover:bg-paper-2/60 transition-colors whitespace-nowrap"
+                      >
+                        {sl.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={`font-body text-sm tracking-wide whitespace-nowrap transition-colors ${
+                  pathname === l.href
+                    ? "text-blue"
+                    : "text-ink-text/70 hover:text-blue"
+                }`}
+              >
+                {l.label}
+              </Link>
+            )
+          )}
         </nav>
 
         <div className="hidden lg:flex items-center gap-3 justify-self-end">
@@ -89,16 +123,28 @@ export default function Header() {
         <div className="lg:hidden bg-white border-t border-navy/8 px-5 pb-6 pt-2">
           <nav className="flex flex-col gap-1">
             {links.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className={`font-body py-3 border-b border-navy/8 ${
-                  pathname === l.href ? "text-blue" : "text-ink-text/80"
-                }`}
-              >
-                {l.label}
-              </Link>
+              <div key={l.href}>
+                <Link
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className={`block font-body py-3 border-b border-navy/8 ${
+                    pathname === l.href ? "text-blue" : "text-ink-text/80"
+                  }`}
+                >
+                  {l.label}
+                </Link>
+                {l.href === "/tours" &&
+                  tourSubLinks.map((sl) => (
+                    <Link
+                      key={sl.href}
+                      href={sl.href}
+                      onClick={() => setOpen(false)}
+                      className="block font-body text-sm py-2.5 pl-5 border-b border-navy/5 text-ink-text/60"
+                    >
+                      — {sl.label}
+                    </Link>
+                  ))}
+              </div>
             ))}
           </nav>
           <div className="mt-4 flex items-center justify-between">
