@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft, ArrowRight, Users, Calendar, Check } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import GalleryGrid from "@/components/GalleryGrid";
 import TourCard from "@/components/TourCard";
 import TourImagePlaceholder from "@/components/TourImagePlaceholder";
 import { tours as staticTours, categoryLabels } from "@/lib/tours";
@@ -125,15 +126,6 @@ export default async function TourDetailPage({
               </div>
             </Reveal>
 
-            {tour.gallery.length > 1 && (
-              <Reveal delay={0.1} className="grid grid-cols-3 gap-3 mt-4">
-                {tour.gallery.map((src) => (
-                  <div key={src} className="relative h-32 sm:h-44 rounded-xl overflow-hidden">
-                    <Image src={src} alt="" fill sizes="200px" className="object-cover" />
-                  </div>
-                ))}
-              </Reveal>
-            )}
           </div>
 
           <div className="lg:col-span-1">
@@ -159,6 +151,33 @@ export default async function TourDetailPage({
           </div>
         </div>
       </section>
+
+      {/* TOUR PHOTO GALLERY */}
+      {tour.gallery.length > 1 && (
+        <section className="bg-navy torn-top relative overflow-hidden py-14 sm:py-20">
+          <div
+            className="absolute inset-0 opacity-50"
+            style={{ background: "radial-gradient(ellipse 70% 55% at 50% 0%, rgba(232,80,43,0.35), transparent 65%)" }}
+            aria-hidden="true"
+          />
+          <div className="canvas-texture absolute inset-0" aria-hidden="true" />
+          <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
+            <Reveal className="text-center mb-9">
+              <p className="font-stamp text-xs uppercase tracking-[0.2em] text-golden mb-4">
+                {t("galleryEyebrow")}
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl text-white">{t("galleryTitle")}</h2>
+            </Reveal>
+            <GalleryGrid
+              images={tour.gallery.map((src, i) => ({
+                src,
+                caption: { en: "", de: "" },
+                tall: i % 4 === 0,
+              }))}
+            />
+          </div>
+        </section>
+      )}
 
       <section className="bg-paper-2-textured py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">

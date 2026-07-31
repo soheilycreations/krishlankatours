@@ -6,7 +6,10 @@
     "gallery": "Galerie",
     "about": "Über uns",
     "contact": "Kontakt",
-    "bookNow": "Jetzt anfragen"
+    "bookNow": "Jetzt anfragen",
+    "dayTours": "Tagestouren",
+    "overnightTours": "Rundreisen (mehrtägig)",
+    "tailorMade": "Maßgeschneiderte Touren"
   },
   "home": {
     "heroEyebrow": "Krish Lanka Tours & Travels",
@@ -153,7 +156,9 @@
     "days": "Tage",
     "day": "Tag",
     "viewDetails": "Reiseplan ansehen",
-    "photoComingSoon": "Foto folgt in Kürze"
+    "photoComingSoon": "Foto folgt in Kürze",
+    "galleryEyebrow": "Von dieser Tour",
+    "galleryTitle": "Foto-Galerie der Tour"
   },
   "tourDetail": {
     "back": "Alle Touren",
