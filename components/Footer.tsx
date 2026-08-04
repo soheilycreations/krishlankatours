@@ -14,8 +14,8 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-navy text-white/75 border-t border-white/10">
       <CornerMotif className="hidden lg:block absolute -top-20 -right-20 w-96 h-96 text-blue-light/15 pointer-events-none" />
-      <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-        <div>
+      <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-10">
+        <div className="lg:col-span-2">
           <div className="flex items-center gap-3 mb-3">
             <span className="relative w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0">
               <Image
@@ -44,10 +44,19 @@ export default function Footer() {
             <li><Link href="/destinations" className="hover:text-blue-light transition-colors">{nav("destinations")}</Link></li>
             <li><Link href="/gallery" className="hover:text-blue-light transition-colors">{nav("gallery")}</Link></li>
             <li><Link href="/vehicles" className="hover:text-blue-light transition-colors">{t("vehiclesLink")}</Link></li>
+            <li><Link href="/about" className="hover:text-blue-light transition-colors">{nav("about")}</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <div className="font-stamp text-xs uppercase tracking-widest text-blue-light mb-4">
+            {t("planInfo")}
+          </div>
+          <ul className="flex flex-col gap-2 font-body text-sm">
+            <li><Link href="/plan" className="hover:text-blue-light transition-colors">{t("plannerLink")}</Link></li>
             <li><Link href="/airport-transfer" className="hover:text-blue-light transition-colors">{t("airportTransferLink")}</Link></li>
             <li><Link href="/blog" className="hover:text-blue-light transition-colors">{t("blogLink")}</Link></li>
             <li><Link href="/faq" className="hover:text-blue-light transition-colors">{t("faqLink")}</Link></li>
-            <li><Link href="/about" className="hover:text-blue-light transition-colors">{nav("about")}</Link></li>
             <li><Link href="/contact" className="hover:text-blue-light transition-colors">{nav("contact")}</Link></li>
           </ul>
         </div>

@@ -26,6 +26,14 @@ function YoutubeIcon({ size = 16 }: { size?: number }) {
   );
 }
 
+function TiktokIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
+      <path d="M16.5 3h-3.1v12.4a2.6 2.6 0 1 1-2.1-2.55v-3.15a5.75 5.75 0 1 0 5.2 5.7V9.4a7.15 7.15 0 0 0 4.5 1.6V7.9a4.05 4.05 0 0 1-2.75-1.15A4 4 0 0 1 16.5 3.9z" />
+    </svg>
+  );
+}
+
 /** Tripadvisor owl mark (simplified, single-color). */
 function TripadvisorIcon({ size = 16 }: { size?: number }) {
   return (
@@ -40,6 +48,7 @@ const LINKS = [
   { label: "Facebook", href: SITE.facebook, Icon: FacebookIcon, hover: "hover:bg-[#1877F2] hover:border-[#1877F2]" },
   { label: "Instagram", href: SITE.instagram, Icon: InstagramIcon, hover: "hover:bg-[#E4405F] hover:border-[#E4405F]" },
   { label: "YouTube", href: SITE.youtube, Icon: YoutubeIcon, hover: "hover:bg-[#FF0000] hover:border-[#FF0000]" },
+  { label: "TikTok", href: SITE.tiktok, Icon: TiktokIcon, hover: "hover:bg-black hover:border-black" },
 ];
 
 /** Round social buttons. `tone="dark"` for the footer, default for light cards. */
