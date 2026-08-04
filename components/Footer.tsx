@@ -43,6 +43,10 @@ export default function Footer() {
             <li><Link href="/tours" className="hover:text-blue-light transition-colors">{nav("tours")}</Link></li>
             <li><Link href="/destinations" className="hover:text-blue-light transition-colors">{nav("destinations")}</Link></li>
             <li><Link href="/gallery" className="hover:text-blue-light transition-colors">{nav("gallery")}</Link></li>
+            <li><Link href="/vehicles" className="hover:text-blue-light transition-colors">{t("vehiclesLink")}</Link></li>
+            <li><Link href="/airport-transfer" className="hover:text-blue-light transition-colors">{t("airportTransferLink")}</Link></li>
+            <li><Link href="/blog" className="hover:text-blue-light transition-colors">{t("blogLink")}</Link></li>
+            <li><Link href="/faq" className="hover:text-blue-light transition-colors">{t("faqLink")}</Link></li>
             <li><Link href="/about" className="hover:text-blue-light transition-colors">{nav("about")}</Link></li>
             <li><Link href="/contact" className="hover:text-blue-light transition-colors">{nav("contact")}</Link></li>
           </ul>

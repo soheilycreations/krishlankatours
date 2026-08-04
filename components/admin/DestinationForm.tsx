@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Plus, Trash2, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import ImageUploadField from "@/components/admin/ImageUploadField";
+import GalleryUploadField from "@/components/admin/GalleryUploadField";
 import { saveDestination } from "@/app/admin/actions";
 
 interface TextItem {
@@ -22,6 +23,7 @@ export interface DestinationFormData {
   tagline_en: string;
   tagline_de: string;
   image: string | null;
+  gallery?: string[];
   description: TextItem[];
   highlights: TextItem[];
   best_time_en: string;
@@ -91,7 +93,12 @@ export default function DestinationForm({ destination }: { destination?: Destina
 
         <section className="bg-white rounded-2xl border border-navy/10 p-6">
           <h2 className="font-display text-lg text-navy mb-4">Image</h2>
-          <ImageUploadField label="Photo" name="image" defaultValue={destination?.image ?? ""} />
+          <ImageUploadField label="Card photo" name="image" defaultValue={destination?.image ?? ""} />
+          <GalleryUploadField
+            label="Photo gallery (shown on the destination page)"
+            name="gallery"
+            defaultValue={destination?.gallery ?? []}
+          />
         </section>
 
         <section className="bg-white rounded-2xl border border-navy/10 p-6">

@@ -45,6 +45,16 @@ export default function TourCard({ tour }: { tour: Tour }) {
         <span className={`absolute bottom-4 left-4 font-stamp text-[10px] uppercase tracking-widest ${colors.bg} text-white px-2.5 py-1 rounded-full shadow-sm`}>
           {categoryLabels[tour.category][locale]}
         </span>
+        {tour.priceFromUsd > 0 && (
+          <span className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
+            <span className="font-stamp text-[9px] uppercase tracking-wide text-ink-text/50 block leading-none">
+              {t("from")}
+            </span>
+            <span className="font-display text-sm text-blue leading-none">
+              ${tour.priceFromUsd}
+            </span>
+          </span>
+        )}
       </div>
 
       <div className="p-6">

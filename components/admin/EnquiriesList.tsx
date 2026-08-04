@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useTransition } from "react";
-import { ChevronDown, Trash2, Mail, Phone, Calendar, Users, MessageSquare } from "lucide-react";
+import { ChevronDown, Trash2, Mail, Phone, Calendar, Users, MessageSquare, MapPin } from "lucide-react";
 import { updateInquiryStatus, deleteInquiry } from "@/app/admin/actions";
 import type { InquiryRow } from "@/app/admin/enquiries/page";
 
@@ -120,6 +120,12 @@ export default function EnquiriesList({ inquiries }: { inquiries: InquiryRow[] }
                       <div className="flex items-center gap-2">
                         <Users size={14} className="text-blue shrink-0" />
                         {inq.group_size}
+                      </div>
+                    )}
+                    {inq.hotel_location && (
+                      <div className="flex items-center gap-2">
+                        <MapPin size={14} className="text-blue shrink-0" />
+                        {inq.hotel_location}
                       </div>
                     )}
                   </div>

@@ -34,6 +34,10 @@ export default function Header() {
     { href: "/tours?duration=day", label: t("dayTours") },
     { href: "/tours?duration=multi", label: t("overnightTours") },
     { href: "/plan", label: t("tailorMade") },
+    { href: "/airport-transfer", label: t("airportTransferNav") },
+    { href: "/taxi-service", label: t("taxiServiceNav") },
+    { href: "/surfing", label: t("surfingNav") },
+    { href: "/vehicles", label: t("vehiclesNav") },
   ];
 
   return (

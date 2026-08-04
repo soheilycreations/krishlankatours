@@ -27,6 +27,7 @@ export default function ContactForm({ tours }: { tours: Tour[] }) {
     tourSlug: preselectedTour,
     travelDates: "",
     groupSize: "",
+    hotelLocation: "",
     message: "",
   });
 
@@ -109,6 +110,7 @@ export default function ContactForm({ tours }: { tours: Tour[] }) {
           />
         </div>
         <Field label={t("formGroupSize")} name="groupSize" value={form.groupSize} onChange={handleChange} />
+        <Field label={t("formHotelLocation")} name="hotelLocation" value={form.hotelLocation} onChange={handleChange} placeholder={t("formHotelLocationPlaceholder")} />
       </div>
 
       <div className="mt-5">
@@ -158,6 +160,7 @@ function Field({
   onChange,
   type = "text",
   required = false,
+  placeholder,
 }: {
   label: string;
   name: string;
@@ -165,6 +168,7 @@ function Field({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   required?: boolean;
+  placeholder?: string;
 }) {
   return (
     <div>
@@ -177,6 +181,7 @@ function Field({
         value={value}
         onChange={onChange}
         required={required}
+        placeholder={placeholder}
         className="w-full bg-paper-2/40 border border-navy/12 rounded-lg px-4 py-3 font-body text-sm text-navy focus:border-blue outline-none"
       />
     </div>
