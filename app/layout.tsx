@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   ],
   icons: {
     icon: "/icon.png",
-    apple: "/icon.png",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     type: "website",
@@ -35,14 +35,14 @@ export const metadata: Metadata = {
     title: "Krish Lanka Tours & Travels — Private Tours in Sri Lanka",
     description:
       "Private, driver-guided tours across Sri Lanka — wildlife, ancient cities, tea country and the coast. Rated 5.0 on TripAdvisor.",
-    images: [{ url: "/og-image.jpg?v=2", width: 1200, height: 630, alt: "Krish Lanka Tours & Travels" }],
+    images: [{ url: "/og-image.jpg?v=3", width: 1200, height: 630, alt: "Krish Lanka Tours & Travels" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Krish Lanka Tours & Travels — Private Tours in Sri Lanka",
     description:
       "Private, driver-guided tours across Sri Lanka. Rated 5.0 on TripAdvisor.",
-    images: ["/og-image.jpg?v=2"],
+    images: ["/og-image.jpg?v=3"],
   },
 };
 
