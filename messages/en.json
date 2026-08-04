@@ -9,7 +9,11 @@
     "bookNow": "Enquire Now",
     "dayTours": "Day Tours",
     "overnightTours": "Round Tours (Multi-Day)",
-    "tailorMade": "Tailor-Made Tours"
+    "tailorMade": "Tailor-Made Tours",
+    "airportTransferNav": "Airport Transfer",
+    "taxiServiceNav": "Taxi Service",
+    "surfingNav": "Surfing",
+    "vehiclesNav": "Our Vehicles"
   },
   "home": {
     "heroEyebrow": "Krish Lanka Tours & Travels",
@@ -157,8 +161,7 @@
     "day": "day",
     "viewDetails": "View itinerary",
     "photoComingSoon": "Photo coming soon",
-    "galleryEyebrow": "From this tour",
-    "galleryTitle": "Tour photo gallery"
+    "from": "From"
   },
   "tourDetail": {
     "back": "All tour packages",
@@ -168,7 +171,11 @@
     "groupSize": "Group size",
     "priceNote": "Every trip is quoted individually based on group size, season, and vehicle — send an enquiry and I'll get back to you with the details.",
     "enquire": "Enquire about this trip",
-    "otherTours": "Other tour packages"
+    "otherTours": "Other tour packages",
+    "galleryEyebrow": "From this tour",
+    "galleryTitle": "Tour photo gallery",
+    "from": "From",
+    "perPerson": "per person"
   },
   "destinations": {
     "pageEyebrow": "Destinations",
@@ -183,7 +190,11 @@
     "homeSubtitle": "Six spots that come up in almost every conversation about Sri Lanka.",
     "viewAll": "See all destinations",
     "ctaTitle": "Not sure which of these fits your trip?",
-    "ctaButton": "Tell me what you're after"
+    "ctaButton": "Tell me what you're after",
+    "viewGalleryCta": "View {count} more photos",
+    "backToDestinations": "Back to destinations",
+    "galleryEyebrow": "From this destination",
+    "galleryTitle": "Photo gallery"
   },
   "gallery": {
     "pageEyebrow": "Gallery",
@@ -269,7 +280,9 @@
     "formDeparture": "Departure date",
     "formPickDate": "Pick a date",
     "followTitle": "Follow our journeys",
-    "followBody": "Real trips, reviews, and island moments."
+    "followBody": "Real trips, reviews, and island moments.",
+    "formHotelLocation": "Hotel / area you're staying",
+    "formHotelLocationPlaceholder": "e.g. Cinnamon Bentota Beach"
   },
   "footer": {
     "tagline": "Private, driver-guided tours across Sri Lanka.",
@@ -279,7 +292,11 @@
     "newsletterBody": "Trip ideas and seasonal tips, a few times a year — no spam.",
     "newsletterPlaceholder": "Your email",
     "newsletterButton": "Subscribe",
-    "rights": "Krish Lanka Tours & Travels. All rights reserved."
+    "rights": "Krish Lanka Tours & Travels. All rights reserved.",
+    "vehiclesLink": "Our Vehicles",
+    "airportTransferLink": "Airport Transfer",
+    "blogLink": "Travel Blog",
+    "faqLink": "FAQ"
   },
   "plan": {
     "pageEyebrow": "Custom trip planner",
@@ -326,5 +343,94 @@
     "successTitle": "Your trip plan is on its way!",
     "successScript": "We're already dreaming up your route...",
     "successBody": "Thank you! We've received your custom trip request and will get back to you within 24 hours with a personalised itinerary and quote."
+  },
+  "faqPage": {
+    "pageEyebrow": "Questions & answers",
+    "pageTitle": "Frequently asked questions",
+    "pageSubtitle": "Everything guests usually ask before booking a private Sri Lanka tour.",
+    "more": [
+      {
+        "q": "How far in advance should I book?",
+        "a": "For peak season (December–March) we recommend booking at least 2–3 weeks ahead. Last-minute requests are often still possible — just message us on WhatsApp."
+      },
+      {
+        "q": "Do you offer airport transfers?",
+        "a": "Yes — private airport transfers from Bandaranaike International Airport (CMB) to anywhere on the south coast or beyond. See our Airport Transfer page for details."
+      },
+      {
+        "q": "Can I combine several tours into a multi-day trip?",
+        "a": "Absolutely — that's exactly what our Custom Trip Planner is for. Pick your destinations, dates, vehicle and hotel style, and we'll build the route."
+      }
+    ],
+    "stillQuestions": "Still have a question?",
+    "stillQuestionsBody": "Message us directly and we'll get back to you within a few hours.",
+    "contactCta": "Contact us"
+  },
+  "airportTransfer": {
+    "eyebrow": "Airport Transfer Sri Lanka",
+    "title": "Colombo Airport to Your Hotel — Direct & Comfortable",
+    "subtitle": "Skip the taxi queues. A driver with your name on a sign, a clean air-conditioned car, and a straight road to your first night in Sri Lanka.",
+    "intro": "Landing after a long flight is not the moment to negotiate a taxi fare. We track your flight, meet you at Bandaranaike International Airport (CMB) arrivals with a name board, and drive you directly to your hotel in Ahungalla, Bentota, Galle or anywhere on the south coast — no stops, no detours, no surprises on price.",
+    "points": [
+      "Flight tracking — we adjust for delays automatically",
+      "Meet & greet at CMB arrivals with a name board",
+      "Fixed price agreed before you travel — no surprises",
+      "Clean, air-conditioned private vehicle",
+      "English-speaking driver, bottled water included",
+      "Also available: hotel-to-airport departure transfers"
+    ],
+    "ctaTitle": "Landing soon?",
+    "ctaBody": "Send us your flight number and hotel, and we'll confirm your transfer within the hour.",
+    "whatsapp": "Book on WhatsApp",
+    "contactCta": "Send an enquiry"
+  },
+  "surfing": {
+    "eyebrow": "Surf tours",
+    "title": "Surfing in Hikkaduwa & Weligama",
+    "subtitle": "Sri Lanka's best beginner and intermediate breaks, with a driver who knows exactly when the waves are working.",
+    "intro": "Hikkaduwa and Weligama are two of Sri Lanka's most reliable surf spots — gentle, forgiving breaks that are ideal for beginners, with enough swell on the right day to keep intermediate surfers happy. We arrange private transport to whichever spot is working best, board hire on request, and can point you to the right local surf schools if you want a lesson.",
+    "points": [
+      "Private transport to Hikkaduwa or Weligama",
+      "Board hire arranged on request",
+      "Local knowledge of which spot is working that day",
+      "Great for beginners — gentle, sandy-bottom breaks",
+      "Combine with a beach day or turtle hatchery visit nearby"
+    ],
+    "ctaTitle": "Ready to paddle out?",
+    "ctaBody": "Tell us your experience level and we'll plan the right day for you.",
+    "whatsapp": "Ask on WhatsApp",
+    "contactCta": "Send an enquiry"
+  },
+  "taxiService": {
+    "eyebrow": "Taxi service",
+    "title": "Private Taxi Service Across Sri Lanka",
+    "subtitle": "Point-to-point transfers between cities, beaches and hill country — comfortable, fixed-price, and on your schedule.",
+    "intro": "Not every trip needs a full guided tour — sometimes you just need a reliable, comfortable ride from A to B. Our taxi service covers point-to-point transfers anywhere in Sri Lanka, in clean air-conditioned vehicles with experienced drivers, at a fixed price agreed before you travel.",
+    "points": [
+      "Point-to-point transfers, any city to any city",
+      "Fixed price agreed in advance — no meter surprises",
+      "Air-conditioned cars, vans and SUVs available",
+      "Experienced, English-speaking drivers",
+      "Available for one-way or return journeys"
+    ],
+    "ctaTitle": "Need a ride?",
+    "ctaBody": "Tell us your route and dates, and we'll send a fixed quote.",
+    "whatsapp": "Book on WhatsApp",
+    "contactCta": "Send an enquiry"
+  },
+  "vehiclesPage": {
+    "pageEyebrow": "Our fleet",
+    "pageTitle": "Choose your ride",
+    "pageSubtitle": "Every vehicle comes with an experienced, English-speaking driver-guide.",
+    "upTo": "Up to {count} guests"
+  },
+  "blog": {
+    "pageEyebrow": "Travel tips",
+    "pageTitle": "Notes from the road",
+    "pageSubtitle": "Practical Sri Lanka travel tips from a local operator — weather, packing, and places worth the detour.",
+    "readTime": "{count} min read",
+    "readMore": "Read more",
+    "back": "Back to blog",
+    "planCta": "Plan your own trip"
   }
 }

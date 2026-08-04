@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -15,6 +16,26 @@ export const revalidate = 60;
 
 export function generateStaticParams() {
   return staticTours.map((t) => ({ slug: t.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const tour = await getTourBySlugFromDb(slug);
+  if (!tour) return {};
+  const loc = locale as Locale;
+  return {
+    title: tour.title[loc],
+    description: `${tour.tagline[loc]} ${tour.summary[loc]}`.slice(0, 160),
+    openGraph: {
+      title: tour.title[loc],
+      description: tour.tagline[loc],
+      images: tour.heroImage ? [{ url: tour.heroImage, width: 1200, height: 630 }] : undefined,
+    },
+  };
 }
 
 export default async function TourDetailPage({
@@ -62,9 +83,18 @@ export default async function TourDetailPage({
           >
             <ArrowLeft size={15} /> {t("back")}
           </Link>
-          <span className="font-stamp text-[10px] uppercase tracking-widest bg-blue text-white px-2.5 py-1 rounded-full">
-            {categoryLabels[tour.category][loc]}
-          </span>
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="font-stamp text-[10px] uppercase tracking-widest bg-blue text-white px-2.5 py-1 rounded-full">
+              {categoryLabels[tour.category][loc]}
+            </span>
+            {tour.priceFromUsd > 0 && (
+              <span className="inline-flex items-baseline gap-1 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1">
+                <span className="font-stamp text-[9px] uppercase tracking-wide text-ink-text/50">{t("from")}</span>
+                <span className="font-display text-base text-blue leading-none">${tour.priceFromUsd}</span>
+                <span className="font-body text-[10px] text-ink-text/45">{t("perPerson")}</span>
+              </span>
+            )}
+          </div>
           <h1 className="font-display text-3xl sm:text-5xl text-white mt-4 max-w-2xl text-balance">
             {tour.title[loc]}
           </h1>

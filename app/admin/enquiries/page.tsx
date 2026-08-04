@@ -13,6 +13,7 @@ export interface InquiryRow {
   tour_slug: string | null;
   travel_dates: string | null;
   group_size: string | null;
+  hotel_location: string | null;
   message: string | null;
   locale: string;
   status: string;

@@ -15,6 +15,7 @@ interface DestinationRow {
   tagline_en: string | null;
   tagline_de: string | null;
   image: string | null;
+  gallery: string[] | null;
   description: LocalizedText[] | null;
   highlights: LocalizedText[] | null;
   best_time_en: string | null;
@@ -31,6 +32,7 @@ function rowToDestination(row: DestinationRow): Destination {
     region: { en: row.region_en ?? "", de: row.region_de ?? row.region_en ?? "" },
     tagline: { en: row.tagline_en ?? "", de: row.tagline_de ?? row.tagline_en ?? "" },
     image: row.image ?? "",
+    gallery: row.gallery ?? [],
     description: row.description ?? [],
     highlights: row.highlights ?? [],
     bestTime: { en: row.best_time_en ?? "", de: row.best_time_de ?? row.best_time_en ?? "" },

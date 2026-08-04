@@ -26,6 +26,7 @@ export default async function EditDestinationPage({
     tagline_en: data.tagline_en ?? "",
     tagline_de: data.tagline_de ?? "",
     image: data.image,
+    gallery: data.gallery ?? [],
     description: data.description ?? [],
     highlights: data.highlights ?? [],
     best_time_en: data.best_time_en ?? "",

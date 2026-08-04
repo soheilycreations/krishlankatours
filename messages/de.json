@@ -9,7 +9,11 @@
     "bookNow": "Jetzt anfragen",
     "dayTours": "Tagestouren",
     "overnightTours": "Rundreisen (mehrtägig)",
-    "tailorMade": "Maßgeschneiderte Touren"
+    "tailorMade": "Maßgeschneiderte Touren",
+    "airportTransferNav": "Flughafentransfer",
+    "taxiServiceNav": "Taxiservice",
+    "surfingNav": "Surfen",
+    "vehiclesNav": "Unsere Fahrzeuge"
   },
   "home": {
     "heroEyebrow": "Krish Lanka Tours & Travels",
@@ -157,8 +161,7 @@
     "day": "Tag",
     "viewDetails": "Reiseplan ansehen",
     "photoComingSoon": "Foto folgt in Kürze",
-    "galleryEyebrow": "Von dieser Tour",
-    "galleryTitle": "Foto-Galerie der Tour"
+    "from": "Ab"
   },
   "tourDetail": {
     "back": "Alle Touren",
@@ -168,7 +171,11 @@
     "groupSize": "Gruppengröße",
     "priceNote": "Jede Reise wird individuell kalkuliert, je nach Gruppengröße, Saison und Fahrzeug — schick mir eine Anfrage und ich melde mich mit den Details.",
     "enquire": "Zu dieser Reise anfragen",
-    "otherTours": "Weitere Touren"
+    "otherTours": "Weitere Touren",
+    "galleryEyebrow": "Von dieser Tour",
+    "galleryTitle": "Foto-Galerie der Tour",
+    "from": "Ab",
+    "perPerson": "pro Person"
   },
   "destinations": {
     "pageEyebrow": "Reiseziele",
@@ -183,7 +190,11 @@
     "homeSubtitle": "Sechs Orte, die in fast jedem Gespräch über Sri Lanka vorkommen.",
     "viewAll": "Alle Reiseziele ansehen",
     "ctaTitle": "Nicht sicher, welches davon zu deiner Reise passt?",
-    "ctaButton": "Sag mir, was du suchst"
+    "ctaButton": "Sag mir, was du suchst",
+    "viewGalleryCta": "{count} weitere Fotos ansehen",
+    "backToDestinations": "Zurück zu den Reisezielen",
+    "galleryEyebrow": "Von diesem Reiseziel",
+    "galleryTitle": "Foto-Galerie"
   },
   "gallery": {
     "pageEyebrow": "Galerie",
@@ -269,7 +280,9 @@
     "formDeparture": "Abreise",
     "formPickDate": "Datum wählen",
     "followTitle": "Folgen Sie unseren Reisen",
-    "followBody": "Echte Touren, Bewertungen und Inselmomente."
+    "followBody": "Echte Touren, Bewertungen und Inselmomente.",
+    "formHotelLocation": "Hotel / Gegend, in der Sie wohnen",
+    "formHotelLocationPlaceholder": "z.B. Cinnamon Bentota Beach"
   },
   "footer": {
     "tagline": "Private, fahrergeführte Touren durch ganz Sri Lanka.",
@@ -279,7 +292,11 @@
     "newsletterBody": "Reiseideen und saisonale Tipps, ein paar Mal im Jahr — kein Spam.",
     "newsletterPlaceholder": "Deine E-Mail",
     "newsletterButton": "Abonnieren",
-    "rights": "Krish Lanka Tours & Travels. Alle Rechte vorbehalten."
+    "rights": "Krish Lanka Tours & Travels. Alle Rechte vorbehalten.",
+    "vehiclesLink": "Unsere Fahrzeuge",
+    "airportTransferLink": "Flughafentransfer",
+    "blogLink": "Reiseblog",
+    "faqLink": "FAQ"
   },
   "plan": {
     "pageEyebrow": "Individueller Reiseplaner",
@@ -326,5 +343,94 @@
     "successTitle": "Ihr Reiseplan ist unterwegs!",
     "successScript": "Wir träumen bereits von Ihrer Route...",
     "successBody": "Vielen Dank! Wir haben Ihre Anfrage erhalten und melden uns innerhalb von 24 Stunden mit einer persönlichen Route und einem Angebot."
+  },
+  "faqPage": {
+    "pageEyebrow": "Fragen & Antworten",
+    "pageTitle": "Häufig gestellte Fragen",
+    "pageSubtitle": "Alles, was Gäste vor einer privaten Sri-Lanka-Tour meist fragen.",
+    "more": [
+      {
+        "q": "Wie weit im Voraus sollte ich buchen?",
+        "a": "Für die Hochsaison (Dezember–März) empfehlen wir mindestens 2–3 Wochen Vorlauf. Kurzfristige Anfragen sind oft trotzdem möglich — einfach per WhatsApp anfragen."
+      },
+      {
+        "q": "Bieten Sie Flughafentransfers an?",
+        "a": "Ja — private Flughafentransfers vom Bandaranaike International Airport (CMB) an die Südküste oder darüber hinaus. Details auf unserer Flughafentransfer-Seite."
+      },
+      {
+        "q": "Kann ich mehrere Touren zu einer mehrtägigen Reise kombinieren?",
+        "a": "Absolut — genau dafür ist unser individueller Reiseplaner da. Wählen Sie Ziele, Daten, Fahrzeug und Hotelstil, und wir planen die Route."
+      }
+    ],
+    "stillQuestions": "Noch eine Frage?",
+    "stillQuestionsBody": "Schreiben Sie uns direkt — wir antworten innerhalb weniger Stunden.",
+    "contactCta": "Kontakt aufnehmen"
+  },
+  "airportTransfer": {
+    "eyebrow": "Flughafentransfer Sri Lanka",
+    "title": "Vom Flughafen Colombo direkt zu Ihrem Hotel",
+    "subtitle": "Keine Taxischlangen. Ein Fahrer mit Namensschild, ein klimatisiertes Auto, direkt zu Ihrer ersten Nacht in Sri Lanka.",
+    "intro": "Nach einem langen Flug ist nicht der Moment, um einen Taxipreis auszuhandeln. Wir verfolgen Ihren Flug, empfangen Sie am Bandaranaike International Airport (CMB) mit Namensschild und fahren Sie direkt zu Ihrem Hotel in Ahungalla, Bentota, Galle oder an die gesamte Südküste — ohne Umwege, ohne Preisüberraschungen.",
+    "points": [
+      "Flugverfolgung — wir passen uns automatisch an Verspätungen an",
+      "Empfang am CMB mit Namensschild",
+      "Festpreis vor der Reise vereinbart — keine Überraschungen",
+      "Sauberes, klimatisiertes Privatfahrzeug",
+      "Englischsprachiger Fahrer, Wasser inklusive",
+      "Auch verfügbar: Rücktransfer vom Hotel zum Flughafen"
+    ],
+    "ctaTitle": "Bald Landung?",
+    "ctaBody": "Senden Sie uns Flugnummer und Hotel — wir bestätigen Ihren Transfer innerhalb einer Stunde.",
+    "whatsapp": "Auf WhatsApp buchen",
+    "contactCta": "Anfrage senden"
+  },
+  "surfing": {
+    "eyebrow": "Surftouren",
+    "title": "Surfen in Hikkaduwa & Weligama",
+    "subtitle": "Sri Lankas beste Anfänger- und Fortgeschrittenen-Wellen, mit einem Fahrer, der genau weiß, wann die Wellen gut sind.",
+    "intro": "Hikkaduwa und Weligama gehören zu Sri Lankas zuverlässigsten Surfspots — sanfte, verzeihende Wellen, ideal für Anfänger, mit genug Schwung an guten Tagen für Fortgeschrittene. Wir organisieren privaten Transport zum jeweils besten Spot, auf Wunsch Board-Verleih, und vermitteln bei Bedarf eine örtliche Surfschule.",
+    "points": [
+      "Privater Transport nach Hikkaduwa oder Weligama",
+      "Board-Verleih auf Anfrage",
+      "Lokales Wissen, welcher Spot gerade gut ist",
+      "Ideal für Anfänger — sanfte Wellen über Sandboden",
+      "Kombinierbar mit Strandtag oder Schildkröten-Station"
+    ],
+    "ctaTitle": "Bereit zum Paddeln?",
+    "ctaBody": "Sagen Sie uns Ihr Level — wir planen den passenden Tag.",
+    "whatsapp": "Auf WhatsApp fragen",
+    "contactCta": "Anfrage senden"
+  },
+  "taxiService": {
+    "eyebrow": "Taxiservice",
+    "title": "Privater Taxiservice in ganz Sri Lanka",
+    "subtitle": "Transfers zwischen Städten, Stränden und Hochland — komfortabel, zum Festpreis, nach Ihrem Zeitplan.",
+    "intro": "Nicht jede Fahrt braucht eine geführte Tour — manchmal reicht eine zuverlässige, komfortable Fahrt von A nach B. Unser Taxiservice deckt Transfers in ganz Sri Lanka ab, in klimatisierten Fahrzeugen mit erfahrenen Fahrern, zum vorab vereinbarten Festpreis.",
+    "points": [
+      "Transfers zwischen beliebigen Städten",
+      "Festpreis im Voraus — keine Überraschungen",
+      "Klimatisierte Autos, Vans und SUVs verfügbar",
+      "Erfahrene, englischsprachige Fahrer",
+      "Einfache Fahrt oder Rückfahrt möglich"
+    ],
+    "ctaTitle": "Brauchen Sie eine Fahrt?",
+    "ctaBody": "Nennen Sie uns Route und Datum — wir senden ein Festpreisangebot.",
+    "whatsapp": "Auf WhatsApp buchen",
+    "contactCta": "Anfrage senden"
+  },
+  "vehiclesPage": {
+    "pageEyebrow": "Unsere Flotte",
+    "pageTitle": "Wählen Sie Ihr Fahrzeug",
+    "pageSubtitle": "Jedes Fahrzeug kommt mit einem erfahrenen, englischsprachigen Fahrer-Guide.",
+    "upTo": "Bis zu {count} Gäste"
+  },
+  "blog": {
+    "pageEyebrow": "Reisetipps",
+    "pageTitle": "Notizen von unterwegs",
+    "pageSubtitle": "Praktische Sri-Lanka-Reisetipps von einem lokalen Anbieter — Wetter, Packliste und lohnende Umwege.",
+    "readTime": "{count} Min. Lesezeit",
+    "readMore": "Weiterlesen",
+    "back": "Zurück zum Blog",
+    "planCta": "Ihre eigene Reise planen"
   }
 }

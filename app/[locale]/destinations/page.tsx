@@ -100,15 +100,25 @@ export default async function DestinationsPage({
                     </div>
                   </div>
 
-                  {relatedTour && (
-                    <Link
-                      href={`/tours/${relatedTour.slug}`}
-                      className="inline-flex items-center gap-2 font-body text-sm font-medium text-blue hover:text-navy transition-colors border-b border-blue/40 pb-0.5"
-                    >
-                      <MapPin size={15} />
-                      {t("relatedTourCta")} <ArrowRight size={14} />
-                    </Link>
-                  )}
+                  <div className="flex flex-wrap items-center gap-5">
+                    {relatedTour && (
+                      <Link
+                        href={`/tours/${relatedTour.slug}`}
+                        className="inline-flex items-center gap-2 font-body text-sm font-medium text-blue hover:text-navy transition-colors border-b border-blue/40 pb-0.5"
+                      >
+                        <MapPin size={15} />
+                        {t("relatedTourCta")} <ArrowRight size={14} />
+                      </Link>
+                    )}
+                    {dest.gallery && dest.gallery.length > 0 && (
+                      <Link
+                        href={`/destinations/${dest.slug}`}
+                        className="inline-flex items-center gap-2 font-body text-sm font-medium text-navy/70 hover:text-blue transition-colors border-b border-navy/25 pb-0.5"
+                      >
+                        {t("viewGalleryCta", { count: dest.gallery.length })} <ArrowRight size={14} />
+                      </Link>
+                    )}
+                  </div>
                 </Reveal>
               </div>
             </div>

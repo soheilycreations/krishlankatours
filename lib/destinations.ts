@@ -6,6 +6,7 @@ export interface Destination {
   region: LocalizedText;
   tagline: LocalizedText;
   image: string;
+  gallery?: string[];
   description: LocalizedText[];
   highlights: LocalizedText[];
   bestTime: LocalizedText;

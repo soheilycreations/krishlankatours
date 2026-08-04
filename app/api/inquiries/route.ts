@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { name, email, phone, tourSlug, travelDates, groupSize, message, locale } = body;
+  const { name, email, phone, tourSlug, travelDates, groupSize, hotelLocation, message, locale } = body;
 
   if (!name || !email) {
     return NextResponse.json(
@@ -29,6 +29,7 @@ export async function POST(request: Request) {
     tour_slug: tourSlug || null,
     travel_dates: travelDates || null,
     group_size: groupSize || null,
+    hotel_location: hotelLocation || null,
     message: message || null,
     locale: locale || "en",
   });

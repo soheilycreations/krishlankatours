@@ -206,6 +206,10 @@ export async function saveDestination(
     tagline_en: String(formData.get("tagline_en") || ""),
     tagline_de: String(formData.get("tagline_de") || ""),
     image: String(formData.get("image") || "") || null,
+    gallery: String(formData.get("gallery") || "")
+      .split("\n")
+      .map((s) => s.trim())
+      .filter(Boolean),
     description,
     highlights,
     best_time_en: String(formData.get("best_time_en") || ""),
