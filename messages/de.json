@@ -296,7 +296,9 @@
     "vehiclesLink": "Unsere Fahrzeuge",
     "airportTransferLink": "Flughafentransfer",
     "blogLink": "Reiseblog",
-    "faqLink": "FAQ"
+    "faqLink": "FAQ",
+    "planInfo": "Planen & Infos",
+    "plannerLink": "Reiseplaner"
   },
   "plan": {
     "pageEyebrow": "Individueller Reiseplaner",

@@ -13,4 +13,5 @@ export const SITE = {
   facebook: "https://www.facebook.com/people/Krish-Lanka-Tours-Travels/61582721903932/",
   instagram: "https://www.instagram.com/p/DX9dCTTiP5b/",
   youtube: "https://www.youtube.com/channel/UCcQ9ReFdTijG2JACuwz1W9Q",
+  tiktok: "https://www.tiktok.com/@krishlankatours",
 };
