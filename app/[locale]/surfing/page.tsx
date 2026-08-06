@@ -14,7 +14,7 @@ export default async function SurfingPage() {
   const t = await getTranslations("surfing");
   return (
     <ServicePage
-      heroImage="/images/stock2/palm-point-coast.jpg"
+      heroImage="/images/learn-to-surf.jpg"
       eyebrow={t("eyebrow")}
       title={t("title")}
       subtitle={t("subtitle")}

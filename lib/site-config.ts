@@ -5,7 +5,7 @@ export const SITE = {
   phoneDisplay: "+94 77 916 8959",
   phoneTel: "+94779168959",
   whatsapp: "94779168959",
-  email: "hello@krishlankatours.com",
+  email: "krishlankatours@gmail.com",
   founded: 2008,
   googleMaps: "https://maps.app.goo.gl/x7srx8h3AX121UUj9",
   tripadvisor:

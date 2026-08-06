@@ -58,7 +58,7 @@ export default async function ContactPage() {
               <ul className="flex flex-col gap-4 font-body text-sm text-ink-text/75">
                 <li className="flex items-center gap-3">
                   <Mail size={16} className="text-blue shrink-0" />
-                  hello@krishlankatours.com
+                  krishlankatours@gmail.com
                 </li>
                 <li className="flex items-center gap-3">
                   <Phone size={16} className="text-blue shrink-0" />
