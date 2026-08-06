@@ -66,13 +66,15 @@ export default function BookingsCalendar({ events }: { events: BookingEvent[] })
     events.filter((e) => {
       if (!e.from) return false;
       const from = parseISO(e.from);
-      const to = e.to ? parseISO(e.to) : from;
       if (!isValid(from)) return false;
-      return isWithinInterval(day, { start: from, end: isValid(to) ? to : from });
+      let to = e.to ? parseISO(e.to) : from;
+      if (!isValid(to)) to = from;
+      if (to < from) to = from; // guard against reversed/bad date ranges crashing the calendar
+      return isWithinInterval(day, { start: from, end: to });
     });
 
   const monthEvents = events
-    .filter((e) => e.from && isSameMonth(parseISO(e.from), month))
+    .filter((e) => e.from && isValid(parseISO(e.from)) && isSameMonth(parseISO(e.from), month))
     .sort((a, b) => (a.from! < b.from! ? -1 : 1));
   const undated = events.filter((e) => !e.from);
   const listed = selected ? eventsOn(selected) : monthEvents;

@@ -76,7 +76,7 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-2">
               <Mail size={15} className="text-blue-light shrink-0" />
-              hello@krishlankatours.com
+              krishlankatours@gmail.com
             </li>
           </ul>
             <div className="mt-6"><SocialLinks tone="dark" /></div>
