@@ -14,8 +14,8 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-navy text-white/75 border-t border-white/10">
       <CornerMotif className="hidden lg:block absolute -top-20 -right-20 w-96 h-96 text-blue-light/15 pointer-events-none" />
-      <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-10">
-        <div className="lg:col-span-2">
+      <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div>
           <div className="flex items-center gap-3 mb-3">
             <span className="relative w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0">
               <Image

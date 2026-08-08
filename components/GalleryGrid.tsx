@@ -12,19 +12,28 @@ import Reveal from "@/components/Reveal";
 export default function GalleryGrid({ images: galleryImages = defaultImages }: { images?: GalleryImage[] } = {}) {
   const locale = useLocale() as Locale;
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [broken, setBroken] = useState<Set<number>>(new Set());
+
+  // Drop any entries with an empty/missing photo URL outright — these can
+  // slip in from admin forms and would otherwise render as a broken icon.
+  const images = galleryImages.filter((img) => !!img.src);
+  const markBroken = (i: number) => setBroken((prev) => new Set(prev).add(i));
 
   const close = () => setActiveIndex(null);
   const next = () =>
-    setActiveIndex((i) => (i === null ? null : (i + 1) % galleryImages.length));
+    setActiveIndex((i) => (i === null ? null : (i + 1) % images.length));
   const prev = () =>
     setActiveIndex((i) =>
-      i === null ? null : (i - 1 + galleryImages.length) % galleryImages.length
+      i === null ? null : (i - 1 + images.length) % images.length
     );
+
+  if (images.length === 0) return null;
 
   return (
     <>
       <div className="columns-2 sm:columns-3 gap-3 sm:gap-4 [column-fill:balance]">
-        {galleryImages.map((img, i) => (
+        {images.map((img, i) =>
+          broken.has(i) ? null : (
           <Reveal
             key={img.src}
             delay={(i % 6) * 0.05}
@@ -43,15 +52,17 @@ export default function GalleryGrid({ images: galleryImages = defaultImages }: {
                 fill
                 sizes="(max-width: 640px) 50vw, 33vw"
                 className="object-cover painterly group-hover:scale-105 transition-transform duration-700"
+                onError={() => markBroken(i)}
               />
               <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/20 transition-colors" />
             </button>
           </Reveal>
-        ))}
+          )
+        )}
       </div>
 
       <AnimatePresence>
-        {activeIndex !== null && (
+        {activeIndex !== null && !broken.has(activeIndex) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -96,15 +107,16 @@ export default function GalleryGrid({ images: galleryImages = defaultImages }: {
               onClick={(e) => e.stopPropagation()}
             >
               <Image
-                src={galleryImages[activeIndex].src}
-                alt={galleryImages[activeIndex].caption[locale]}
+                src={images[activeIndex].src}
+                alt={images[activeIndex].caption[locale]}
                 fill
                 sizes="90vw"
                 className="object-contain"
+                onError={() => markBroken(activeIndex)}
               />
             </motion.div>
             <p className="absolute bottom-6 left-0 right-0 text-center font-body text-sm text-paper/70">
-              {galleryImages[activeIndex].caption[locale]}
+              {images[activeIndex].caption[locale]}
             </p>
           </motion.div>
         )}
