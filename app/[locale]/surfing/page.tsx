@@ -21,7 +21,7 @@ export default async function SurfingPage() {
       script="Catch the perfect wave..."
       intro={t("intro")}
       points={t.raw("points") as string[]}
-      image2="/images/stock2/rocky-coast-cloudy.jpg"
+      image2="/images/learn-to-surf.jpg"
       ctaTitle={t("ctaTitle")}
       ctaBody={t("ctaBody")}
       whatsappText={t("whatsapp")}

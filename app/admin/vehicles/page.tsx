@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { saveVehicle, deleteVehicle, toggleVehicle } from "@/app/admin/actions";
+import ImageUploadField from "@/components/admin/ImageUploadField";
 import { AlertTriangle, Car, Plus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -36,8 +37,7 @@ function VehicleForm({ vehicle }: { vehicle?: Record<string, unknown> }) {
         <input name="description" defaultValue={String(v.description ?? "")} className="w-full bg-white border border-navy/12 rounded-lg px-3 py-2.5 font-body text-sm text-navy outline-none" />
       </div>
       <div className="sm:col-span-2">
-        <label className="block font-stamp text-[10px] uppercase tracking-wide text-ink-text/50 mb-1.5">Image URL (optional)</label>
-        <input name="image_url" defaultValue={String(v.image_url ?? "")} placeholder="https://..." className="w-full bg-white border border-navy/12 rounded-lg px-3 py-2.5 font-body text-sm text-navy outline-none" />
+        <ImageUploadField label="Vehicle photo" name="image_url" defaultValue={String(v.image_url ?? "")} />
       </div>
       <div className="sm:col-span-2 flex items-center justify-between">
         <label className="flex items-center gap-2 font-body text-sm text-ink-text/70">
