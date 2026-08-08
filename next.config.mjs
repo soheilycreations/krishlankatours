@@ -8,8 +8,13 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "*.supabase.co" },
     ],
-    formats: ["image/avif", "image/webp"],
-    deviceSizes: [360, 480, 640, 768, 1024, 1280, 1600, 1920],
+    // Vercel's free plan has a monthly Image Optimization quota (source
+    // images processed). Once it's hit, ANY newly-referenced image starts
+    // returning errors — which is exactly what was happening here (old
+    // images kept working, new ones broke). Serving images unoptimized
+    // trades a bit of automatic compression for images that always,
+    // reliably display, with no quota risk.
+    unoptimized: true,
   },
   compress: true,
   poweredByHeader: false,
