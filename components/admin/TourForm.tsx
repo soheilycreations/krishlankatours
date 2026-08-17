@@ -9,6 +9,18 @@ import GalleryUploadField from "@/components/admin/GalleryUploadField";
 import { saveTour } from "@/app/admin/actions";
 import { categoryLabels, type TourCategory } from "@/lib/tours";
 
+/** Converts free-text input into a safe URL slug: lowercase, spaces/underscores
+ *  to single dashes, strips anything that isn't a-z, 0-9 or dash, trims dashes. */
+function slugify(input: string): string {
+  return input
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_]+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 interface HighlightItem {
   en: string;
   de: string;
@@ -59,6 +71,16 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
     setError("");
     setPending(true);
     const formData = new FormData(e.currentTarget);
+
+    const rawSlug = String(formData.get("slug") ?? "");
+    const cleanSlug = slugify(rawSlug);
+    if (!cleanSlug) {
+      setError("Slug can't be empty after removing invalid characters.");
+      setPending(false);
+      return;
+    }
+    formData.set("slug", cleanSlug);
+
     const result = await saveTour(tour?.id ?? null, undefined, formData);
     if (result?.error) {
       setError(result.error);
@@ -66,6 +88,8 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
     }
     // on success, saveTour() redirects server-side
   };
+
+  const [slugPreview, setSlugPreview] = useState(tour?.slug ?? "");
 
   const [highlights, setHighlights] = useState<HighlightItem[]>(
     tour?.highlights?.length ? tour.highlights : [{ en: "", de: "" }]
@@ -94,7 +118,20 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
         <section className="bg-white rounded-2xl border border-navy/10 p-6">
           <h2 className="font-display text-lg text-navy mb-4">Basics</h2>
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Slug (URL, lowercase-with-dashes)" name="slug" defaultValue={tour?.slug} required />
+            <div>
+              <Field
+                label="Slug (URL, lowercase-with-dashes)"
+                name="slug"
+                defaultValue={tour?.slug}
+                required
+                onChange={(e) => setSlugPreview(slugify(e.target.value))}
+              />
+              {slugPreview && (
+                <p className="mt-1 font-body text-xs text-ink-text/45">
+                  Will be saved as: <span className="text-blue">{slugPreview}</span>
+                </p>
+              )}
+            </div>
             <div>
               <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-1.5">
                 Category
@@ -297,6 +334,7 @@ function Field({
   required,
   min,
   className = "",
+  onChange,
 }: {
   label: string;
   name: string;
@@ -305,6 +343,7 @@ function Field({
   required?: boolean;
   min?: number;
   className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <div className={className}>
@@ -317,6 +356,7 @@ function Field({
         defaultValue={defaultValue}
         required={required}
         min={min}
+        onChange={onChange}
         className="w-full border border-navy/15 rounded-lg px-3 py-2.5 font-body text-sm text-navy focus:border-blue outline-none"
       />
     </div>
