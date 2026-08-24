@@ -72,14 +72,15 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
     setPending(true);
     const formData = new FormData(e.currentTarget);
 
-    const rawSlug = String(formData.get("slug") ?? "");
-    const cleanSlug = slugify(rawSlug);
-    if (!cleanSlug) {
-      setError("Slug can't be empty after removing invalid characters.");
-      setPending(false);
-      return;
+    if (!tour?.slug) {
+      const cleanSlug = slugify(String(formData.get("title_en") ?? ""));
+      if (!cleanSlug) {
+        setError("Title (EN) can't be empty.");
+        setPending(false);
+        return;
+      }
+      formData.set("slug", cleanSlug);
     }
-    formData.set("slug", cleanSlug);
 
     const result = await saveTour(tour?.id ?? null, undefined, formData);
     if (result?.error) {
@@ -88,8 +89,6 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
     }
     // on success, saveTour() redirects server-side
   };
-
-  const [slugPreview, setSlugPreview] = useState(tour?.slug ?? "");
 
   const [highlights, setHighlights] = useState<HighlightItem[]>(
     tour?.highlights?.length ? tour.highlights : [{ en: "", de: "" }]
@@ -117,21 +116,8 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         <section className="bg-white rounded-2xl border border-navy/10 p-6">
           <h2 className="font-display text-lg text-navy mb-4">Basics</h2>
+          {tour?.slug && <input type="hidden" name="slug" value={tour.slug} />}
           <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <Field
-                label="Slug (URL, lowercase-with-dashes)"
-                name="slug"
-                defaultValue={tour?.slug}
-                required
-                onChange={(e) => setSlugPreview(slugify(e.target.value))}
-              />
-              {slugPreview && (
-                <p className="mt-1 font-body text-xs text-ink-text/45">
-                  Will be saved as: <span className="text-blue">{slugPreview}</span>
-                </p>
-              )}
-            </div>
             <div>
               <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-1.5">
                 Category

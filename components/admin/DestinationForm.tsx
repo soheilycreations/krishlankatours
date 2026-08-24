@@ -32,6 +32,14 @@ export interface DestinationFormData {
   published: boolean;
 }
 
+function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export default function DestinationForm({ destination }: { destination?: DestinationFormData }) {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -49,6 +57,9 @@ export default function DestinationForm({ destination }: { destination?: Destina
     setError("");
     setPending(true);
     const formData = new FormData(e.currentTarget);
+    if (!destination?.slug) {
+      formData.set("slug", slugify(formData.get("name_en") as string));
+    }
     const result = await saveDestination(destination?.id ?? null, undefined, formData);
     if (result?.error) {
       setError(result.error);
@@ -68,8 +79,8 @@ export default function DestinationForm({ destination }: { destination?: Destina
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         <section className="bg-white rounded-2xl border border-navy/10 p-6">
           <h2 className="font-display text-lg text-navy mb-4">Basics</h2>
+          {destination?.slug && <input type="hidden" name="slug" value={destination.slug} />}
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Slug (URL, lowercase-with-dashes)" name="slug" defaultValue={destination?.slug} required />
             <Field label="Related tour slug" name="related_tour_slug" defaultValue={destination?.related_tour_slug} />
             <Field label="Name (EN)" name="name_en" defaultValue={destination?.name_en} required />
             <Field label="Name (DE)" name="name_de" defaultValue={destination?.name_de} />
