@@ -37,6 +37,7 @@ export default function Header() {
     { href: "/airport-transfer", label: t("airportTransferNav") },
     { href: "/taxi-service", label: t("taxiServiceNav") },
     { href: "/surfing", label: t("surfingNav") },
+    { href: "/tours/ayurveda-massage-experience", label: t("ayurvedaNav") },
     { href: "/vehicles", label: t("vehiclesNav") },
   ];
 
