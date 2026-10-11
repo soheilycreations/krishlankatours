@@ -3,6 +3,9 @@
 Phase 2A: get the site live on Cloudflare Workers, first on `*.workers.dev`, then on
 `krishlankatours.com`. The Supabase project and data stay exactly where they are.
 
+This setup runs on the **Workers FREE plan**: no payment card, no R2 and no Durable Objects.
+Pages are cached in **Workers KV** and revalidation timestamps are kept in **D1**.
+
 **Order matters:** Part A (database) → Part B (Cloudflare account) → Part C (deploy to workers.dev)
 → Part D (test) → **stop and confirm** → Part E (domain).
 
@@ -13,11 +16,21 @@ Phase 2A: get the site live on Cloudflare Workers, first on `*.workers.dev`, the
 | Piece | Where | Notes |
 |---|---|---|
 | Website + admin + API | Cloudflare Worker `krishlankatours` | Built with `@opennextjs/cloudflare` |
-| Page cache (ISR) | R2 bucket `krishlankatours-cache` | Pages are generated once, then served from cache |
-| "Refresh after admin edit" timestamps | D1 database `krishlankatours-tag-cache` | Created/filled automatically on deploy |
-| Background page refresh | Durable Object `DOQueueHandler` | Declared in `wrangler.jsonc`, nothing to create |
+| Page cache (ISR) | KV namespace (binding `NEXT_INC_CACHE_KV`) | Pages are generated once, then served from cache |
+| "Refresh after admin edit" timestamps | D1 database `krishlankatours-tag-cache` | Table created automatically on deploy |
+| Background (hourly) page refresh | Memory queue, inside the Worker | Uses the `WORKER_SELF_REFERENCE` service binding; nothing to create |
 | Database, auth, photo storage | Supabase (unchanged) | |
 | Supabase photos | Served via `/media/tour-images/...` | Edge-cached by the Worker for 1 year |
+
+### Free-plan limits that matter here
+
+| Limit (free plan) | This site |
+|---|---|
+| Worker size: 3 MiB gzipped | ≈ 2.0 MiB gzipped (checked with `wrangler deploy --dry-run`) |
+| Workers requests: 100,000/day | Fine for current traffic |
+| KV: 100,000 reads/day, **1,000 writes/day** | Each deploy writes ≈ 115 cache entries. Each page refresh (hourly per visited page, or after an admin save) writes 1 entry. Watch *KV → Metrics* in the first days. If writes go over the limit, pages are still served, but new versions may not be saved until the next day |
+| D1: 5 million rows read/day, 100,000 rows written/day | Fine |
+| CPU time: 10 ms per request | Cached pages are well under this. Watch *Workers → Metrics → CPU time* for admin pages |
 
 ---
 
@@ -28,6 +41,9 @@ Phase 2A: get the site live on Cloudflare Workers, first on `*.workers.dev`, the
 | `NEXT_PUBLIC_SUPABASE_URL` | **Build variable** | Supabase → Project Settings → API → Project URL | Yes |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | **Build variable** | Supabase → Project Settings → API → `anon` `public` key | Yes |
 | `NEXT_PUBLIC_SITE_URL` | **Build variable** | `https://krishlankatours.com` | Recommended (this is also the default) |
+
+KV and D1 are connected through `wrangler.jsonc` and need no variables:
+KV `NEXT_INC_CACHE_KV` = `cc88fe3844d14de29dc05275653cd0a1`, D1 `NEXT_TAG_CACHE_D1` = `d2018d6b-fd26-4ca1-b8a3-894aebf965e4`.
 | `ADMIN_EMAILS` | **Secret** (runtime) | `krishlankatours@gmail.com,second@example.com` | Only needed if you deploy *before* running migration 5 |
 
 `NEXT_PUBLIC_*` values are baked into the code when it is **built**, so they must exist at build
@@ -72,19 +88,21 @@ npm ci
    npx wrangler login          # opens the browser — choose the NEW account
    npx wrangler whoami         # confirm the right account is shown
    ```
-2. **Workers Paid plan**: Dashboard → *Workers & Pages* → *Plans* → **Workers Paid** ($5/month).
-3. **Enable R2**: Dashboard → *R2 Object Storage* → follow the one-time activation. It asks for a
-   payment method; the free tier still applies.
-4. **Create the R2 bucket** (page cache):
+2. **Plan**: the free Workers plan is enough. No card, R2 or Durable Objects needed.
+3. **KV namespace (page cache)**: already created. Its ID `cc88fe3844d14de29dc05275653cd0a1` is in
+   `wrangler.jsonc` under `kv_namespaces` (binding `NEXT_INC_CACHE_KV`). If you ever need to
+   recreate it:
    ```bash
-   npx wrangler r2 bucket create krishlankatours-cache
+   npx wrangler kv namespace create NEXT_INC_CACHE_KV
    ```
-5. **Create the D1 database** (revalidation timestamps):
+   and put the new ID in `wrangler.jsonc`.
+4. **D1 database (revalidation timestamps)**: already created. Its ID
+   `d2018d6b-fd26-4ca1-b8a3-894aebf965e4` is in `wrangler.jsonc` (binding `NEXT_TAG_CACHE_D1`,
+   name `krishlankatours-tag-cache`). To recreate:
    ```bash
    npx wrangler d1 create krishlankatours-tag-cache
    ```
-   Copy the printed `database_id` into `wrangler.jsonc`, replacing `REPLACE_WITH_D1_DATABASE_ID`.
-   Commit that change; the ID isn't secret.
+   The `revalidations` table is created automatically by `npm run deploy`.
 
 ---
 
@@ -112,8 +130,8 @@ npm ci
    ```bash
    npm run deploy
    ```
-   This builds the site, uploads the Worker and static files, creates the Durable Object, creates
-   the D1 table and fills the R2 page cache. The first time, Wrangler may ask you to choose a
+   This builds the site, uploads the Worker and static files, creates the D1 table and fills the
+   KV page cache (≈ 115 KV writes). The first time, Wrangler may ask you to choose a
    `workers.dev` subdomain.
 
    The output ends with the live URL, e.g.
@@ -131,7 +149,7 @@ Dashboard → *Workers & Pages* → **Create** → *Import a repository* → pic
 - Deploy command: `npx opennextjs-cloudflare deploy`
 - **Build variables** (Settings → Build → Variables): the three `NEXT_PUBLIC_*` values above.
 
-The R2 bucket and D1 database from Part B are still required.
+The KV namespace and D1 database from Part B are still required; their IDs are already in `wrangler.jsonc`.
 
 ---
 
@@ -237,6 +255,7 @@ SEO
 | Site shows only the 13 built-in tours | `NEXT_PUBLIC_SUPABASE_*` weren't set at **build** time. Fix `.env.production.local` or the build variables, then deploy again |
 | Admin says "This account doesn't have admin access" | Add the email (lowercase) to `public.admin_users` in the SQL editor |
 | Enquiry delete says "migration 5 hasn't been run" | Run `supabase/migration-5-hardening.sql` |
-| Admin edits don't appear on the site | Check that the D1 `database_id` in `wrangler.jsonc` is correct, then redeploy |
-| `wrangler r2 bucket create` fails | R2 isn't enabled on the account yet (Part B, step 3) |
+| Admin edits don't appear on the site | Check the D1 `database_id` and KV `id` in `wrangler.jsonc`, then redeploy. Also check *KV → Metrics*: once the 1,000 writes/day limit is reached, new page versions can't be saved until the next day |
+| Deploy fails with "No KV binding NEXT_INC_CACHE_KV found" | The `kv_namespaces` entry in `wrangler.jsonc` is missing or has the wrong ID |
+| Error about worker size (over 3 MiB) | Run `npx wrangler deploy --dry-run --outdir /tmp/cf-out` and send me the "Total Upload … gzip" line |
 | Logs | Dashboard → Workers → krishlankatours → *Logs* (observability is on), or `npx wrangler tail` |

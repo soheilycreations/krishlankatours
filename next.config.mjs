@@ -20,5 +20,5 @@ const nextConfig = {
 
 export default withNextIntl(nextConfig);
 
-// Makes Cloudflare bindings (R2, D1, ...) available to `next dev`.
+// Makes Cloudflare bindings (KV, D1, ...) available to `next dev`.
 initOpenNextCloudflareForDev();
