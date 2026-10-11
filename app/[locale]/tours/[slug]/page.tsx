@@ -13,8 +13,8 @@ import { getCategoryLabel } from "@/lib/tours";
 import { getTours, getTourBySlugFromDb } from "@/lib/tours-data";
 import type { Locale } from "@/i18n/routing";
 
-// Re-generated at most hourly; admin edits refresh it immediately.
-export const revalidate = 3600;
+// Re-generated at most once a day; admin edits refresh it immediately.
+export const revalidate = 86400; // 24 hours (keeps KV writes within the free plan)
 
 export async function generateStaticParams() {
   const tours = await getTours();

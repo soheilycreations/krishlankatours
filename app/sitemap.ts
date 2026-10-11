@@ -5,8 +5,8 @@ import { getDestinations } from "@/lib/destinations-data";
 import { getBlogPosts } from "@/lib/blog";
 import { STATIC_PATHS, absoluteUrl } from "@/lib/seo";
 
-// Regenerated at most hourly; admin edits to tours/destinations refresh it immediately.
-export const revalidate = 3600;
+// Regenerated at most once a day; admin edits to tours/destinations refresh it immediately.
+export const revalidate = 86400; // 24 hours (keeps KV writes within the free plan)
 
 type Entry = MetadataRoute.Sitemap[number];
 

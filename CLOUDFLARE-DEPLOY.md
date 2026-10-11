@@ -18,7 +18,7 @@ Pages are cached in **Workers KV** and revalidation timestamps are kept in **D1*
 | Website + admin + API | Cloudflare Worker `krishlankatours` | Built with `@opennextjs/cloudflare` |
 | Page cache (ISR) | KV namespace (binding `NEXT_INC_CACHE_KV`) | Pages are generated once, then served from cache |
 | "Refresh after admin edit" timestamps | D1 database `krishlankatours-tag-cache` | Table created automatically on deploy |
-| Background (hourly) page refresh | Memory queue, inside the Worker | Uses the `WORKER_SELF_REFERENCE` service binding; nothing to create |
+| Background (daily) page refresh | Memory queue, inside the Worker | Uses the `WORKER_SELF_REFERENCE` service binding; nothing to create |
 | Database, auth, photo storage | Supabase (unchanged) | |
 | Supabase photos | Served via `/media/tour-images/...` | Edge-cached by the Worker for 1 year |
 
@@ -28,7 +28,7 @@ Pages are cached in **Workers KV** and revalidation timestamps are kept in **D1*
 |---|---|
 | Worker size: 3 MiB gzipped | ≈ 2.0 MiB gzipped (checked with `wrangler deploy --dry-run`) |
 | Workers requests: 100,000/day | Fine for current traffic |
-| KV: 100,000 reads/day, **1,000 writes/day** | Each deploy writes ≈ 115 cache entries. Each page refresh (hourly per visited page, or after an admin save) writes 1 entry. Watch *KV → Metrics* in the first days. If writes go over the limit, pages are still served, but new versions may not be saved until the next day |
+| KV: 100,000 reads/day, **1,000 writes/day** | Each deploy writes ≈ 115 cache entries. Each page refresh writes 1 entry: at most once per page per **24 hours**, plus once per affected page after an admin save. Expect roughly 100–250 writes on a normal day. Avoid many deploys in one day (≈ 115 writes each), and watch *KV → Metrics* in the first days. If writes go over the limit, pages are still served, but new versions may not be saved until the next day |
 | D1: 5 million rows read/day, 100,000 rows written/day | Fine |
 | CPU time: 10 ms per request | Cached pages are well under this. Watch *Workers → Metrics → CPU time* for admin pages |
 
@@ -256,6 +256,7 @@ SEO
 | Admin says "This account doesn't have admin access" | Add the email (lowercase) to `public.admin_users` in the SQL editor |
 | Enquiry delete says "migration 5 hasn't been run" | Run `supabase/migration-5-hardening.sql` |
 | Admin edits don't appear on the site | Check the D1 `database_id` and KV `id` in `wrangler.jsonc`, then redeploy. Also check *KV → Metrics*: once the 1,000 writes/day limit is reached, new page versions can't be saved until the next day |
+| A change made directly in the Supabase dashboard (not in `/admin`) doesn't show | Pages refresh automatically only once every 24 hours. Saving any item in `/admin` refreshes all public pages straight away, as does `npm run deploy` |
 | Deploy fails with "No KV binding NEXT_INC_CACHE_KV found" | The `kv_namespaces` entry in `wrangler.jsonc` is missing or has the wrong ID |
 | Error about worker size (over 3 MiB) | Run `npx wrangler deploy --dry-run --outdir /tmp/cf-out` and send me the "Total Upload … gzip" line |
 | Logs | Dashboard → Workers → krishlankatours → *Logs* (observability is on), or `npx wrangler tail` |

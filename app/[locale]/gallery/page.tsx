@@ -4,8 +4,8 @@ import { staticPageMetadata } from "@/lib/seo";
 import type { Locale } from "@/i18n/routing";
 import Reveal from "@/components/Reveal";
 import PageHero from "@/components/PageHero";
-// Re-generated at most hourly; admin edits refresh it immediately.
-export const revalidate = 3600;
+// Re-generated at most once a day; admin edits refresh it immediately.
+export const revalidate = 86400; // 24 hours (keeps KV writes within the free plan)
 
 import GalleryGrid from "@/components/GalleryGrid";
 import { getGalleryImages } from "@/lib/content-data";
