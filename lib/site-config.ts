@@ -1,6 +1,15 @@
 /** Central place for real-world business details — update here, changes everywhere. */
+
+/** Canonical production origin, no trailing slash. Override with
+ *  NEXT_PUBLIC_SITE_URL (e.g. for a workers.dev preview build). */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://krishlankatours.com").replace(
+  /\/+$/,
+  ""
+);
+
 export const SITE = {
   name: "Krish Lanka Tours & Travels",
+  url: SITE_URL,
   location: "Ahungalla, Sri Lanka",
   phoneDisplay: "+94 77 916 8959",
   phoneTel: "+94779168959",

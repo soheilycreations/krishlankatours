@@ -1,4 +1,7 @@
-import { getTranslations, getLocale } from "next-intl/server";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { staticPageMetadata } from "@/lib/seo";
+import type { Locale } from "@/i18n/routing";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, Quote, Star } from "lucide-react";
@@ -19,10 +22,17 @@ import { getDestinations } from "@/lib/destinations-data";
 import { getCategories, getReviews, getGalleryImages } from "@/lib/content-data";
 import { getTours } from "@/lib/tours-data";
 
-export const revalidate = 60;
+// Re-generated at most hourly; admin edits refresh it immediately.
+export const revalidate = 3600;
 
-export default async function HomePage() {
-  const locale = await getLocale();
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return staticPageMetadata(locale as Locale, "");
+}
+
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("home");
   const td = await getTranslations("destinations");
   const tours = await getTours();
@@ -141,7 +151,7 @@ export default async function HomePage() {
           {/* search card, cleanly in flow */}
           <div className="mt-12 sm:mt-14 max-w-5xl mx-auto">
             <Reveal delay={0.45}>
-              <HeroSearchBar />
+              <HeroSearchBar categories={categories} />
             </Reveal>
           </div>
         </div>

@@ -1,8 +1,29 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { LogOut, LayoutDashboard, Map, Mail, MapPin, Send, Car, Route, CalendarDays, Shapes, Images, Star } from "lucide-react";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { checkAdminSession } from "@/lib/auth";
 import { signOut } from "@/app/admin/actions";
+import { fontVariables } from "@/lib/fonts";
+import "../globals.css";
+
+export const metadata: Metadata = {
+  title: "Admin",
+  robots: { index: false, follow: false },
+};
+
+// Admin is always per-request (never cached).
+export const dynamic = "force-dynamic";
+
+/** The admin section has its own <html> shell (the public site's lives in
+ *  app/[locale]/layout.tsx). */
+function AdminHtml({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body className={`${fontVariables} font-body bg-paper text-ink-text antialiased`}>{children}</body>
+    </html>
+  );
+}
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -19,8 +40,9 @@ const navItems = [
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createSupabaseServerClient();
-  const user = supabase ? (await supabase.auth.getUser()).data.user : null;
+  const session = await checkAdminSession();
+  const supabase = session.status === "admin" ? session.supabase : null;
+  const user = session.status === "admin" ? session.user : null;
 
   let newCount = 0;
   if (supabase && user) {
@@ -34,11 +56,18 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // Not signed in → the only reachable admin page is /admin/login
   // (middleware redirects everything else), so render it without the
   // dashboard chrome.
+  // Not signed in, or signed in without admin rights → only the login page
+  // renders here (every admin page also calls requireAdmin()).
   if (!user) {
-    return <div className="min-h-screen bg-navy">{children}</div>;
+    return (
+      <AdminHtml>
+        <div className="min-h-screen bg-navy">{children}</div>
+      </AdminHtml>
+    );
   }
 
   return (
+    <AdminHtml>
     <div className="min-h-screen bg-paper-2 flex">
       <aside className="hidden md:flex flex-col w-60 shrink-0 bg-navy text-white min-h-screen">
         <Link href="/admin" className="flex items-center gap-2.5 px-6 h-16 border-b border-white/10">
@@ -129,5 +158,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <main className="max-w-5xl mx-auto px-5 sm:px-8 py-10">{children}</main>
       </div>
     </div>
+    </AdminHtml>
   );
 }

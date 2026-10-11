@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle2, AlertCircle } from "lucide-react";
@@ -15,8 +14,6 @@ type Status = "idle" | "submitting" | "success" | "error";
 export default function ContactForm({ tours }: { tours: Tour[] }) {
   const t = useTranslations("contact");
   const locale = useLocale() as Locale;
-  const searchParams = useSearchParams();
-  const preselectedTour = searchParams.get("tour") || "";
 
   const [status, setStatus] = useState<Status>("idle");
   const [dates, setDates] = useState<DateRange | undefined>();
@@ -24,18 +21,21 @@ export default function ContactForm({ tours }: { tours: Tour[] }) {
     name: "",
     email: "",
     phone: "",
-    tourSlug: preselectedTour,
+    tourSlug: "",
     travelDates: "",
     groupSize: "",
     hotelLocation: "",
     message: "",
   });
 
+  // ?tour=<slug> (from a tour's "Enquire" button) preselects that tour.
+  // Read after hydration so the page itself can be statically cached.
   useEffect(() => {
-    if (preselectedTour) {
-      setForm((f) => ({ ...f, tourSlug: preselectedTour }));
+    const preselected = new URLSearchParams(window.location.search).get("tour");
+    if (preselected) {
+      setForm((f) => ({ ...f, tourSlug: preselected }));
     }
-  }, [preselectedTour]);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>

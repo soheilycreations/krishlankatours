@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronDown, Trash2, Mail, Phone, Calendar, Users, MessageSquare, MapPin } from "lucide-react";
 import { updateInquiryStatus, deleteInquiry } from "@/app/admin/actions";
 import type { InquiryRow } from "@/app/admin/enquiries/page";
@@ -19,6 +20,8 @@ export default function EnquiriesList({ inquiries }: { inquiries: InquiryRow[] }
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [items, setItems] = useState(inquiries);
   const [, startTransition] = useTransition();
+  const [actionError, setActionError] = useState("");
+  const router = useRouter();
 
   const filtered = useMemo(
     () => (filter === "all" ? items : items.filter((i) => i.status === filter)),
@@ -26,17 +29,34 @@ export default function EnquiriesList({ inquiries }: { inquiries: InquiryRow[] }
   );
 
   const handleStatusChange = (id: string, status: string) => {
+    const previous = items;
+    setActionError("");
     setItems((prev) => prev.map((i) => (i.id === id ? { ...i, status } : i)));
-    startTransition(() => {
-      updateInquiryStatus(id, status);
+    startTransition(async () => {
+      const result = await updateInquiryStatus(id, status);
+      if (result?.error) {
+        setItems(previous);
+        setActionError(result.error);
+      } else {
+        router.refresh();
+      }
     });
   };
 
   const handleDelete = (id: string, name: string) => {
     if (!confirm(`Delete the enquiry from "${name}"? This can't be undone.`)) return;
+    const previous = items;
+    setActionError("");
     setItems((prev) => prev.filter((i) => i.id !== id));
-    startTransition(() => {
-      deleteInquiry(id);
+    startTransition(async () => {
+      const result = await deleteInquiry(id);
+      if (result?.error) {
+        // Put it back — the delete didn't happen.
+        setItems(previous);
+        setActionError(result.error);
+      } else {
+        router.refresh();
+      }
     });
   };
 
@@ -50,6 +70,11 @@ export default function EnquiriesList({ inquiries }: { inquiries: InquiryRow[] }
 
   return (
     <div>
+      {actionError && (
+        <p role="alert" className="mb-5 font-body text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+          {actionError}
+        </p>
+      )}
       <div className="flex flex-wrap gap-2 mb-6">
         {(["all", ...statuses] as const).map((s) => (
           <button

@@ -1,21 +1,24 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft, ArrowRight, Users, Calendar, Check } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import GalleryGrid from "@/components/GalleryGrid";
 import TourCard from "@/components/TourCard";
 import TourImagePlaceholder from "@/components/TourImagePlaceholder";
-import { tours as staticTours, categoryLabels } from "@/lib/tours";
+import { getCategoryLabel } from "@/lib/tours";
 import { getTours, getTourBySlugFromDb } from "@/lib/tours-data";
 import type { Locale } from "@/i18n/routing";
 
-export const revalidate = 60;
+// Re-generated at most hourly; admin edits refresh it immediately.
+export const revalidate = 3600;
 
-export function generateStaticParams() {
-  return staticTours.map((t) => ({ slug: t.slug }));
+export async function generateStaticParams() {
+  const tours = await getTours();
+  return tours.map((t) => ({ slug: t.slug }));
 }
 
 export async function generateMetadata({
@@ -27,15 +30,13 @@ export async function generateMetadata({
   const tour = await getTourBySlugFromDb(slug);
   if (!tour) return {};
   const loc = locale as Locale;
-  return {
+  return pageMetadata({
+    locale: loc,
+    path: `/tours/${tour.slug}`,
     title: tour.title[loc],
-    description: `${tour.tagline[loc]} ${tour.summary[loc]}`.slice(0, 160),
-    openGraph: {
-      title: tour.title[loc],
-      description: tour.tagline[loc],
-      images: tour.heroImage ? [{ url: tour.heroImage, width: 1200, height: 630 }] : undefined,
-    },
-  };
+    description: `${tour.tagline[loc]} ${tour.summary[loc]}`.trim().slice(0, 160),
+    image: tour.heroImage ?? null,
+  });
 }
 
 export default async function TourDetailPage({
@@ -44,10 +45,10 @@ export default async function TourDetailPage({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
+  const loc = locale as Locale;
+  setRequestLocale(loc);
   const tour = await getTourBySlugFromDb(slug);
   if (!tour) notFound();
-
-  const loc = locale as Locale;
   const t = await getTranslations("tourDetail");
   const tListing = await getTranslations("tours");
   const allTours = await getTours();
@@ -85,7 +86,7 @@ export default async function TourDetailPage({
           </Link>
           <div className="flex items-center gap-3 flex-wrap">
             <span className="font-stamp text-[10px] uppercase tracking-widest bg-blue text-white px-2.5 py-1 rounded-full">
-              {categoryLabels[tour.category][loc]}
+              {getCategoryLabel(tour.category, loc)}
             </span>
             {tour.priceFromUsd > 0 && (
               <span className="inline-flex items-baseline gap-1 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1">

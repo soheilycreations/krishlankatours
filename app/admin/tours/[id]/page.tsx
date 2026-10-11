@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
+import { uuidSchema } from "@/lib/validation";
+import { getCategoryOptions } from "@/lib/admin-categories";
 import TourForm, { type TourFormData } from "@/components/admin/TourForm";
 
 export const dynamic = "force-dynamic";
@@ -10,8 +12,8 @@ export default async function EditTourPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) notFound();
+  const { supabase } = await requireAdmin();
+  if (!uuidSchema.safeParse(id).success) notFound();
 
   const { data, error } = await supabase.from("tours").select("*").eq("id", id).single();
   if (error || !data) notFound();
@@ -39,7 +41,7 @@ export default async function EditTourPage({
   return (
     <div>
       <h1 className="font-display text-2xl text-navy mb-6">Edit tour</h1>
-      <TourForm tour={tour} />
+      <TourForm tour={tour} categoryOptions={await getCategoryOptions(supabase)} />
     </div>
   );
 }

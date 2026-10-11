@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import { Upload, X, Loader2, ImageOff } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { prepareImageForUpload, UPLOAD_CACHE_CONTROL } from "@/lib/image-compress";
 
 export default function ImageUploadField({
   label,
@@ -28,13 +29,23 @@ export default function ImageUploadField({
     }
 
     setUploading(true);
-    const ext = file.name.split(".").pop();
-    const path = `${crypto.randomUUID()}.${ext}`;
-
+    let prepared;
+    try {
+      // Resize to max 1920px wide and convert to WebP before uploading.
+      prepared = await prepareImageForUpload(file);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't read that photo.");
+      setUploading(false);
+      return;
+    }
+    const path = `${crypto.randomUUID()}.${prepared.extension}`;
     const { error: uploadError } = await supabase.storage
       .from("tour-images")
-      .upload(path, file, { cacheControl: "3600", upsert: false });
-
+      .upload(path, prepared.blob, {
+        cacheControl: UPLOAD_CACHE_CONTROL,
+        contentType: prepared.contentType,
+        upsert: false,
+      });
     if (uploadError) {
       setError(uploadError.message);
       setUploading(false);
@@ -73,7 +84,7 @@ export default function ImageUploadField({
           <input
             ref={inputRef}
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,image/gif"
             className="hidden"
             onChange={(e) => {
               const file = e.target.files?.[0];

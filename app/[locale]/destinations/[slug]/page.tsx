@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft, ArrowRight, MapPin, Calendar } from "lucide-react";
 import PageHero from "@/components/PageHero";
@@ -10,7 +11,13 @@ import { getDestinations } from "@/lib/destinations-data";
 import { getTours } from "@/lib/tours-data";
 import type { Locale } from "@/i18n/routing";
 
-export const revalidate = 60;
+// Re-generated at most hourly; admin edits refresh it immediately.
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const destinations = await getDestinations();
+  return destinations.map((d) => ({ slug: d.slug }));
+}
 
 export async function generateMetadata({
   params,
@@ -22,13 +29,13 @@ export async function generateMetadata({
   const destinations = await getDestinations();
   const dest = destinations.find((d) => d.slug === slug);
   if (!dest) return {};
-  return {
+  return pageMetadata({
+    locale: loc,
+    path: `/destinations/${dest.slug}`,
     title: dest.name[loc],
     description: dest.tagline[loc],
-    openGraph: dest.image
-      ? { title: dest.name[loc], description: dest.tagline[loc], images: [{ url: dest.image, width: 1200, height: 630 }] }
-      : undefined,
-  };
+    image: dest.image || null,
+  });
 }
 
 export default async function DestinationDetailPage({
@@ -38,6 +45,7 @@ export default async function DestinationDetailPage({
 }) {
   const { locale, slug } = await params;
   const loc = locale as Locale;
+  setRequestLocale(loc);
   const t = await getTranslations("destinations");
   const destinations = await getDestinations();
   const dest = destinations.find((d) => d.slug === slug);

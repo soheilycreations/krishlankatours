@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, Pencil, ImageOff, AlertTriangle } from "lucide-react";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { Plus, Pencil, ImageOff } from "lucide-react";
+import { requireAdmin } from "@/lib/auth";
 import DeleteDestinationButton from "@/app/admin/DeleteDestinationButton";
 
 export const dynamic = "force-dynamic";
@@ -16,19 +16,8 @@ interface DestinationRow {
 }
 
 export default async function DestinationsAdminPage() {
-  const supabase = await createSupabaseServerClient();
+  const { supabase } = await requireAdmin();
 
-  if (!supabase) {
-    return (
-      <div className="bg-white rounded-2xl border border-navy/10 p-8 text-center">
-        <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
-        <h1 className="font-display text-xl text-navy mb-2">Not connected yet</h1>
-        <p className="font-body text-sm text-ink-text/60 max-w-md mx-auto">
-          This system isn&apos;t connected yet. Please contact your developer to finish setting this up.
-        </p>
-      </div>
-    );
-  }
 
   const { data } = await supabase
     .from("destinations")

@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { staticPageMetadata } from "@/lib/seo";
+import type { Locale } from "@/i18n/routing";
 import ServicePage from "@/components/ServicePage";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Private Taxi Service Sri Lanka — Point-to-Point Transfers",
-    description:
-      "Private taxi service across Sri Lanka — comfortable, air-conditioned point-to-point transfers between cities, beaches and hill country with English-speaking drivers.",
-  };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return staticPageMetadata(locale as Locale, "/taxi-service");
 }
 
-export default async function TaxiServicePage() {
+export default async function TaxiServicePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("taxiService");
   return (
     <ServicePage

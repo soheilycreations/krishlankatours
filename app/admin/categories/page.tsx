@@ -1,7 +1,8 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
+import AdminFlash from "@/components/admin/AdminFlash";
 import { saveCategory, deleteCategory } from "@/app/admin/actions";
 import ImageUploadField from "@/components/admin/ImageUploadField";
-import { AlertTriangle, Shapes, Plus } from "lucide-react";
+import { Shapes, Plus } from "lucide-react";
 import Image from "next/image";
 
 export const dynamic = "force-dynamic";
@@ -20,8 +21,8 @@ function CategoryForm({ cat }: { cat?: Record<string, unknown> }) {
         <input name="name_de" defaultValue={String(c.name_de ?? "")} className="w-full bg-white border border-navy/12 rounded-lg px-3 py-2.5 font-body text-sm text-navy outline-none focus:border-blue" />
       </div>
       <div>
-        <label className="block font-stamp text-[10px] uppercase tracking-wide text-ink-text/50 mb-1.5">Slug * <span className="normal-case text-ink-text/35">(matches tour category, e.g. village)</span></label>
-        <input name="slug" defaultValue={String(c.slug ?? "")} required className="w-full bg-white border border-navy/12 rounded-lg px-3 py-2.5 font-body text-sm text-navy outline-none focus:border-blue" />
+        <label className="block font-stamp text-[10px] uppercase tracking-wide text-ink-text/50 mb-1.5">Slug <span className="normal-case text-ink-text/35">(matches tour category, e.g. village — leave empty to create it from the name)</span></label>
+        <input name="slug" defaultValue={String(c.slug ?? "")} placeholder="e.g. village" className="w-full bg-white border border-navy/12 rounded-lg px-3 py-2.5 font-body text-sm text-navy outline-none focus:border-blue" />
       </div>
       <div>
         <label className="block font-stamp text-[10px] uppercase tracking-wide text-ink-text/50 mb-1.5">Order</label>
@@ -43,20 +44,14 @@ function CategoryForm({ cat }: { cat?: Record<string, unknown> }) {
   );
 }
 
-export default async function CategoriesAdminPage() {
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) {
-    return (
-      <div className="bg-white rounded-2xl border border-navy/10 p-8 text-center">
-        <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
-        <p className="font-body text-sm text-ink-text/60">Not connected yet — contact your developer.</p>
-      </div>
-    );
-  }
+export default async function CategoriesAdminPage({ searchParams }: { searchParams: Promise<{ error?: string | string[] }> }) {
+  const { error: flashError } = await searchParams;
+  const { supabase } = await requireAdmin();
   const { data: cats, error } = await supabase.from("categories").select("*").order("sort_order");
 
   return (
     <div className="space-y-8">
+      <AdminFlash error={flashError} />
       <div>
         <h1 className="font-display text-2xl text-navy">Tour Categories</h1>
         <p className="font-body text-sm text-ink-text/55 mt-1">The circular category icons on the homepage. The slug must match the category used on tours.</p>

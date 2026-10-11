@@ -8,9 +8,7 @@ import {
   Wheat,
   ImageOff,
 } from "lucide-react";
-import type { TourCategory } from "@/lib/tours";
-
-const categoryIcons: Record<TourCategory, typeof PawPrint> = {
+const categoryIcons: Record<string, typeof PawPrint> = {
   wildlife: PawPrint,
   heritage: Landmark,
   hillcountry: Mountain,
@@ -20,7 +18,7 @@ const categoryIcons: Record<TourCategory, typeof PawPrint> = {
   village: Wheat,
 };
 
-const categoryGradients: Record<TourCategory, string> = {
+const categoryGradients: Record<string, string> = {
   wildlife: "from-emerald-900 to-emerald-700",
   heritage: "from-amber-900 to-amber-700",
   hillcountry: "from-teal-900 to-teal-700",
@@ -35,7 +33,7 @@ export default function TourImagePlaceholder({
   label,
   className = "",
 }: {
-  category: TourCategory;
+  category: string;
   label: string;
   className?: string;
 }) {

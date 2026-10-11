@@ -1,8 +1,18 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { staticPageMetadata } from "@/lib/seo";
+import type { Locale } from "@/i18n/routing";
 import Reveal from "@/components/Reveal";
 
-export default async function AboutPage() {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return staticPageMetadata(locale as Locale, "/about");
+}
+
+export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("about");
   const values = t.raw("values") as { title: string; body: string }[];
 

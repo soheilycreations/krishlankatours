@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 import BookingsCalendar, {
   parseTextRange,
   type BookingEvent,
@@ -18,15 +18,7 @@ function safeDate(v: unknown): string | null {
 }
 
 export default async function BookingsPage() {
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) {
-    return (
-      <div className="bg-white rounded-2xl border border-navy/10 p-8 text-center">
-        <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
-        <p className="font-body text-sm text-ink-text/60">Not connected yet — contact your developer.</p>
-      </div>
-    );
-  }
+  const { supabase } = await requireAdmin();
 
   let events: BookingEvent[] = [];
   let loadError: string | null = null;

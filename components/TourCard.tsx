@@ -5,14 +5,14 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Users, ArrowRight, Clock } from "lucide-react";
 import type { Tour } from "@/lib/tours";
-import { categoryLabels, categoryColors } from "@/lib/tours";
+import { getCategoryLabel, getCategoryColors } from "@/lib/tours";
 import type { Locale } from "@/i18n/routing";
 import TourImagePlaceholder from "@/components/TourImagePlaceholder";
 
 export default function TourCard({ tour }: { tour: Tour }) {
   const locale = useLocale() as Locale;
   const t = useTranslations("tours");
-  const colors = categoryColors[tour.category];
+  const colors = getCategoryColors(tour.category);
 
   return (
     <Link
@@ -43,7 +43,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
           </span>
         </div>
         <span className={`absolute bottom-4 left-4 font-stamp text-[10px] uppercase tracking-widest ${colors.bg} text-white px-2.5 py-1 rounded-full shadow-sm`}>
-          {categoryLabels[tour.category][locale]}
+          {getCategoryLabel(tour.category, locale)}
         </span>
         {tour.priceFromUsd > 0 && (
           <span className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
@@ -79,7 +79,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
         <div className="dotted-rule pb-4 mb-1" />
         <div className="flex items-center justify-between">
           <span className={`font-stamp text-[10px] uppercase tracking-wide ${colors.text}`}>
-            {categoryLabels[tour.category][locale]}
+            {getCategoryLabel(tour.category, locale)}
           </span>
           <span className="flex items-center gap-1 font-body text-xs font-medium text-blue group-hover:gap-1.5 transition-all">
             {t("viewDetails")} <ArrowRight size={13} />

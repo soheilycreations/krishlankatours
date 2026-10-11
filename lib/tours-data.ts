@@ -1,8 +1,8 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { mediaUrl, mediaUrls } from "@/lib/media";
 import {
   tours as staticTours,
   type Tour,
-  type TourCategory,
   type LocalizedText,
 } from "@/lib/tours";
 
@@ -36,12 +36,12 @@ interface TourRow {
 function rowToTour(row: TourRow): Tour {
   return {
     slug: row.slug,
-    category: row.category as TourCategory,
+    category: row.category,
     durationDays: row.duration_days,
     priceFromUsd: row.price_from_usd ?? 0,
     groupSize: row.group_size ?? "",
-    heroImage: row.hero_image ?? undefined,
-    gallery: row.gallery ?? [],
+    heroImage: mediaUrl(row.hero_image) || undefined,
+    gallery: mediaUrls(row.gallery),
     title: { en: row.title_en, de: row.title_de ?? row.title_en },
     tagline: { en: row.tagline_en ?? "", de: row.tagline_de ?? row.tagline_en ?? "" },
     summary: { en: row.summary_en ?? "", de: row.summary_de ?? row.summary_en ?? "" },
@@ -53,11 +53,12 @@ function rowToTour(row: TourRow): Tour {
 /** Fetches tours from Supabase (published only). Falls back to the
  *  starter content in lib/tours.ts if Supabase isn't configured, the
  *  table is empty, or the request fails — the public site never breaks
- *  because of the CMS. */
+ *  because of the CMS.
+ *
+ *  Uses the cookie-less public client so pages stay cacheable. */
 export async function getTours(): Promise<Tour[]> {
   try {
-    const supabase = await createSupabaseServerClient();
-    if (!supabase) return staticTours;
+    if (!isSupabaseConfigured || !supabase) return staticTours;
 
     const { data, error } = await supabase
       .from("tours")

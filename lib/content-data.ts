@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { galleryImages as staticGallery, type GalleryImage } from "@/lib/gallery";
+import { mediaUrl } from "@/lib/media";
 
 // ---------- CATEGORIES ----------
 export interface CategoryItem {
@@ -25,7 +26,7 @@ export async function getCategories(): Promise<CategoryItem[]> {
   return data.map((r) => ({
     slug: r.slug,
     name: { en: r.name_en, de: r.name_de ?? r.name_en },
-    image: r.image_url ?? "",
+    image: mediaUrl(r.image_url),
   }));
 }
 
@@ -62,7 +63,7 @@ export async function getGalleryImages(): Promise<GalleryImage[]> {
     .from("gallery_images").select("*").eq("active", true).order("sort_order");
   if (error || !data || data.length === 0) return staticGallery;
   return data.map((r) => ({
-    src: r.image_url,
+    src: mediaUrl(r.image_url),
     caption: { en: r.caption_en ?? "", de: r.caption_de ?? r.caption_en ?? "" },
     tall: r.tall,
   }));

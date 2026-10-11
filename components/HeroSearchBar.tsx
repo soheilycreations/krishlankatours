@@ -4,31 +4,22 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { Search, MapPin, Calendar, Users } from "lucide-react";
-import { categoryLabels, type TourCategory } from "@/lib/tours";
+import type { CategoryItem } from "@/lib/content-data";
 import type { Locale } from "@/i18n/routing";
 
-const categories: TourCategory[] = [
-  "wildlife",
-  "heritage",
-  "hillcountry",
-  "wetland",
-  "coastal",
-  "city",
-];
-
-export default function HeroSearchBar() {
+export default function HeroSearchBar({ categories }: { categories: CategoryItem[] }) {
   const t = useTranslations("home");
   const locale = useLocale() as Locale;
   const router = useRouter();
 
-  const [category, setCategory] = useState<TourCategory | "">("");
+  const [category, setCategory] = useState("");
   const [dates, setDates] = useState("");
   const [travelers, setTravelers] = useState("2");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (category) {
-      router.push(`/tours?category=${category}`);
+      router.push(`/tours?category=${encodeURIComponent(category)}`);
     } else {
       router.push("/tours");
     }
@@ -47,13 +38,13 @@ export default function HeroSearchBar() {
           </span>
           <select
             value={category}
-            onChange={(e) => setCategory(e.target.value as TourCategory | "")}
+            onChange={(e) => setCategory(e.target.value)}
             className="font-body text-sm text-navy bg-transparent outline-none -ml-0.5"
           >
             <option value="">{t("searchWhereAny")}</option>
             {categories.map((c) => (
-              <option key={c} value={c}>
-                {categoryLabels[c][locale]}
+              <option key={c.slug} value={c.slug}>
+                {c.name[locale] || c.name.en}
               </option>
             ))}
           </select>

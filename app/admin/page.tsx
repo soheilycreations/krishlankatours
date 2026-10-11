@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Mail, Map, MapPin, Send, ArrowRight, AlertTriangle } from "lucide-react";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { Mail, Map, MapPin, Send, ArrowRight } from "lucide-react";
+import { requireAdmin } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -15,19 +15,8 @@ interface InquiryRow {
 }
 
 export default async function AdminDashboard() {
-  const supabase = await createSupabaseServerClient();
+  const { supabase } = await requireAdmin();
 
-  if (!supabase) {
-    return (
-      <div className="bg-white rounded-2xl border border-navy/10 p-8 text-center">
-        <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
-        <h1 className="font-display text-xl text-navy mb-2">Not connected yet</h1>
-        <p className="font-body text-sm text-ink-text/60 max-w-md mx-auto">
-          This system isn&apos;t connected yet. Please contact your developer to finish setting this up.
-        </p>
-      </div>
-    );
-  }
 
   const [{ count: newEnquiries }, { count: totalEnquiries }, { count: totalTours }, { count: totalSubs }, { data: recent }] =
     await Promise.all([

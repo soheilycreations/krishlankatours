@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { staticPageMetadata } from "@/lib/seo";
+import type { Locale } from "@/i18n/routing";
 import ServicePage from "@/components/ServicePage";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Surfing Tours — Hikkaduwa & Weligama, Sri Lanka",
-    description:
-      "Private surf trips to Hikkaduwa and Weligama, Sri Lanka's best beginner and intermediate surf spots. Board hire, spot recommendations, and driver-guided transport from your hotel.",
-  };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return staticPageMetadata(locale as Locale, "/surfing");
 }
 
-export default async function SurfingPage() {
+export default async function SurfingPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("surfing");
   return (
     <ServicePage

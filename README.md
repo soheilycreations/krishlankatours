@@ -1,10 +1,10 @@
 # Krish Lanka Tours & Travels
 
-Private, driver-guided Sri Lanka tour website. Next.js 14 (App Router) + TypeScript + Tailwind CSS + Framer Motion + Supabase, with English/German support.
+Private, driver-guided Sri Lanka tour website. Next.js 15 (App Router) + TypeScript + Tailwind CSS + Framer Motion + Supabase, hosted on Cloudflare Workers, with English/German support.
 
 ## Stack
 
-- **Next.js 14** (App Router, TypeScript)
+- **Next.js 15** (App Router, TypeScript), deployed to **Cloudflare Workers** with OpenNext
 - **Tailwind CSS** for styling
 - **Framer Motion** for scroll reveals and the gallery lightbox
 - **next-intl** for English/German i18n (auto-detects browser language, manual EN/DE switcher in the header)
@@ -88,12 +88,16 @@ git push -u origin main
 
 ## Deploying
 
-The easiest path for a Next.js site like this is **Vercel** (made by the Next.js team, free tier is generous):
+The site runs on **Cloudflare Workers** via [`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare).
+Full step-by-step instructions (account setup, R2/D1, build variables, deploy, custom domain,
+test checklist) are in **[CLOUDFLARE-DEPLOY.md](./CLOUDFLARE-DEPLOY.md)**.
 
-1. Push the repo to GitHub (above).
-2. Go to [vercel.com/new](https://vercel.com/new), import the repo.
-3. Add the same environment variables from `.env.local` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_WHATSAPP_NUMBER`) in the Vercel project settings.
-4. Deploy. Point `krishlankatours.com`'s DNS at Vercel following their custom domain instructions.
+Quick reference:
+
+```bash
+npm run preview   # build + run locally on the Cloudflare runtime (http://localhost:8787)
+npm run deploy    # build + deploy to Cloudflare
+```
 
 ## Admin panel (manage tours & photos yourself)
 

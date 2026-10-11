@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import { Upload, X, Loader2, Link2 } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { prepareImageForUpload, UPLOAD_CACHE_CONTROL } from "@/lib/image-compress";
 
 /** Multi-image gallery manager: upload several photos to Supabase storage,
  *  add by URL, remove, and submit as a newline-joined hidden field — fully
@@ -33,11 +34,23 @@ export default function GalleryUploadField({
     setUploading(files.length);
     const uploaded: string[] = [];
     for (const file of Array.from(files)) {
-      const ext = file.name.split(".").pop();
-      const path = `${crypto.randomUUID()}.${ext}`;
+      let prepared;
+      try {
+        // Resize to max 1920px wide and convert to WebP before uploading.
+        prepared = await prepareImageForUpload(file);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Couldn't read that photo.");
+        setUploading((n) => n - 1);
+        continue;
+      }
+      const path = `${crypto.randomUUID()}.${prepared.extension}`;
       const { error: uploadError } = await supabase.storage
         .from("tour-images")
-        .upload(path, file, { cacheControl: "3600", upsert: false });
+        .upload(path, prepared.blob, {
+          cacheControl: UPLOAD_CACHE_CONTROL,
+          contentType: prepared.contentType,
+          upsert: false,
+        });
       if (uploadError) {
         setError(uploadError.message);
       } else {
@@ -100,7 +113,7 @@ export default function GalleryUploadField({
       <input
         ref={fileRef}
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,image/gif"
         multiple
         className="hidden"
         onChange={(e) => e.target.files?.length && uploadFiles(e.target.files)}

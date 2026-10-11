@@ -1,21 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LogIn } from "lucide-react";
-import { signIn } from "@/app/admin/actions";
+import { signIn, signOut } from "@/app/admin/actions";
 
 export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [denied, setDenied] = useState(false);
+
+  // ?denied=1 → signed in with an account that isn't on the admin allowlist.
+  useEffect(() => {
+    setDenied(new URLSearchParams(window.location.search).has("denied"));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setPending(true);
     const formData = new FormData(e.currentTarget);
-    const result = await signIn(undefined, formData);
-    if (result?.error) {
-      setError(result.error);
+    try {
+      const result = await signIn(undefined, formData);
+      if (result?.error) {
+        setError(result.error);
+        setPending(false);
+      }
+    } catch (err) {
+      // redirect() is delivered as a thrown control-flow signal — let Next handle it.
+      if (err && typeof err === "object" && "digest" in err) throw err;
+      setError("Something went wrong. Please try again.");
       setPending(false);
     }
     // on success, signIn() redirects server-side
@@ -28,6 +41,17 @@ export default function AdminLoginPage() {
         <p className="font-body text-sm text-ink-text/55 mb-6">
           Krish Lanka Tours & Travels
         </p>
+
+        {denied && (
+          <div className="mb-5 font-body text-sm text-red-700 bg-red-50 rounded-lg px-3 py-3">
+            <p className="mb-2">This account doesn&apos;t have admin access.</p>
+            <form action={signOut}>
+              <button type="submit" className="underline hover:no-underline">
+                Sign out and use a different account
+              </button>
+            </form>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>

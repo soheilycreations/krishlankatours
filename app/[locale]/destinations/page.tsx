@@ -1,5 +1,7 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { staticPageMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, MapPin, Calendar, Sparkles } from "lucide-react";
 import Reveal from "@/components/Reveal";
@@ -7,7 +9,13 @@ import PageHero from "@/components/PageHero";
 import { getDestinations } from "@/lib/destinations-data";
 import type { Locale } from "@/i18n/routing";
 
-export const revalidate = 60;
+// Re-generated at most hourly; admin edits refresh it immediately.
+export const revalidate = 3600;
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return staticPageMetadata(locale as Locale, "/destinations");
+}
 
 export default async function DestinationsPage({
   params,
@@ -16,6 +24,7 @@ export default async function DestinationsPage({
 }) {
   const { locale } = await params;
   const loc = locale as Locale;
+  setRequestLocale(loc);
   const t = await getTranslations("destinations");
   const destinations = await getDestinations();
 

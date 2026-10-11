@@ -19,7 +19,8 @@ export interface ItineraryDay {
 
 export interface Tour {
   slug: string;
-  category: TourCategory;
+  /** One of the built-in TourCategory slugs, or a category created in /admin/categories. */
+  category: string;
   durationDays: number;
   priceFromUsd: number;
   groupSize: string;
@@ -57,6 +58,28 @@ export const categoryColors: Record<TourCategory, { bg: string; text: string; ri
   city: { bg: "bg-violet-600", text: "text-violet-700", ring: "group-hover:ring-violet-500" },
   village: { bg: "bg-lime-600", text: "text-lime-700", ring: "group-hover:ring-lime-500" },
 };
+
+/** The categories that exist in code. Categories added in /admin/categories
+ *  are merged on top of these wherever a category list is shown. */
+export const BUILT_IN_CATEGORIES = Object.keys(categoryLabels) as TourCategory[];
+
+const FALLBACK_COLORS = { bg: "bg-blue", text: "text-blue", ring: "group-hover:ring-blue" };
+
+/** Human label for any category slug, including admin-created ones. */
+export function getCategoryLabel(slug: string, locale: "en" | "de"): string {
+  const known = (categoryLabels as Record<string, LocalizedText | undefined>)[slug];
+  if (known) return known[locale];
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+/** Accent colours for any category slug, with a neutral fallback. */
+export function getCategoryColors(slug: string): { bg: string; text: string; ring: string } {
+  return (categoryColors as Record<string, { bg: string; text: string; ring: string } | undefined>)[slug] ?? FALLBACK_COLORS;
+}
 
 export const tours: Tour[] = [
   {

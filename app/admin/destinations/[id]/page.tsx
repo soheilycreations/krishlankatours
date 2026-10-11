@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
+import { uuidSchema } from "@/lib/validation";
 import DestinationForm, { type DestinationFormData } from "@/components/admin/DestinationForm";
 
 export const dynamic = "force-dynamic";
@@ -10,8 +11,8 @@ export default async function EditDestinationPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) notFound();
+  const { supabase } = await requireAdmin();
+  if (!uuidSchema.safeParse(id).success) notFound();
 
   const { data, error } = await supabase.from("destinations").select("*").eq("id", id).single();
   if (error || !data) notFound();

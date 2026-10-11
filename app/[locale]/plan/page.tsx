@@ -1,11 +1,19 @@
-import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { staticPageMetadata } from "@/lib/seo";
 import PageHero from "@/components/PageHero";
 import CustomTripPlanner from "@/components/CustomTripPlanner";
 import { getDestinations } from "@/lib/destinations-data";
 import { getVehicles } from "@/lib/vehicles-data";
 import type { Locale } from "@/i18n/routing";
 
-export const revalidate = 60;
+// Re-generated at most hourly; admin edits refresh it immediately.
+export const revalidate = 3600;
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return staticPageMetadata(locale as Locale, "/plan");
+}
 
 export default async function PlanPage({
   params,
@@ -14,6 +22,7 @@ export default async function PlanPage({
 }) {
   const { locale } = await params;
   const loc = locale as Locale;
+  setRequestLocale(loc);
   const t = await getTranslations("plan");
   const [destinations, vehicles] = await Promise.all([getDestinations(), getVehicles()]);
 

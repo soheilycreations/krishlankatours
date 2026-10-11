@@ -11,7 +11,20 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // www.krishlankatours.com → krishlankatours.com (301). A Cloudflare
+  // redirect rule does this too; this is the in-app safety net.
+  const host = request.headers.get("host") ?? "";
+  if (host.startsWith("www.")) {
+    const url = request.nextUrl.clone();
+    url.host = host.slice(4);
+    url.port = "";
+    url.protocol = "https:";
+    return NextResponse.redirect(url, 301);
+  }
+
   // /admin is a plain (non-localized) section protected by Supabase Auth.
+  // This only checks "signed in"; every admin page and server action
+  // additionally checks the admin allowlist (lib/auth.ts).
   if (pathname.startsWith("/admin")) {
     let response = NextResponse.next({ request });
 
@@ -46,10 +59,14 @@ export default async function middleware(request: NextRequest) {
     if (!user && pathname !== "/admin/login") {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
-    if (user && pathname === "/admin/login") {
+    // ?denied=1 = signed in but not on the admin allowlist; stay on the
+    // login page so it can explain that (and offer "sign out").
+    if (user && pathname === "/admin/login" && !request.nextUrl.searchParams.has("denied")) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
 
+    response.headers.set("Cache-Control", "private, no-store");
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
     return response;
   }
 
@@ -57,7 +74,7 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!api|trpc|_next|_vercel|.*\\..*).*)",
-  ],
+  // Skip API routes, Next internals, the /media image proxy and any file
+  // with an extension (images, sitemap.xml, robots.txt, ...).
+  matcher: ["/((?!api|media|_next|.*\\..*).*)"],
 };

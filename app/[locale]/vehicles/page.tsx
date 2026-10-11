@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { staticPageMetadata } from "@/lib/seo";
+import type { Locale } from "@/i18n/routing";
 import { Users, Car } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { getVehicles } from "@/lib/vehicles-data";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Our Vehicle Fleet — Sri Lanka Private Tours",
-    description:
-      "Cars, vans, SUVs and mini coaches for private Sri Lanka tours — all with experienced, English-speaking driver-guides. Choose the right vehicle for your group.",
-  };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return staticPageMetadata(locale as Locale, "/vehicles");
 }
 
-export const revalidate = 60;
+// Re-generated at most hourly; admin edits refresh it immediately.
+export const revalidate = 3600;
 
-export default async function VehiclesPage() {
+export default async function VehiclesPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("vehiclesPage");
   const vehicles = await getVehicles();
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { deleteTour } from "@/app/admin/actions";
 
@@ -12,11 +13,17 @@ export default function DeleteTourButton({
   tourTitle: string;
 }) {
   const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleDelete = () => {
     if (!confirm(`Delete "${tourTitle}"? This can't be undone.`)) return;
-    startTransition(() => {
-      deleteTour(tourId);
+    startTransition(async () => {
+      const result = await deleteTour(tourId);
+      if (result?.error) {
+        alert(result.error);
+      } else {
+        router.refresh();
+      }
     });
   };
 

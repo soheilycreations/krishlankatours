@@ -1,6 +1,7 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
+import AdminFlash from "@/components/admin/AdminFlash";
 import { updateTripRequestStatus } from "@/app/admin/actions";
-import { AlertTriangle, MapPin, CalendarDays, Users, Car, Hotel, Phone, Mail } from "lucide-react";
+import { MapPin, CalendarDays, Users, Car, Hotel, Phone, Mail } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -13,16 +14,9 @@ const STATUS_COLORS: Record<string, string> = {
   closed: "bg-navy/8 text-navy/50",
 };
 
-export default async function TripRequestsPage() {
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) {
-    return (
-      <div className="bg-white rounded-2xl border border-navy/10 p-8 text-center">
-        <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
-        <p className="font-body text-sm text-ink-text/60">Not connected yet — contact your developer.</p>
-      </div>
-    );
-  }
+export default async function TripRequestsPage({ searchParams }: { searchParams: Promise<{ error?: string | string[] }> }) {
+  const { error: flashError } = await searchParams;
+  const { supabase } = await requireAdmin();
 
   const { data: requests, error } = await supabase
     .from("custom_trip_requests")
@@ -31,6 +25,7 @@ export default async function TripRequestsPage() {
 
   return (
     <div className="space-y-6">
+      <AdminFlash error={flashError} />
       <div>
         <h1 className="font-display text-2xl text-navy">Custom Trip Requests</h1>
         <p className="font-body text-sm text-ink-text/55 mt-1">

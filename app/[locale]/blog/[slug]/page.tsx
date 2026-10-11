@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft, Clock } from "lucide-react";
 import Reveal from "@/components/Reveal";
@@ -21,11 +22,13 @@ export async function generateMetadata({
   const post = getBlogPostBySlug(slug);
   if (!post) return {};
   const loc = locale as Locale;
-  return {
+  return pageMetadata({
+    locale: loc,
+    path: `/blog/${post.slug}`,
     title: post.title[loc],
     description: post.excerpt[loc],
-    openGraph: { title: post.title[loc], description: post.excerpt[loc], images: [{ url: post.image, width: 1200, height: 630 }] },
-  };
+    image: post.image,
+  });
 }
 
 export default async function BlogPostPage({
@@ -33,10 +36,11 @@ export default async function BlogPostPage({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale: rawLocale, slug } = await params;
+  const locale = rawLocale as Locale;
+  setRequestLocale(locale);
   const post = getBlogPostBySlug(slug);
   if (!post) notFound();
-  const locale = (await getLocale()) as Locale;
   const t = await getTranslations("blog");
 
   return (

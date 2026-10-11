@@ -1,41 +1,44 @@
 import { NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { inquirySchema, firstIssue } from "@/lib/validation";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   if (!isSupabaseConfigured || !supabase) {
     return NextResponse.json(
-      {
-        error:
-          "Supabase isn't configured yet. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment (see .env.example) and run supabase/schema.sql in your project.",
-      },
+      { error: "The booking form isn't connected yet. Please contact us on WhatsApp." },
       { status: 503 }
     );
   }
 
-  const body = await request.json();
-  const { name, email, phone, tourSlug, travelDates, groupSize, hotelLocation, message, locale } = body;
-
-  if (!name || !email) {
-    return NextResponse.json(
-      { error: "Name and email are required." },
-      { status: 400 }
-    );
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
+  const parsed = inquirySchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: firstIssue(parsed.error) }, { status: 400 });
+  }
+  const d = parsed.data;
+
   const { error } = await supabase.from("inquiries").insert({
-    name,
-    email,
-    phone: phone || null,
-    tour_slug: tourSlug || null,
-    travel_dates: travelDates || null,
-    group_size: groupSize || null,
-    hotel_location: hotelLocation || null,
-    message: message || null,
-    locale: locale || "en",
+    name: d.name,
+    email: d.email,
+    phone: d.phone,
+    tour_slug: d.tourSlug,
+    travel_dates: d.travelDates,
+    group_size: d.groupSize,
+    hotel_location: d.hotelLocation,
+    message: d.message,
+    locale: d.locale,
   });
 
   if (error) {
-    console.error("Supabase insert error:", error.message);
+    console.error("inquiries insert error:", error.message);
     return NextResponse.json(
       { error: "Could not save your enquiry. Please try again." },
       { status: 500 }

@@ -2,55 +2,60 @@ import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { getTours } from "@/lib/tours-data";
 import { getDestinations } from "@/lib/destinations-data";
+import { getBlogPosts } from "@/lib/blog";
+import { STATIC_PATHS, absoluteUrl } from "@/lib/seo";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://krishlankatours.com";
+// Regenerated at most hourly; admin edits to tours/destinations refresh it immediately.
+export const revalidate = 3600;
 
-const STATIC_PATHS = ["", "/tours", "/destinations", "/gallery", "/about", "/contact", "/plan"];
+type Entry = MetadataRoute.Sitemap[number];
+
+/** One entry per locale, each listing every language version (hreflang). */
+function entriesFor(
+  path: string,
+  opts: { changeFrequency: Entry["changeFrequency"]; priority: number; lastModified?: Date }
+): MetadataRoute.Sitemap {
+  const languages: Record<string, string> = {};
+  for (const l of routing.locales) languages[l] = absoluteUrl(l, path);
+  languages["x-default"] = absoluteUrl(routing.defaultLocale, path);
+
+  return routing.locales.map((locale) => ({
+    url: absoluteUrl(locale, path),
+    ...(opts.lastModified ? { lastModified: opts.lastModified } : {}),
+    changeFrequency: opts.changeFrequency,
+    priority: opts.priority,
+    alternates: { languages },
+  }));
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
-  for (const locale of routing.locales) {
-    for (const path of STATIC_PATHS) {
-      entries.push({
-        url: `${SITE_URL}/${locale}${path}`,
-        lastModified: new Date(),
+  for (const path of STATIC_PATHS) {
+    entries.push(
+      ...entriesFor(path, {
         changeFrequency: path === "" ? "weekly" : "monthly",
         priority: path === "" ? 1 : 0.8,
-      });
-    }
+      })
+    );
   }
 
-  try {
-    const tours = await getTours();
-    for (const locale of routing.locales) {
-      for (const tour of tours) {
-        entries.push({
-          url: `${SITE_URL}/${locale}/tours/${tour.slug}`,
-          lastModified: new Date(),
-          changeFrequency: "monthly",
-          priority: 0.7,
-        });
-      }
-    }
-  } catch {
-    // Supabase not configured at build time — static tours still covered above
-  }
+  const [tours, destinations] = await Promise.all([getTours(), getDestinations()]);
 
-  try {
-    const destinations = await getDestinations();
-    for (const locale of routing.locales) {
-      for (const d of destinations) {
-        entries.push({
-          url: `${SITE_URL}/${locale}/destinations/${d.slug}`,
-          lastModified: new Date(),
-          changeFrequency: "monthly",
-          priority: 0.6,
-        });
-      }
-    }
-  } catch {
-    // ignore
+  for (const tour of tours) {
+    entries.push(...entriesFor(`/tours/${tour.slug}`, { changeFrequency: "monthly", priority: 0.7 }));
+  }
+  for (const d of destinations) {
+    entries.push(...entriesFor(`/destinations/${d.slug}`, { changeFrequency: "monthly", priority: 0.6 }));
+  }
+  for (const post of getBlogPosts()) {
+    entries.push(
+      ...entriesFor(`/blog/${post.slug}`, {
+        changeFrequency: "yearly",
+        priority: 0.6,
+        lastModified: new Date(`${post.date}T00:00:00Z`),
+      })
+    );
   }
 
   return entries;

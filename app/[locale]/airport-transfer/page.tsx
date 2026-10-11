@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { staticPageMetadata } from "@/lib/seo";
+import type { Locale } from "@/i18n/routing";
 import ServicePage from "@/components/ServicePage";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Airport Transfer Sri Lanka — Colombo (CMB) to Ahungalla, Bentota & Beyond",
-    description:
-      "Reliable private airport transfer Sri Lanka — Bandaranaike Airport (CMB) pickup and drop-off to Ahungalla, Bentota, Galle and hotels across the south coast. Fixed prices, English-speaking drivers.",
-  };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return staticPageMetadata(locale as Locale, "/airport-transfer");
 }
 
-export default async function AirportTransferPage() {
+export default async function AirportTransferPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("airportTransfer");
   return (
     <ServicePage

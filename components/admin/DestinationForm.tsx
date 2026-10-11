@@ -7,10 +7,15 @@ import Link from "next/link";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import GalleryUploadField from "@/components/admin/GalleryUploadField";
 import { saveDestination } from "@/app/admin/actions";
+import { slugify } from "@/lib/slug";
 
 interface TextItem {
   en: string;
   de: string;
+}
+
+interface KeyedTextItem extends TextItem {
+  key: string;
 }
 
 export interface DestinationFormData {
@@ -32,37 +37,57 @@ export interface DestinationFormData {
   published: boolean;
 }
 
-function slugify(value: string): string {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
+/** Stable React keys for list rows. Using the array index as key makes React
+ *  reuse the wrong inputs when a row is removed (deleting the first
+ *  paragraph used to remove the last one instead). */
+let keySeq = 0;
+const newKey = () => `row-${Date.now().toString(36)}-${(keySeq++).toString(36)}`;
+const withKeys = (items: TextItem[] | undefined): KeyedTextItem[] =>
+  items?.length
+    ? items.map((t) => ({ key: newKey(), en: t.en, de: t.de }))
+    : [{ key: newKey(), en: "", de: "" }];
 
 export default function DestinationForm({ destination }: { destination?: DestinationFormData }) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
-
-  const [description, setDescription] = useState<TextItem[]>(
-    destination?.description?.length ? destination.description : [{ en: "", de: "" }]
+  const [nameEn, setNameEn] = useState(destination?.name_en ?? "");
+  const [description, setDescription] = useState<KeyedTextItem[]>(() =>
+    withKeys(destination?.description)
   );
-  const [highlights, setHighlights] = useState<TextItem[]>(
-    destination?.highlights?.length ? destination.highlights : [{ en: "", de: "" }]
+  const [highlights, setHighlights] = useState<KeyedTextItem[]>(() =>
+    withKeys(destination?.highlights)
   );
+  const slugPreview = destination?.slug ?? slugify(nameEn);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setPending(true);
     const formData = new FormData(e.currentTarget);
+
     if (!destination?.slug) {
-      formData.set("slug", slugify(formData.get("name_en") as string));
+      const slug = slugify(String(formData.get("name_en") ?? ""));
+      if (!slug) {
+        setError("Name (EN) needs at least one letter or number.");
+        setPending(false);
+        return;
+      }
+      // The server re-sanitizes; this is just the same value it will use.
+      formData.set("slug", slug);
     }
-    const result = await saveDestination(destination?.id ?? null, undefined, formData);
-    if (result?.error) {
-      setError(result.error);
+
+    try {
+      const result = await saveDestination(destination?.id ?? null, undefined, formData);
+      if (result?.error) {
+        setError(result.error);
+        setPending(false);
+      }
+      // on success, saveDestination() redirects server-side
+    } catch (err) {
+      // redirect() is delivered as a thrown control-flow signal — let Next handle it.
+      if (err && typeof err === "object" && "digest" in err) throw err;
+      setError("Something went wrong. Please try again.");
       setPending(false);
     }
   };
@@ -79,10 +104,30 @@ export default function DestinationForm({ destination }: { destination?: Destina
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         <section className="bg-white rounded-2xl border border-navy/10 p-6">
           <h2 className="font-display text-lg text-navy mb-4">Basics</h2>
-          {destination?.slug && <input type="hidden" name="slug" value={destination.slug} />}
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Related tour slug" name="related_tour_slug" defaultValue={destination?.related_tour_slug} />
-            <Field label="Name (EN)" name="name_en" defaultValue={destination?.name_en} required />
+            <Field
+              label="Related tour slug (optional, e.g. kandy-day-tour)"
+              name="related_tour_slug"
+              defaultValue={destination?.related_tour_slug}
+            />
+            <div>
+              <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-1.5">
+                Name (EN)
+              </label>
+              <input
+                type="text"
+                name="name_en"
+                value={nameEn}
+                onChange={(e) => setNameEn(e.target.value)}
+                required
+                maxLength={160}
+                className="w-full border border-navy/15 rounded-lg px-3 py-2.5 font-body text-sm text-navy focus:border-blue outline-none"
+              />
+              <p className="font-body text-[11px] text-ink-text/45 mt-1.5">
+                Web address: /destinations/<span className="text-navy">{slugPreview || "…"}</span>
+                {destination?.slug ? " (fixed once created)" : ""}
+              </p>
+            </div>
             <Field label="Name (DE)" name="name_de" defaultValue={destination?.name_de} />
             <Field label="Region (EN)" name="region_en" defaultValue={destination?.region_en} />
             <Field label="Region (DE)" name="region_de" defaultValue={destination?.region_de} />
@@ -117,7 +162,7 @@ export default function DestinationForm({ destination }: { destination?: Destina
             <h2 className="font-display text-lg text-navy">Description paragraphs</h2>
             <button
               type="button"
-              onClick={() => setDescription([...description, { en: "", de: "" }])}
+              onClick={() => setDescription([...description, { key: newKey(), en: "", de: "" }])}
               className="inline-flex items-center gap-1 font-body text-xs text-blue hover:text-blue-light"
             >
               <Plus size={14} /> Add paragraph
@@ -125,7 +170,7 @@ export default function DestinationForm({ destination }: { destination?: Destina
           </div>
           <div className="flex flex-col gap-3">
             {description.map((d, i) => (
-              <div key={i} className="grid sm:grid-cols-2 gap-2 items-start">
+              <div key={d.key} className="grid sm:grid-cols-2 gap-2 items-start">
                 <textarea
                   name={`description_en_${i}`}
                   defaultValue={d.en}
@@ -143,7 +188,8 @@ export default function DestinationForm({ destination }: { destination?: Destina
                   />
                   <button
                     type="button"
-                    onClick={() => setDescription(description.filter((_, di) => di !== i))}
+                    aria-label="Remove paragraph"
+                    onClick={() => setDescription(description.filter((x) => x.key !== d.key))}
                     className="shrink-0 w-9 h-9 rounded-lg border border-navy/12 flex items-center justify-center text-ink-text/40 hover:text-red-600 hover:border-red-200"
                   >
                     <Trash2 size={14} />
@@ -159,7 +205,7 @@ export default function DestinationForm({ destination }: { destination?: Destina
             <h2 className="font-display text-lg text-navy">Highlights</h2>
             <button
               type="button"
-              onClick={() => setHighlights([...highlights, { en: "", de: "" }])}
+              onClick={() => setHighlights([...highlights, { key: newKey(), en: "", de: "" }])}
               className="inline-flex items-center gap-1 font-body text-xs text-blue hover:text-blue-light"
             >
               <Plus size={14} /> Add
@@ -167,7 +213,7 @@ export default function DestinationForm({ destination }: { destination?: Destina
           </div>
           <div className="flex flex-col gap-3">
             {highlights.map((h, i) => (
-              <div key={i} className="grid sm:grid-cols-2 gap-2 items-start">
+              <div key={h.key} className="grid sm:grid-cols-2 gap-2 items-start">
                 <input
                   name={`highlight_en_${i}`}
                   defaultValue={h.en}
@@ -183,7 +229,8 @@ export default function DestinationForm({ destination }: { destination?: Destina
                   />
                   <button
                     type="button"
-                    onClick={() => setHighlights(highlights.filter((_, hi) => hi !== i))}
+                    aria-label="Remove highlight"
+                    onClick={() => setHighlights(highlights.filter((x) => x.key !== h.key))}
                     className="shrink-0 w-9 h-9 rounded-lg border border-navy/12 flex items-center justify-center text-ink-text/40 hover:text-red-600 hover:border-red-200"
                   >
                     <Trash2 size={14} />
@@ -195,7 +242,9 @@ export default function DestinationForm({ destination }: { destination?: Destina
         </section>
 
         {error && (
-          <p className="font-body text-sm text-red-600 bg-red-50 rounded-lg px-4 py-3">{error}</p>
+          <p role="alert" className="font-body text-sm text-red-600 bg-red-50 rounded-lg px-4 py-3">
+            {error}
+          </p>
         )}
 
         <div className="flex gap-3">

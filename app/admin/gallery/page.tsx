@@ -1,25 +1,20 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
+import AdminFlash from "@/components/admin/AdminFlash";
 import { saveGalleryImage, deleteGalleryImage } from "@/app/admin/actions";
 import ImageUploadField from "@/components/admin/ImageUploadField";
-import { AlertTriangle, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
-export default async function GalleryAdminPage() {
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) {
-    return (
-      <div className="bg-white rounded-2xl border border-navy/10 p-8 text-center">
-        <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
-        <p className="font-body text-sm text-ink-text/60">Not connected yet — contact your developer.</p>
-      </div>
-    );
-  }
+export default async function GalleryAdminPage({ searchParams }: { searchParams: Promise<{ error?: string | string[] }> }) {
+  const { error: flashError } = await searchParams;
+  const { supabase } = await requireAdmin();
   const { data: images, error } = await supabase.from("gallery_images").select("*").order("sort_order");
 
   return (
     <div className="space-y-8">
+      <AdminFlash error={flashError} />
       <div>
         <h1 className="font-display text-2xl text-navy">Gallery</h1>
         <p className="font-body text-sm text-ink-text/55 mt-1">Photos shown on the public gallery page. Upload, caption, and remove freely.</p>

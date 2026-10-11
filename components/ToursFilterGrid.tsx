@@ -1,31 +1,55 @@
 "use client";
 
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import TourCard from "@/components/TourCard";
 import Reveal from "@/components/Reveal";
-import { categoryLabels, type TourCategory, type Tour } from "@/lib/tours";
+import { getCategoryLabel, type Tour } from "@/lib/tours";
+import type { CategoryItem } from "@/lib/content-data";
 import type { Locale } from "@/i18n/routing";
 
-const categories: TourCategory[] = [
-  "wildlife",
-  "heritage",
-  "hillcountry",
-  "wetland",
-  "coastal",
-  "city",
-];
-
-export default function ToursFilterGrid({ tours }: { tours: Tour[] }) {
-  const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category") as TourCategory | null;
-  const duration = searchParams.get("duration"); // "day" | "multi" | null
-  const [active, setActive] = useState<TourCategory | "all">(
-    initialCategory && categories.includes(initialCategory) ? initialCategory : "all"
-  );
+/** Category chips come from the categories table (/admin/categories, with a
+ *  built-in fallback list), plus any category a tour uses that isn't listed
+ *  — so every tour is always reachable through a filter. */
+export default function ToursFilterGrid({
+  tours,
+  categories,
+}: {
+  tours: Tour[];
+  categories: CategoryItem[];
+}) {
   const locale = useLocale() as Locale;
   const t = useTranslations("tours");
+
+  const chips = useMemo(() => {
+    const list = categories.map((c) => ({ slug: c.slug, label: c.name[locale] || c.name.en }));
+    const known = new Set(list.map((c) => c.slug));
+    for (const tour of tours) {
+      if (!known.has(tour.category)) {
+        known.add(tour.category);
+        list.push({ slug: tour.category, label: getCategoryLabel(tour.category, locale) });
+      }
+    }
+    return list;
+  }, [categories, tours, locale]);
+
+  // ?category= and ?duration= are read after hydration (not via
+  // useSearchParams) so the full tour grid is in the static HTML that
+  // search engines see.
+  const [active, setActive] = useState<string>("all");
+  const [duration, setDuration] = useState<string | null>(null); // "day" | "multi" | null
+
+  useEffect(() => {
+    const read = () => {
+      const params = new URLSearchParams(window.location.search);
+      const category = params.get("category");
+      setActive(category && chips.some((c) => c.slug === category) ? category : "all");
+      setDuration(params.get("duration"));
+    };
+    read();
+    window.addEventListener("popstate", read);
+    return () => window.removeEventListener("popstate", read);
+  }, [chips]);
 
   const byDuration =
     duration === "day"
@@ -49,17 +73,17 @@ export default function ToursFilterGrid({ tours }: { tours: Tour[] }) {
         >
           {t("filterAll")}
         </button>
-        {categories.map((c) => (
+        {chips.map((c) => (
           <button
-            key={c}
-            onClick={() => setActive(c)}
+            key={c.slug}
+            onClick={() => setActive(c.slug)}
             className={`font-stamp text-xs uppercase tracking-wide px-4 py-2 rounded-full border transition-colors ${
-              active === c
+              active === c.slug
                 ? "bg-blue text-white border-blue"
                 : "border-navy/15 text-ink-text/65 hover:border-blue/50 hover:text-navy"
             }`}
           >
-            {categoryLabels[c][locale]}
+            {c.label}
           </button>
         ))}
       </div>

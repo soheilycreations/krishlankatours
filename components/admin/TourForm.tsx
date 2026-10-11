@@ -7,25 +7,17 @@ import Link from "next/link";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import GalleryUploadField from "@/components/admin/GalleryUploadField";
 import { saveTour } from "@/app/admin/actions";
-import { categoryLabels, type TourCategory } from "@/lib/tours";
-
-/** Converts free-text input into a safe URL slug: lowercase, spaces/underscores
- *  to single dashes, strips anything that isn't a-z, 0-9 or dash, trims dashes. */
-function slugify(input: string): string {
-  return input
-    .trim()
-    .toLowerCase()
-    .replace(/[\s_]+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
+import { slugify } from "@/lib/slug";
+import type { CategoryOption } from "@/lib/admin-categories";
 
 interface HighlightItem {
+  key: string;
   en: string;
   de: string;
 }
+
 interface ItineraryItem {
+  key: string;
   titleEn: string;
   titleDe: string;
   descEn: string;
@@ -47,24 +39,54 @@ export interface TourFormData {
   tagline_de: string;
   summary_en: string;
   summary_de: string;
-  highlights: HighlightItem[];
+  highlights: { en: string; de: string }[];
   itinerary: { day: number; title: { en: string; de: string }; description: { en: string; de: string } }[];
   published: boolean;
 }
 
-const categories: TourCategory[] = [
-  "wildlife",
-  "heritage",
-  "hillcountry",
-  "wetland",
-  "coastal",
-  "city",
-];
+/** Stable React keys for list rows. Using the array index as key makes React
+ *  reuse the wrong inputs when a row is removed (deleting row 1 used to
+ *  remove the last row instead). */
+let keySeq = 0;
+const newKey = () => `row-${Date.now().toString(36)}-${(keySeq++).toString(36)}`;
 
-export default function TourForm({ tour }: { tour?: TourFormData }) {
+export default function TourForm({
+  tour,
+  categoryOptions,
+}: {
+  tour?: TourFormData;
+  categoryOptions: CategoryOption[];
+}) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [titleEn, setTitleEn] = useState(tour?.title_en ?? "");
+
+  // Make sure a tour's current category is always selectable, even if it
+  // was removed from /admin/categories — otherwise saving would change it.
+  const options =
+    tour?.category && !categoryOptions.some((c) => c.slug === tour.category)
+      ? [...categoryOptions, { slug: tour.category, label: tour.category }]
+      : categoryOptions;
+
+  const [highlights, setHighlights] = useState<HighlightItem[]>(
+    tour?.highlights?.length
+      ? tour.highlights.map((h) => ({ key: newKey(), en: h.en, de: h.de }))
+      : [{ key: newKey(), en: "", de: "" }]
+  );
+  const [itinerary, setItinerary] = useState<ItineraryItem[]>(
+    tour?.itinerary?.length
+      ? tour.itinerary.map((d) => ({
+          key: newKey(),
+          titleEn: d.title.en,
+          titleDe: d.title.de,
+          descEn: d.description.en,
+          descDe: d.description.de,
+        }))
+      : [{ key: newKey(), titleEn: "", titleDe: "", descEn: "", descDe: "" }]
+  );
+
+  const slugPreview = tour?.slug ?? slugify(titleEn);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -73,41 +95,34 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
     const formData = new FormData(e.currentTarget);
 
     if (!tour?.slug) {
-      const cleanSlug = slugify(String(formData.get("title_en") ?? ""));
-      if (!cleanSlug) {
-        setError("Title (EN) can't be empty.");
+      if (!slugify(String(formData.get("title_en") ?? ""))) {
+        setError("Title (EN) needs at least one letter or number.");
         setPending(false);
         return;
       }
-      formData.set("slug", cleanSlug);
+      // The server re-sanitizes; this is just the same value it will use.
+      formData.set("slug", slugify(String(formData.get("title_en") ?? "")));
     }
 
-    const result = await saveTour(tour?.id ?? null, undefined, formData);
-    if (result?.error) {
-      setError(result.error);
+    try {
+      const result = await saveTour(tour?.id ?? null, undefined, formData);
+      if (result?.error) {
+        setError(result.error);
+        setPending(false);
+      }
+      // on success, saveTour() redirects server-side
+    } catch (err) {
+      // redirect() is delivered as a thrown control-flow signal — let Next handle it.
+      if (err && typeof err === "object" && "digest" in err) throw err;
+      setError("Something went wrong. Please try again.");
       setPending(false);
     }
-    // on success, saveTour() redirects server-side
   };
-
-  const [highlights, setHighlights] = useState<HighlightItem[]>(
-    tour?.highlights?.length ? tour.highlights : [{ en: "", de: "" }]
-  );
-  const [itinerary, setItinerary] = useState<ItineraryItem[]>(
-    tour?.itinerary?.length
-      ? tour.itinerary.map((d) => ({
-          titleEn: d.title.en,
-          titleDe: d.title.de,
-          descEn: d.description.en,
-          descDe: d.description.de,
-        }))
-      : [{ titleEn: "", titleDe: "", descEn: "", descDe: "" }]
-  );
 
   return (
     <div>
       <Link
-        href="/admin"
+        href="/admin/tours"
         className="inline-flex items-center gap-1.5 font-body text-sm text-ink-text/60 hover:text-blue mb-6"
       >
         <ArrowLeft size={15} /> Back to tours
@@ -116,7 +131,6 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         <section className="bg-white rounded-2xl border border-navy/10 p-6">
           <h2 className="font-display text-lg text-navy mb-4">Basics</h2>
-          {tour?.slug && <input type="hidden" name="slug" value={tour.slug} />}
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-1.5">
@@ -124,12 +138,12 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
               </label>
               <select
                 name="category"
-                defaultValue={tour?.category ?? "wildlife"}
+                defaultValue={tour?.category ?? options[0]?.slug ?? "wildlife"}
                 className="w-full border border-navy/15 rounded-lg px-3 py-2.5 font-body text-sm text-navy focus:border-blue outline-none"
               >
-                {categories.map((c) => (
-                  <option key={c} value={c}>
-                    {categoryLabels[c].en}
+                {options.map((c) => (
+                  <option key={c.slug} value={c.slug}>
+                    {c.label}
                   </option>
                 ))}
               </select>
@@ -142,9 +156,10 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
               defaultValue={String(tour?.duration_days ?? 1)}
             />
             <Field
-              label="Price from (USD, optional — not shown publicly)"
+              label="Price from (USD, optional — shown on the site when above 0)"
               name="price_from_usd"
               type="number"
+              min={0}
               defaultValue={tour?.price_from_usd != null ? String(tour.price_from_usd) : ""}
             />
             <Field label="Group size" name="group_size" defaultValue={tour?.group_size} className="sm:col-span-2" />
@@ -175,7 +190,24 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
         <section className="bg-white rounded-2xl border border-navy/10 p-6">
           <h2 className="font-display text-lg text-navy mb-4">Text (English / German)</h2>
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Title (EN)" name="title_en" defaultValue={tour?.title_en} required />
+            <div>
+              <label className="block font-stamp text-xs uppercase tracking-wide text-ink-text/45 mb-1.5">
+                Title (EN)
+              </label>
+              <input
+                type="text"
+                name="title_en"
+                value={titleEn}
+                onChange={(e) => setTitleEn(e.target.value)}
+                required
+                maxLength={160}
+                className="w-full border border-navy/15 rounded-lg px-3 py-2.5 font-body text-sm text-navy focus:border-blue outline-none"
+              />
+              <p className="font-body text-[11px] text-ink-text/45 mt-1.5">
+                Web address: /tours/<span className="text-navy">{slugPreview || "…"}</span>
+                {tour?.slug ? " (fixed once a tour is created)" : ""}
+              </p>
+            </div>
             <Field label="Title (DE)" name="title_de" defaultValue={tour?.title_de} />
             <Field label="Tagline (EN)" name="tagline_en" defaultValue={tour?.tagline_en} />
             <Field label="Tagline (DE)" name="tagline_de" defaultValue={tour?.tagline_de} />
@@ -191,7 +223,7 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
             <h2 className="font-display text-lg text-navy">Highlights</h2>
             <button
               type="button"
-              onClick={() => setHighlights([...highlights, { en: "", de: "" }])}
+              onClick={() => setHighlights([...highlights, { key: newKey(), en: "", de: "" }])}
               className="inline-flex items-center gap-1 font-body text-xs text-blue hover:text-blue-light"
             >
               <Plus size={14} /> Add
@@ -199,7 +231,7 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
           </div>
           <div className="flex flex-col gap-3">
             {highlights.map((h, i) => (
-              <div key={i} className="grid sm:grid-cols-2 gap-2 items-start">
+              <div key={h.key} className="grid sm:grid-cols-2 gap-2 items-start">
                 <input
                   name={`highlight_en_${i}`}
                   defaultValue={h.en}
@@ -215,7 +247,8 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
                   />
                   <button
                     type="button"
-                    onClick={() => setHighlights(highlights.filter((_, hi) => hi !== i))}
+                    aria-label="Remove highlight"
+                    onClick={() => setHighlights(highlights.filter((x) => x.key !== h.key))}
                     className="shrink-0 w-9 h-9 rounded-lg border border-navy/12 flex items-center justify-center text-ink-text/40 hover:text-red-600 hover:border-red-200"
                   >
                     <Trash2 size={14} />
@@ -232,7 +265,10 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
             <button
               type="button"
               onClick={() =>
-                setItinerary([...itinerary, { titleEn: "", titleDe: "", descEn: "", descDe: "" }])
+                setItinerary([
+                  ...itinerary,
+                  { key: newKey(), titleEn: "", titleDe: "", descEn: "", descDe: "" },
+                ])
               }
               className="inline-flex items-center gap-1 font-body text-xs text-blue hover:text-blue-light"
             >
@@ -241,12 +277,13 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
           </div>
           <div className="flex flex-col gap-5">
             {itinerary.map((day, i) => (
-              <div key={i} className="border border-navy/10 rounded-xl p-4">
+              <div key={day.key} className="border border-navy/10 rounded-xl p-4">
                 <div className="flex items-center justify-between mb-3">
                   <span className="font-stamp text-xs uppercase tracking-wide text-blue">Day {i + 1}</span>
                   <button
                     type="button"
-                    onClick={() => setItinerary(itinerary.filter((_, di) => di !== i))}
+                    aria-label={`Remove day ${i + 1}`}
+                    onClick={() => setItinerary(itinerary.filter((x) => x.key !== day.key))}
                     className="text-ink-text/40 hover:text-red-600"
                   >
                     <Trash2 size={14} />
@@ -288,7 +325,9 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
         </section>
 
         {error && (
-          <p className="font-body text-sm text-red-600 bg-red-50 rounded-lg px-4 py-3">{error}</p>
+          <p role="alert" className="font-body text-sm text-red-600 bg-red-50 rounded-lg px-4 py-3">
+            {error}
+          </p>
         )}
 
         <div className="flex gap-3">
@@ -301,7 +340,7 @@ export default function TourForm({ tour }: { tour?: TourFormData }) {
           </button>
           <button
             type="button"
-            onClick={() => router.push("/admin")}
+            onClick={() => router.push("/admin/tours")}
             className="font-body text-sm text-ink-text/60 hover:text-navy px-4"
           >
             Cancel
@@ -320,7 +359,6 @@ function Field({
   required,
   min,
   className = "",
-  onChange,
 }: {
   label: string;
   name: string;
@@ -329,7 +367,6 @@ function Field({
   required?: boolean;
   min?: number;
   className?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <div className={className}>
@@ -342,7 +379,6 @@ function Field({
         defaultValue={defaultValue}
         required={required}
         min={min}
-        onChange={onChange}
         className="w-full border border-navy/15 rounded-lg px-3 py-2.5 font-body text-sm text-navy focus:border-blue outline-none"
       />
     </div>

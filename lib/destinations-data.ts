@@ -1,4 +1,5 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { mediaUrl, mediaUrls } from "@/lib/media";
 import {
   destinations as staticDestinations,
   type Destination,
@@ -31,8 +32,8 @@ function rowToDestination(row: DestinationRow): Destination {
     name: { en: row.name_en, de: row.name_de ?? row.name_en },
     region: { en: row.region_en ?? "", de: row.region_de ?? row.region_en ?? "" },
     tagline: { en: row.tagline_en ?? "", de: row.tagline_de ?? row.tagline_en ?? "" },
-    image: row.image ?? "",
-    gallery: row.gallery ?? [],
+    image: mediaUrl(row.image),
+    gallery: mediaUrls(row.gallery),
     description: row.description ?? [],
     highlights: row.highlights ?? [],
     bestTime: { en: row.best_time_en ?? "", de: row.best_time_de ?? row.best_time_en ?? "" },
@@ -45,8 +46,7 @@ function rowToDestination(row: DestinationRow): Destination {
  *  configured, the table is empty, or the request fails. */
 export async function getDestinations(): Promise<Destination[]> {
   try {
-    const supabase = await createSupabaseServerClient();
-    if (!supabase) return staticDestinations;
+    if (!isSupabaseConfigured || !supabase) return staticDestinations;
 
     const { data, error } = await supabase
       .from("destinations")
@@ -54,6 +54,7 @@ export async function getDestinations(): Promise<Destination[]> {
       .eq("published", true)
       .order("sort_order", { ascending: true });
 
+    if (error) console.error("getDestinations:", error.message);
     if (error || !data || data.length === 0) return staticDestinations;
 
     return (data as DestinationRow[]).map(rowToDestination);

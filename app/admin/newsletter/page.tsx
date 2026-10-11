@@ -1,5 +1,5 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { AlertTriangle, Mail } from "lucide-react";
+import { requireAdmin } from "@/lib/auth";
+import { Mail } from "lucide-react";
 import CopyEmailsButton from "@/components/admin/CopyEmailsButton";
 
 export const dynamic = "force-dynamic";
@@ -11,19 +11,8 @@ interface SubscriberRow {
 }
 
 export default async function NewsletterPage() {
-  const supabase = await createSupabaseServerClient();
+  const { supabase } = await requireAdmin();
 
-  if (!supabase) {
-    return (
-      <div className="bg-white rounded-2xl border border-navy/10 p-8 text-center">
-        <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
-        <h1 className="font-display text-xl text-navy mb-2">Not connected yet</h1>
-        <p className="font-body text-sm text-ink-text/60 max-w-md mx-auto">
-          This system isn&apos;t connected yet. Please contact your developer to finish setting this up.
-        </p>
-      </div>
-    );
-  }
 
   const { data } = await supabase
     .from("newsletter_subscribers")

@@ -1,0 +1,43 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "krishlankatours",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "preview_urls": true,
+  "observability": { "enabled": true },
+
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  // Lets the Durable Object queue call back into this Worker to revalidate pages.
+  "services": [
+    { "binding": "WORKER_SELF_REFERENCE", "service": "krishlankatours" }
+  ],
+
+  // ISR / SSG page cache. Create once with:
+  //   npx wrangler r2 bucket create krishlankatours-cache
+  "r2_buckets": [
+    { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "krishlankatours-cache" }
+  ],
+
+  // revalidatePath()/revalidateTag() timestamps. Create once with:
+  //   npx wrangler d1 create krishlankatours-tag-cache
+  // then paste the printed database_id below.
+  "d1_databases": [
+    {
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "krishlankatours-tag-cache",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+    }
+  ],
+
+  // Background (time-based) ISR revalidation queue.
+  "durable_objects": {
+    "bindings": [{ "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["DOQueueHandler"] }]
+}

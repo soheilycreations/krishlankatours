@@ -8,6 +8,7 @@ import {
   MapPin, Users, Car, Hotel, Send, CheckCircle2, AlertCircle, Star, Check, Minus, Plus,
 } from "lucide-react";
 import DateRangeField, { type DateRange } from "@/components/DateRangeField";
+import { format } from "date-fns";
 import type { Locale } from "@/i18n/routing";
 import type { Vehicle } from "@/lib/vehicles-data";
 
@@ -79,8 +80,11 @@ export default function CustomTripPlanner({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...contact,
-          arrivalDate: range?.from ? range.from.toISOString().slice(0, 10) : null,
-          departureDate: range?.to ? range.to.toISOString().slice(0, 10) : null,
+          // Plain calendar dates in the visitor's own calendar. (toISOString()
+          // would convert to UTC and shift the date back a day for anyone
+          // east of UTC — e.g. Germany and Sri Lanka.)
+          arrivalDate: range?.from ? format(range.from, "yyyy-MM-dd") : null,
+          departureDate: range?.to ? format(range.to, "yyyy-MM-dd") : null,
           travelers,
           locations: picked.map((slug) => {
             const d = destinations.find((x) => x.slug === slug);

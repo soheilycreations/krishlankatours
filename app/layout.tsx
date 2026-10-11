@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { getLocale } from "next-intl/server";
-import { fontVariables } from "@/lib/fonts";
-import "./globals.css";
+import { SITE_URL } from "@/lib/site-config";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://krishlankatours.vercel.app";
-
+/**
+ * Root layout is a pass-through: the <html>/<body> shell lives in
+ * app/[locale]/layout.tsx (public site, lang="en"/"de") and
+ * app/admin/layout.tsx (admin, lang="en"). This lets the public pages be
+ * statically generated per locale and cached on Cloudflare.
+ */
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -40,20 +42,11 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Krish Lanka Tours & Travels — Private Tours in Sri Lanka",
-    description:
-      "Private, driver-guided tours across Sri Lanka. Rated 5.0 on TripAdvisor.",
+    description: "Private, driver-guided tours across Sri Lanka. Rated 5.0 on TripAdvisor.",
     images: ["/og-image.jpg?v=3"],
   },
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const locale = await getLocale();
-
-  return (
-    <html lang={locale}>
-      <body className={`${fontVariables} font-body bg-paper text-ink-text antialiased`}>
-        {children}
-      </body>
-    </html>
-  );
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return children;
 }

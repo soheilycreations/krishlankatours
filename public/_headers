@@ -1,0 +1,15 @@
+# Cloudflare static-asset headers (Workers Static Assets).
+
+# Hashed build output never changes.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Site photos: cache for a week in browsers, a month at the edge.
+/images/*
+  Cache-Control: public, max-age=604800, s-maxage=2592000
+
+/patterns/*
+  Cache-Control: public, max-age=604800
+
+/og-image.jpg
+  Cache-Control: public, max-age=86400

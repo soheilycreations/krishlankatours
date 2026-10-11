@@ -1,5 +1,8 @@
 import { Suspense } from "react";
-import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { staticPageMetadata } from "@/lib/seo";
+import type { Locale } from "@/i18n/routing";
 import { MessageCircle, Mail, Phone, MapPin, Plane } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import PageHero from "@/components/PageHero";
@@ -7,11 +10,18 @@ import ContactForm from "@/components/ContactForm";
 import SocialLinks from "@/components/SocialLinks";
 import { getTours } from "@/lib/tours-data";
 
-export const revalidate = 60;
+// Re-generated at most hourly; admin edits refresh it immediately.
+export const revalidate = 3600;
 
-export default async function ContactPage() {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return staticPageMetadata(locale as Locale, "/contact");
+}
+
+export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("contact");
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
   const pickupAreas = t.raw("pickupAreas") as string[];
   const tours = await getTours();
 

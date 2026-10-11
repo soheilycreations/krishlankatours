@@ -1,7 +1,8 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
+import AdminFlash from "@/components/admin/AdminFlash";
 import { saveVehicle, deleteVehicle, toggleVehicle } from "@/app/admin/actions";
 import ImageUploadField from "@/components/admin/ImageUploadField";
-import { AlertTriangle, Car, Plus } from "lucide-react";
+import { Car, Plus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -52,16 +53,9 @@ function VehicleForm({ vehicle }: { vehicle?: Record<string, unknown> }) {
   );
 }
 
-export default async function VehiclesAdminPage() {
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) {
-    return (
-      <div className="bg-white rounded-2xl border border-navy/10 p-8 text-center">
-        <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
-        <p className="font-body text-sm text-ink-text/60">Not connected yet — contact your developer.</p>
-      </div>
-    );
-  }
+export default async function VehiclesAdminPage({ searchParams }: { searchParams: Promise<{ error?: string | string[] }> }) {
+  const { error: flashError } = await searchParams;
+  const { supabase } = await requireAdmin();
 
   const { data: vehicles, error } = await supabase
     .from("vehicles")
@@ -71,6 +65,7 @@ export default async function VehiclesAdminPage() {
 
   return (
     <div className="space-y-8">
+      <AdminFlash error={flashError} />
       <div>
         <h1 className="font-display text-2xl text-navy">Vehicles</h1>
         <p className="font-body text-sm text-ink-text/55 mt-1">

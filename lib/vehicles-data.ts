@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { mediaUrl } from "@/lib/media";
 
 export interface Vehicle {
   id: string;
@@ -28,7 +29,7 @@ export async function getVehicles(includeInactive = false): Promise<Vehicle[]> {
     type: row.type,
     seats: row.seats,
     description: row.description ?? "",
-    imageUrl: row.image_url ?? "",
+    imageUrl: mediaUrl(row.image_url),
     active: row.active,
   }));
 }

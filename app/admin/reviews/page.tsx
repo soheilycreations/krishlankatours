@@ -1,6 +1,7 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
+import AdminFlash from "@/components/admin/AdminFlash";
 import { saveReview, deleteReview } from "@/app/admin/actions";
-import { AlertTriangle, Star, Plus } from "lucide-react";
+import { Star, Plus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -52,20 +53,14 @@ function ReviewForm({ review }: { review?: Record<string, unknown> }) {
   );
 }
 
-export default async function ReviewsAdminPage() {
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) {
-    return (
-      <div className="bg-white rounded-2xl border border-navy/10 p-8 text-center">
-        <AlertTriangle className="text-clay mx-auto mb-3" size={28} />
-        <p className="font-body text-sm text-ink-text/60">Not connected yet — contact your developer.</p>
-      </div>
-    );
-  }
+export default async function ReviewsAdminPage({ searchParams }: { searchParams: Promise<{ error?: string | string[] }> }) {
+  const { error: flashError } = await searchParams;
+  const { supabase } = await requireAdmin();
   const { data: reviews, error } = await supabase.from("reviews").select("*").order("sort_order").order("review_date", { ascending: false });
 
   return (
     <div className="space-y-8">
+      <AdminFlash error={flashError} />
       <div>
         <h1 className="font-display text-2xl text-navy">Guest Reviews</h1>
         <p className="font-body text-sm text-ink-text/55 mt-1">
